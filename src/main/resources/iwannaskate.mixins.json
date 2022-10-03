@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "com.github.alexthe668.iwannaskate.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "target": "@env(DEFAULT)",
+  "refmap": "iwannaskate.refmap.json",
+  "mixins": [
+    "CrossCollisionBlockMixin",
+    "LivingEntityMixin",
+    "client.WallBlockMixin"
+  ],
+  "client": [
+    "client.AgeableListModelMixin",
+    "client.ClientPacketListenerMixin",
+    "client.EntityRendererProviderMixin",
+    "client.LivingEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

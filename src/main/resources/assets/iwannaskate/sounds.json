@@ -1,0 +1,94 @@
+{
+  "skateboard_pedal": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_pedal_0"
+      },
+      {
+        "name": "iwannaskate:skateboard_pedal_1"
+      },
+      {
+        "name": "iwannaskate:skateboard_pedal_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_pedal"
+  },
+  "skateboard_rough_rolling_loop": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_rough_rolling_loop",
+        "stream": true
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_rough_rolling_loop"
+  },
+  "skateboard_smooth_rolling_loop": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_smooth_rolling_loop",
+        "stream": true
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_smooth_rolling_loop"
+  },
+  "skateboard_grind_loop": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_grind_loop",
+        "stream": true
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_grind_loop"
+  },
+  "skateboard_change_pose": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_change_pose_0"
+      },
+      {
+        "name": "iwannaskate:skateboard_change_pose_1"
+      },
+      {
+        "name": "iwannaskate:skateboard_change_pose_2"
+      },
+      {
+        "name": "iwannaskate:skateboard_change_pose_3"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_change_pose"
+  },
+  "skateboard_jump_start": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_jump_start_0"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_start_1"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_start_2"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_start_3"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_jump_start"
+  },
+  "skateboard_jump_land": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skateboard_jump_land_0"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_land_1"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_land_2"
+      },
+      {
+        "name": "iwannaskate:skateboard_jump_land_3"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skateboard_jump_land"
+  }
+}

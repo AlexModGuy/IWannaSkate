@@ -1,0 +1,21 @@
+{
+  "#comment": "All entities that have a vanilla-style quadruped entity model, for animation purposes.",
+  "replace": false,
+  "values": [
+    "minecraft:pig",
+    "minecraft:sheep",
+    "minecraft:cow",
+    "minecraft:goat",
+    "minecraft:panda",
+    "minecraft:polar_bear",
+    "minecraft:turtle",
+    "minecraft:wolf",
+    "minecraft:cat",
+    "minecraft:ocelot",
+    "minecraft:llama",
+    "minecraft:hoglin",
+    "minecraft:zoglin",
+    "minecraft:fox",
+    "minecraft:axolotl"
+  ]
+}

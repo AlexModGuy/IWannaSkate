@@ -1,0 +1,9 @@
+{
+  "#comment": "All blocks that can be grinded on.",
+  "replace": false,
+  "values": [
+    "minecraft:iron_bars",
+    "#minecraft:fences",
+    "#minecraft:walls"
+  ]
+}

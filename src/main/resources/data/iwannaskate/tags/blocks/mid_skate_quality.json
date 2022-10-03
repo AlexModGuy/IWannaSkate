@@ -1,0 +1,10 @@
+{
+  "#comment": "All blocks that are passable to skate on. Untagged blocks will be assigned a rank based off their material.",
+  "replace": false,
+  "values": [
+    "minecraft:dripstone_block",
+    "minecraft:bedrock",
+    "minecraft:deepslate",
+    "minecraft:prismarine"
+  ]
+}

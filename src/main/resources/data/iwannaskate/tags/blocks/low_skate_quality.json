@@ -1,0 +1,26 @@
+{
+  "#comment": "All blocks that are really bad to skate on. Untagged blocks will be assigned a rank based off their material.",
+  "replace": false,
+  "values": [
+    "#minecraft:wool_carpets",
+    "#minecraft:logs",
+    "#minecraft:leaves",
+    "#minecraft:sand",
+    "#minecraft:dirt",
+    "#minecraft:coral_blocks",
+    "#minecraft:wart_blocks",
+    "#forge:gravel",
+    "#forge:netherrack",
+    "minecraft:cobblestone",
+    "minecraft:mossy_cobblestone",
+    "minecraft:glowstone",
+    "minecraft:end_stone",
+    "minecraft:blackstone",
+    "minecraft:gilded_blackstone",
+    "minecraft:moss_block",
+    "minecraft:mud",
+    "minecraft:packed_mud",
+    "minecraft:sculk",
+    "minecraft:sculk_catalyst"
+  ]
+}

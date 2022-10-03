@@ -1,0 +1,10 @@
+{
+  "#comment": "All entities that have the zombie arm positioning, for animation purposes.",
+  "replace": false,
+  "values": [
+    "minecraft:zombie_villager",
+    "minecraft:zombie",
+    "minecraft:husk",
+    "minecraft:zombified_piglin"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "#comment": "All entities that have the villager model or a variant of, for animation purposes.",
+  "replace": false,
+  "values": [
+    "minecraft:villager",
+    "minecraft:wandering_trader",
+    "minecraft:witch"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "#comment": "All entities that do not damage skateboard item durability by using it, not including creative players.",
+  "replace": false,
+  "values": [
+    "#iwannaskate:skilled_skaters"
+  ]
+}

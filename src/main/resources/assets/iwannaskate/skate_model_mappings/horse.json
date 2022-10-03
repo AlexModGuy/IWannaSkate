@@ -1,0 +1,12 @@
+{
+  "entity_type": "#iwannaskate:has_horse_model",
+  "body": [],
+  "head": ["head_parts"],
+  "right_arm": [],
+  "left_arm": [],
+  "right_leg": ["right_hind_leg", "right_front_leg", "right_hind_baby_leg", "right_front_baby_leg"],
+  "left_leg": ["left_hind_leg", "left_front_leg", "left_front_baby_leg", "left_hind_baby_leg"],
+  "animation_speed_modifier": 1.0,
+  "animation_strength_modifier": 1.0,
+  "face_forwards": true
+}

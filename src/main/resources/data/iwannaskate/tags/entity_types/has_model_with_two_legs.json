@@ -1,0 +1,8 @@
+{
+  "#comment": "All entities that ONLY have the 2 legs and a vanilla-style model, for animation purposes.",
+  "replace": false,
+  "values": [
+    "minecraft:chicken",
+    "minecraft:parrot"
+  ]
+}

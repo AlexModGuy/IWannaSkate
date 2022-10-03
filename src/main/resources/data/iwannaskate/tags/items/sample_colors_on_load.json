@@ -1,0 +1,7 @@
+{
+  "#comment": "Sample the colors of these blocks/items on resource pack load - this allows colorization of skateboards based off of wood types with no performance drain",
+  "replace": false,
+  "values": [
+    "#iwannaskate:deck_materials"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "#comment": "All entities that have the illager model or a variant of, for animation purposes.",
+  "replace": false,
+  "values": [
+    "minecraft:evoker",
+    "minecraft:illusioner",
+    "minecraft:pillager",
+    "minecraft:vindicator"
+  ]
+}

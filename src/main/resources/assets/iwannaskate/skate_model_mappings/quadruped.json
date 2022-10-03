@@ -1,0 +1,12 @@
+{
+  "entity_type": "#iwannaskate:has_quadruped_model",
+  "body": ["body"],
+  "head": ["head"],
+  "right_arm": [],
+  "left_arm": [],
+  "right_leg": ["right_hind_leg", "right_front_leg"],
+  "left_leg": ["left_hind_leg", "left_front_leg"],
+  "animation_speed_modifier": 1.0,
+  "animation_strength_modifier": 0.75,
+  "face_forwards": true
+}
