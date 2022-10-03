@@ -3,6 +3,7 @@ package com.github.alexthe668.iwannaskate.client;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.color.BoardColorSampler;
 import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
+import com.github.alexthe668.iwannaskate.client.particle.BeeParticle;
 import com.github.alexthe668.iwannaskate.client.particle.HalloweenParticle;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.client.render.IWSRenderTypes;
@@ -119,7 +120,7 @@ public class ClientProxy extends CommonProxy {
     public void onEntityStatus(Entity entity, byte updateKind) {
         if (entity instanceof SkateboardEntity skateboard && entity.isAlive() && updateKind == 67) {
             SkateboardSound sound;
-            if (SKATEBOARD_SOUND_MAP.get(entity.getId()) == null) {
+            if (SKATEBOARD_SOUND_MAP.get(entity.getId()) == null || SKATEBOARD_SOUND_MAP.get(entity.getId()).isDifferentBoard(entity)) {
                 sound = new SkateboardSound(SkateSoundType.getForSkateboard(skateboard), 0.0F, skateboard);
                 SKATEBOARD_SOUND_MAP.put(entity.getId(), sound);
             } else {
@@ -134,5 +135,6 @@ public class ClientProxy extends CommonProxy {
     public static void setupParticles(RegisterParticleProvidersEvent registry) {
         IWannaSkateMod.LOGGER.debug("Registered particle factories");
         registry.register(IWSParticleRegistry.HALLOWEEN.get(), HalloweenParticle.Factory::new);
+        registry.register(IWSParticleRegistry.BEE.get(), BeeParticle.Factory::new);
     }
 }

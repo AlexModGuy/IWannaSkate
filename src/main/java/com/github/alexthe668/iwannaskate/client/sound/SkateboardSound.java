@@ -10,6 +10,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
 public class SkateboardSound extends AbstractTickableSoundInstance {
     protected final SkateboardEntity skateboard;
@@ -30,7 +31,7 @@ public class SkateboardSound extends AbstractTickableSoundInstance {
     }
 
     public boolean canPlaySound() {
-        return !this.skateboard.isSilent() && !this.isStopped() && (ClientProxy.SKATEBOARD_SOUND_MAP.get(this.skateboard.getId()) == this || changeProgress < 1.0F);
+        return !this.skateboard.isSilent() && (ClientProxy.SKATEBOARD_SOUND_MAP.get(this.skateboard.getId()) == this || changeProgress < 1.0F);
     }
 
     public boolean canStartSilent() {
@@ -80,4 +81,7 @@ public class SkateboardSound extends AbstractTickableSoundInstance {
         return soundType != SkateSoundType.getForSkateboard(skateboard);
     }
 
+    public boolean isDifferentBoard(Entity entity) {
+        return this.skateboard != entity;
+    }
 }

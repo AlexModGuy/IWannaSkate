@@ -12,6 +12,7 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -26,6 +27,7 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
 
     private static final SkateboardModel SKATEBOARD_MODEL = new SkateboardModel();
     private static final ResourceLocation RAINBOW_TRAIL_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/rainbow_trail.png");
+    private static final ResourceLocation AESTHETIC_TRAIL_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/aesthetic_trail.png");
     private LightningRender lightningRender = new LightningRender();
     private LightningBoltData.BoltRenderInfo lightningBoltData = new LightningBoltData.BoltRenderInfo(1.3F, 0.15F, 0.5F, 0.25F, new Vector4f(0.1F, 0.1F, 0.1F, 0.5F), 0.45F);
 
@@ -48,13 +50,14 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
         SKATEBOARD_MODEL.setupAnim(entity, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F);
-        if(entity.getSkateboardData().getWheelType() == SkateboardWheels.RAINBOW){
+        if(entity.getSkateboardData().getWheelType().hasTrail()){
             Vec3 from = Vec3.ZERO;
             Vec3 to = entity.getTrailOffset(8, partialTicks).multiply(1, 0.3, 1);
-            renderRainbowFromWheel(from, to, 2, poseStack, buffer, skateYaw);
-            renderRainbowFromWheel(from, to, 3, poseStack, buffer, skateYaw);
-            renderRainbowFromWheel(from, to, 0, poseStack, buffer, skateYaw);
-            renderRainbowFromWheel(from, to, 1, poseStack, buffer, skateYaw);
+            boolean rainbow = entity.getSkateboardData().getWheelType() == SkateboardWheels.RAINBOW;
+            renderRainbowFromWheel(entity, from, to, 2, poseStack, buffer, skateYaw, rainbow);
+            renderRainbowFromWheel(entity, from, to, 3, poseStack, buffer, skateYaw, rainbow);
+            renderRainbowFromWheel(entity, from, to, 0, poseStack, buffer, skateYaw, rainbow);
+            renderRainbowFromWheel(entity, from, to, 1, poseStack, buffer, skateYaw, rainbow);
         }
         SkateboardTexturer.renderBoard(SKATEBOARD_MODEL, entity.getSkateboardData(), poseStack, buffer, packedLight, entity.hasGlint());
         if(entity.getSkateboardData().getWheelType() == SkateboardWheels.SHOCKING){
@@ -114,7 +117,7 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         return wheelOffset.add(0, -up, 0);
     }
 
-    private static void renderRainbowFromWheel(Vec3 from, Vec3 to, int wheel, PoseStack poseStack, MultiBufferSource bufferSource, float skateYaw){
+    private static void renderRainbowFromWheel(SkateboardEntity entity, Vec3 from, Vec3 to, int wheel, PoseStack poseStack, MultiBufferSource bufferSource, float skateYaw, boolean rainbow){
         Vec3 sub = from.subtract(to);
         double d = sub.horizontalDistance();
         float rotY = (float) (Mth.atan2(sub.x, sub.z) * (double) (180F / (float) Math.PI));
@@ -130,16 +133,17 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         PoseStack.Pose posestack$pose = poseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
-        VertexConsumer rainbowConsumer = bufferSource.getBuffer(ForgeRenderTypes.getUnlitTranslucent(RAINBOW_TRAIL_TEXTURE, false));
+        VertexConsumer rainbowConsumer = bufferSource.getBuffer(ForgeRenderTypes.getUnlitTranslucent(rainbow ? RAINBOW_TRAIL_TEXTURE : AESTHETIC_TRAIL_TEXTURE, false));
         float height = Mth.clamp((float)(sub.length() * 0.5F), 0, 1.2F);
-        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.3F, height, 0, 1, 0);
-        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.7F, height, 1, 1, 0);
-        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.7F, 0, 1, 0, 1);
-        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.3F, 0, 0, 0, 1);
+        float moveAlong = (entity.tickCount + Minecraft.getInstance().getFrameTime()) * -0.1F;
+        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.3F,  height, 0, moveAlong + 1, 0);
+        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.7F,  height, 1, moveAlong + 1, 0);
+        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.7F, 0, 1, moveAlong, 1);
+        rainbowVertex(rainbowConsumer, matrix4f, matrix3f, 240, 0.3F, 0, 0, moveAlong, 1);
         poseStack.popPose();
     }
 
-    private static void rainbowVertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_, float p_114094_, float p_114095_, int p_114096_, int p_114097_, float alpha) {
+    private static void rainbowVertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_, float p_114094_, float p_114095_, float p_114096_, float p_114097_, float alpha) {
         p_114090_.vertex(p_114091_, p_114094_ - 0.5F, (float)p_114095_, 0.0F).color(1F, 1F, 1F,  alpha).uv((float)p_114096_, (float)p_114097_).overlayCoords(NO_OVERLAY).uv2(240).normal(p_114092_, 0.0F, -1.0F, 0.0F).endVertex();
     }
 

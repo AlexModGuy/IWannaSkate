@@ -479,6 +479,12 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
             this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D), -this.random.nextDouble(), (this.random.nextDouble() - 0.5D));
         } else if (partice == IWSParticleRegistry.HALLOWEEN.get()) {
             this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.35F, this.random.nextDouble() * 0.2F, (this.random.nextDouble() - 0.5D) * 0.35F);
+        } else if (partice == ParticleTypes.SNOWFLAKE) {
+            this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.15F, this.random.nextDouble() * 0.1F, (this.random.nextDouble() - 0.5D) * 0.15F);
+        } else if (partice == IWSParticleRegistry.BEE.get()) {
+            Vec3 randomOffset = new Vec3((this.random.nextDouble() - 0.5D) * 1, (this.random.nextDouble()) * 0.75F, (this.random.nextDouble() - 0.5D) * 1);
+            Vec3 spawning = wheelVec.add(randomOffset);
+            this.level.addParticle(partice, spawning.x, spawning.y, spawning.z, wheelVec.x, wheelVec.y, wheelVec.z);
         } else {
             Vec3 delta = this.getDeltaMovement();
             this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, delta.x, delta.y, delta.z);
@@ -513,7 +519,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
             if (this.isGrinding()) {
                 Direction dir = this.getZRot() > 0 ? this.getMotionDirection().getClockWise() : this.getMotionDirection().getCounterClockWise();
                 yRot = dir.toYRot();
-                speed = 15 * getMasterSpeed();
+                speed = 11.5F * getMasterSpeed();
                 prev = Vec3.ZERO;
             }
             float f1 = -Mth.sin(yRot * ((float) Math.PI / 180F));
@@ -577,7 +583,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
         backHeight = this.back.getHeightBelow(sampleBackHeight, backHeight);
 
         if (level.isClientSide) {
-            if (this.getSkateboardData().getWheelType() == SkateboardWheels.RAINBOW) {
+            if (this.getSkateboardData().getWheelType().hasTrail()) {
                 if (this.trailPosPointer < 0) {
                     for (int i = 0; i < this.trailPositions.length; ++i) {
                         this.trailPositions[i][0] = this.getX();

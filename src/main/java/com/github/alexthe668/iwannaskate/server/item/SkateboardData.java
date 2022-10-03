@@ -149,6 +149,10 @@ public class SkateboardData {
                 }
             }
         }
+        if(stack.isEnchanted()){
+            tooltip.add(Component.literal(""));
+            tooltip.add(Component.translatable("item.iwannaskate.skateboard.enchanted").withStyle(chatColor, ChatFormatting.UNDERLINE));
+        }
    }
 
     @NotNull

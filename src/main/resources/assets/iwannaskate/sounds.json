@@ -17,7 +17,7 @@
     "sounds": [
       {
         "name": "iwannaskate:skateboard_rough_rolling_loop",
-        "stream": true
+        "preload": true
       }
     ],
     "subtitle": "iwannaskate.sound.subtitle.skateboard_rough_rolling_loop"
@@ -26,7 +26,7 @@
     "sounds": [
       {
         "name": "iwannaskate:skateboard_smooth_rolling_loop",
-        "stream": true
+        "preload": true
       }
     ],
     "subtitle": "iwannaskate.sound.subtitle.skateboard_smooth_rolling_loop"
@@ -35,7 +35,7 @@
     "sounds": [
       {
         "name": "iwannaskate:skateboard_grind_loop",
-        "stream": true
+        "preload": true
       }
     ],
     "subtitle": "iwannaskate.sound.subtitle.skateboard_grind_loop"

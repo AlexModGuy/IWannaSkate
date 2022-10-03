@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.server;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
+import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,7 @@ public class CommonProxy {
     @SubscribeEvent
     public void onTagsLoaded(TagsUpdatedEvent event){
         SkateboardMaterials.reload();
+        IWSRecipeRegistry.registerCauldronInteractions();
     }
 
     public void setHoverItem(ItemStack stack){}

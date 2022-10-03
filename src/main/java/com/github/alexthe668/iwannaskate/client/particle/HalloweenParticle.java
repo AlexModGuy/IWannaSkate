@@ -12,7 +12,7 @@ public class HalloweenParticle extends TextureSheetParticle {
     protected HalloweenParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         super(world, x, y, z, xSpeed, ySpeed, zSpeed);
         this.friction = 0.86F;
-        this.quadSize *= 0.5F + world.random.nextFloat() * 0.3F;
+        this.quadSize *= 0.3F + world.random.nextFloat() * 0.3F;
         this.lifetime = 32;
         this.hasPhysics = true;
     }

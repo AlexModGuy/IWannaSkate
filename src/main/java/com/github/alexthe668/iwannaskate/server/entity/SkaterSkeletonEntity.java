@@ -4,6 +4,9 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
+import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
+import com.github.alexthe668.iwannaskate.server.misc.IWSDamageTypes;
+import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -29,13 +33,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class SkaterSkeletonEntity extends AbstractSkeleton {
 
@@ -243,7 +248,50 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        return super.isInvulnerableTo(damageSource) || damageSource == DamageSource.IN_WALL;
+        return super.isInvulnerableTo(damageSource) || damageSource == DamageSource.IN_WALL || damageSource == IWSDamageTypes.SKATE_DAMAGE;
+    }
+
+    @Override
+    protected void dropAllDeathLoot(DamageSource source) {
+        Entity entity = source.getEntity();
+
+        int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, source);
+        this.captureDrops(new java.util.ArrayList<>());
+
+        boolean flag = this.lastHurtByPlayerTime > 0;
+        if (this.shouldDropLoot() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            this.dropFromLootTable(source, flag);
+            this.dropCustomDeathLoot(source, i, flag);
+        }
+        //music disc check
+        this.dropEquipment();
+        this.dropExperience();
+
+        Collection<ItemEntity> drops = captureDrops(null);
+        Collection<ItemEntity> processedDrops = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        for(ItemEntity itemEntity : drops){
+            if(itemEntity.getItem().is(IWSTags.SKATEBOARD_WHEELS) && this.getRandom().nextFloat() < 0.25F){
+                int count = itemEntity.getItem().getCount();
+                if(calendar.get(2) + 1 == 10){
+                    itemEntity.setItem(new ItemStack(SkateboardWheels.JACK_O_LANTERN.getItemRegistryObject().get(), count));
+                }
+                if(calendar.get(2) + 1 == 12){
+                    itemEntity.setItem(new ItemStack(SkateboardWheels.SNOWY.getItemRegistryObject().get(), count));
+                }
+                processedDrops.add(itemEntity);
+            }else{
+                processedDrops.add(itemEntity);
+            }
+        }
+        if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, processedDrops, i, lastHurtByPlayerTime > 0))
+            processedDrops.forEach(e -> level.addFreshEntity(e));
+    }
+
+    private void spawnAndLocalizeToHoliday(ItemEntity e) {
+
+        level.addFreshEntity(e);
     }
 
 }

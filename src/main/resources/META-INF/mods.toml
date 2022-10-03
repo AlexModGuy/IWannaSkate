@@ -6,8 +6,8 @@ issueTrackerURL="https://github.com/AlexModGuy/IWannaSkate/issues" #optional
 modId="iwannaskate" #mandatory
 version="0.1" #mandatory
 displayName="I Wanna Skate ALPHA" #mandatory
-displayURL="https://www.curseforge.com/minecraft/mc-mods/i-wanna-skate" #optional
-authors="Alexthe668, Carro1001" #optional
+displayURL="" #optional
+authors="Alexthe668, Crydigo" #optional
 description='''It's time to skate!'''
 [[dependencies.iwannaskate]] #optional
     # the modid of the dependency
@@ -21,7 +21,7 @@ description='''It's time to skate!'''
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 [modproperties.iwannaskate]
-    catalogueItemIcon="minecraft:egg"
+    catalogueItemIcon="iwannaskate:skateboard_wheels"
 [[dependencies.iwannaskate]]
     modId="forge"
     mandatory=true

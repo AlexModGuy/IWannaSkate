@@ -36,9 +36,13 @@ public enum SkateboardWheels {
     SOUL_FLAME,
     RAINBOW,
     JACK_O_LANTERN,
-    SHOCKING;
+    SNOWY,
+    SHOCKING,
+    HONEY,
+    AESTHETIC;
 
     private final ResourceLocation texture;
+    private RegistryObject<Item> itemRegistryObject;
 
     SkateboardWheels(){
         this.texture = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_" + this.name().toLowerCase() + ".png");
@@ -47,7 +51,7 @@ public enum SkateboardWheels {
     public static void init(){
         for(SkateboardWheels wheelType : SkateboardWheels.values()){
             String id = wheelType == DEFAULT ? "skateboard_wheels" : "skateboard_wheels_" + wheelType.name().toLowerCase();
-            IWSItemRegistry.DEF_REG.register(id, () -> new SkateboardWheelsItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE), wheelType));
+            wheelType.itemRegistryObject = IWSItemRegistry.DEF_REG.register(id, () -> new SkateboardWheelsItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE), wheelType));
         }
     }
 
@@ -60,6 +64,10 @@ public enum SkateboardWheels {
 
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    public RegistryObject<Item> getItemRegistryObject() {
+        return itemRegistryObject;
     }
 
     @Nullable
@@ -76,23 +84,32 @@ public enum SkateboardWheels {
         if(this == JACK_O_LANTERN){
             return IWSParticleRegistry.HALLOWEEN.get();
         }
+        if(this == SNOWY){
+            return ParticleTypes.SNOWFLAKE;
+        }
+        if(this == HONEY){
+            return IWSParticleRegistry.BEE.get();
+        }
         return null;
     }
 
-    public boolean centerParticles() {
-        return this == FLAME || this == SOUL_FLAME;
+    public boolean hasTrail() {
+        return this == RAINBOW || this == AESTHETIC;
     }
 
     public boolean isEmissive() {
-        return this == FLAME || this == SOUL_FLAME || this == RAINBOW;
+        return this == FLAME || this == SOUL_FLAME || this == RAINBOW || this == AESTHETIC;
     }
 
     public float getParticleChancePerTick() {
         if(this == FLAME || this == SOUL_FLAME || this == ENDERPEARL){
             return 0.3F;
         }
-        if(this == JACK_O_LANTERN){
+        if(this == JACK_O_LANTERN || this == SNOWY){
             return 0.1F;
+        }
+        if(this == HONEY){
+            return 0.03F;
         }
         return 0;
     }
