@@ -45,7 +45,7 @@ public class SkateboardTexturer {
 
     private static final ResourceLocation BASE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/base.png");
     private static final Map<Holder<BannerPattern>, ResourceLocation> BANNER_PATTERN_RESOURCE_LOCATION_HASH_MAP = new HashMap<>();
-    private static final ResourceLocation JACK_O_LANTERN_GLOW_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_jack_o_lantern_glow.png");
+    private static final ResourceLocation SPOOKY_GLOW_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_spooky_glow.png");
 
     public static void renderDeck(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
         int[] colors = BoardColorSampler.getColor(data.getWoodBlock());
@@ -83,8 +83,8 @@ public class SkateboardTexturer {
         }else{
             model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
-        if(wheelType == SkateboardWheels.JACK_O_LANTERN){
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(JACK_O_LANTERN_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        if(wheelType == SkateboardWheels.SPOOKY){
+            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
         if (data.hasGripTape()) {
             model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(GRIP_TAPE_TEXTURES.get(data.getGripTapeColor())), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

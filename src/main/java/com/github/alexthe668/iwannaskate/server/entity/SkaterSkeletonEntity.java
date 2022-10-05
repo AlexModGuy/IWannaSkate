@@ -1,13 +1,14 @@
 package com.github.alexthe668.iwannaskate.server.entity;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.IWSDamageTypes;
+import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,7 +17,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -29,14 +29,13 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -197,8 +196,8 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
                 skateTimer--;
             }
         }
-        if (!this.isPassenger() && skateboard != null && skateboard.tickCount > 5) {
-            if(attemptRecoveryTimer < 60){
+        if (!this.isPassenger() && skateboard != null) {
+            if(this.isAlive() && attemptRecoveryTimer < 60){
                 if (this.distanceToSqr(skateboard) > 1F) {
                     if (!level.isClientSide) {
                         this.getNavigation().moveTo(skateboard.getX(), skateboard.getY(0.5F), skateboard.getZ(), 1F);
@@ -217,11 +216,20 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     private boolean canPlaceBoard() {
-        return this.isOnGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
+        return IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsUseSkateboards.get() && this.isOnGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
     }
 
     private boolean shouldDismountBoard(SkateboardEntity board) {
         return slowTimer > 60 || board.isRemoveLogic() || this.getTarget() == null && skateTimer > 700 || !this.isAlive();
+    }
+
+    public static boolean checkSkaterSkeletonSpawnRules(EntityType type, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+        BlockPos blockpos = pos.below();
+        return spawnType == MobSpawnType.SPAWNER || IWannaSkateMod.COMMON_CONFIG.spawnSkaterSkeletons.get() && !levelAccessor.getBiome(blockpos).is(IWSTags.NO_MONSTERS) && levelAccessor.getBlockState(blockpos).is(IWSTags.SPAWNS_SKATER_SKELETONS) && levelAccessor.getBlockState(blockpos).isValidSpawn(levelAccessor, blockpos, type);
+    }
+
+    public boolean checkSpawnRules(LevelAccessor levelAccessor, MobSpawnType type) {
+        return IWannaSkateMod.COMMON_CONFIG.spawnSkaterSkeletons.get();
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
@@ -231,19 +239,19 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SKELETON_AMBIENT;
+        return IWSSoundRegistry.SKATER_SKELETON_IDLE.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource p_33579_) {
-        return SoundEvents.SKELETON_HURT;
+        return IWSSoundRegistry.SKATER_SKELETON_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SKELETON_DEATH;
+        return IWSSoundRegistry.SKATER_SKELETON_DIE.get();
     }
 
     protected SoundEvent getStepSound() {
-        return SoundEvents.SKELETON_STEP;
+        return IWSSoundRegistry.SKATER_SKELETON_WALK.get();
     }
 
     @Override
@@ -272,10 +280,10 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         for(ItemEntity itemEntity : drops){
-            if(itemEntity.getItem().is(IWSTags.SKATEBOARD_WHEELS) && this.getRandom().nextFloat() < 0.25F){
+            if(itemEntity.getItem().is(IWSTags.SKATEBOARD_WHEELS) && this.getRandom().nextFloat() < IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsHolidayWheelsDropChance.get()){
                 int count = itemEntity.getItem().getCount();
                 if(calendar.get(2) + 1 == 10){
-                    itemEntity.setItem(new ItemStack(SkateboardWheels.JACK_O_LANTERN.getItemRegistryObject().get(), count));
+                    itemEntity.setItem(new ItemStack(SkateboardWheels.SPOOKY.getItemRegistryObject().get(), count));
                 }
                 if(calendar.get(2) + 1 == 12){
                     itemEntity.setItem(new ItemStack(SkateboardWheels.SNOWY.getItemRegistryObject().get(), count));

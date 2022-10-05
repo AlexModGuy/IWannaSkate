@@ -1,0 +1,8 @@
+{
+  "#comment": "All blocks that the skater skeleton can spawn on.",
+  "replace": false,
+  "values": [
+    "#iwannaskate:best_skate_quality",
+    "#iwannaskate:high_skate_quality"
+  ]
+}

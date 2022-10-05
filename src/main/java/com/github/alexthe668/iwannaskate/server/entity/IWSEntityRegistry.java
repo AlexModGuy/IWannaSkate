@@ -22,7 +22,7 @@ public class IWSEntityRegistry {
 
     @SubscribeEvent
     public static void initializeAttributes(EntityAttributeCreationEvent event) {
-        SpawnPlacements.register(SKATER_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SkaterSkeletonEntity::checkMonsterSpawnRules);
+        SpawnPlacements.register(SKATER_SKELETON.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SkaterSkeletonEntity::checkSkaterSkeletonSpawnRules);
         event.put(SKATER_SKELETON.get(), SkaterSkeletonEntity.createAttributes().build());
 
     }

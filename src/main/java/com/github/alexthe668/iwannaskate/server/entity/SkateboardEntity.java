@@ -10,6 +10,7 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
+import com.google.common.base.Predicates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -20,6 +21,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -32,20 +34,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SkateboardEntity extends Entity implements PlayerRideableJumping {
+public class SkateboardEntity extends Entity implements PlayerRideableJumping, SpecialSlowMotion {
 
     private static final EntityDataAccessor<ItemStack> ITEMSTACK = SynchedEntityData.defineId(SkateboardEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Float> X_ROT = SynchedEntityData.defineId(SkateboardEntity.class, EntityDataSerializers.FLOAT);
@@ -98,6 +103,8 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
     private double totalDistanceTraveled = 0;
     private double lastDamagedDistance = 0;
     private int soundTimer = 0;
+    private List<Entity> slowedDownEntities = new ArrayList<>();
+    private int slowMoFor = 0;
 
     public SkateboardEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -405,7 +412,10 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
         if (this.hasEnchant(IWSEnchantmentRegistry.EARTHCROSSER.get()) && d < 0.9) {
             d = 0.9D;
         }
-        return this.isInLava() ? 0.1F : this.isInWaterOrBubble() ? 0.6F : this.isOnGround() ? d : 0.98F;
+        if (this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get()) && this.isInWaterOrBubble() && d < 0.9) {
+            d = 0.9D;
+        }
+        return this.isInLava() ? 0.1F : this.isInWaterOrBubble() && !this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get()) ? 0.6F : this.isOnGround() ? d : 0.98F;
     }
 
     private double getBlockSlowdown() {
@@ -730,6 +740,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
         for (PartEntity part : this.allParts) {
             part.remove(removalReason);
         }
+        restoreSlowedEntities();
         super.remove(removalReason);
     }
 
@@ -879,6 +890,12 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
 
     public void positionRider(Entity passenger) {
         prevPedalAmount = this.getPedalAmount();
+        if(slowMoFor > 0){
+            if(passenger instanceof SlowableEntity slowableEntity){
+                slowableEntity.setTickRate(getSlowMoTickSpeed());
+            }
+            slowedDownEntities.add(passenger);
+        }
         if (this.isPassengerOfSameVehicle(passenger) && passenger instanceof LivingEntity living && !this.touchingUnloadedChunk()) {
             if (passenger instanceof Player) {
                 tickPlayerRider((Player) passenger);
@@ -924,7 +941,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
     }
 
     public void checkDespawn() {
-        if (this.isMobSpawned()) {
+        if (this.isMobSpawned() && !this.isVehicle()) {
             Entity entity = this.level.getNearestPlayer(this, -1.0D);
             if (entity != null) {
                 double d0 = entity.distanceToSqr(this);
@@ -1027,11 +1044,13 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
         }
         this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_START.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
         sprintDown = this.jumpFor;
+        if(this.hasEnchant(IWSEnchantmentRegistry.SLOW_MOTION.get()) && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+            slowMoFor = 100;
+        }
     }
 
     @Override
     public void handleStopJump() {
-
     }
 
     @Override
@@ -1051,7 +1070,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
 
     @Override
     public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
-        return this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && type == ForgeMod.WATER_TYPE.get();
+        return (this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) || this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get())) && type == ForgeMod.WATER_TYPE.get();
     }
 
     public boolean hasGlint() {
@@ -1081,5 +1100,57 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping {
             return Component.translatable("entity.iwannaskate.skateboard.ground_warning");
         }
         return null;
+    }
+
+    private void restoreSlowedEntities(){
+        if(!slowedDownEntities.isEmpty()){
+            for(Entity entity : slowedDownEntities){
+                if(entity instanceof SlowableEntity slowed){
+                    slowed.setTickRate(20);
+                }
+            }
+            slowedDownEntities.clear();
+        }
+    }
+
+    public int getSlowMoTickSpeed(){
+        int i = this.getEnchantLevel(IWSEnchantmentRegistry.SLOW_MOTION.get());
+        if(i > 0){
+            return i > 2 ? 2 : 10 - 5 * (i - 1);
+        }
+        return 20;
+    }
+
+    private boolean canSlowMoEntity(Entity entity){
+        if(IWannaSkateMod.COMMON_CONFIG.playersSlowMotion.get() && entity instanceof Player){
+            return false;
+        }
+        return !slowedDownEntities.contains(entity);
+    }
+
+    @Override
+    public void onMasterServerTick() {
+        double slowDistance = IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get();
+        if(slowMoFor > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+            ((SlowableEntity)this).setTickRate(getSlowMoTickSpeed());
+            AABB slowBox = new AABB(this.getX() - slowDistance, this.getY() - slowDistance, this.getZ() - slowDistance, this.getX() + slowDistance, this.getY() + slowDistance, this.getZ() + slowDistance);
+            for(Entity needsSlowing : level.getEntities(this, slowBox, this::canSlowMoEntity)){
+                if(needsSlowing instanceof SlowableEntity slowed){
+                    slowed.setTickRate(getSlowMoTickSpeed());
+                }
+                slowedDownEntities.add(needsSlowing);
+            }
+            for(Entity slowedDown : slowedDownEntities){
+                if(!slowBox.contains(slowedDown.position())){
+                    if(slowedDown instanceof SlowableEntity slowed){
+                        slowed.setTickRate(20);
+                    }
+                }
+            }
+            slowMoFor -= this.isOnGround() ? 3 : 1;
+        }else{
+            ((SlowableEntity)this).setTickRate(20);
+            restoreSlowedEntities();
+        }
     }
 }

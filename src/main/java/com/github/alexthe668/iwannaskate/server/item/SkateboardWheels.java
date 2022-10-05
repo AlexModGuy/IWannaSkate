@@ -4,10 +4,8 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -35,7 +33,7 @@ public enum SkateboardWheels {
     FLAME,
     SOUL_FLAME,
     RAINBOW,
-    JACK_O_LANTERN,
+    SPOOKY,
     SNOWY,
     SHOCKING,
     HONEY,
@@ -81,7 +79,7 @@ public enum SkateboardWheels {
         if(this == ENDERPEARL){
             return ParticleTypes.PORTAL;
         }
-        if(this == JACK_O_LANTERN){
+        if(this == SPOOKY){
             return IWSParticleRegistry.HALLOWEEN.get();
         }
         if(this == SNOWY){
@@ -105,7 +103,7 @@ public enum SkateboardWheels {
         if(this == FLAME || this == SOUL_FLAME || this == ENDERPEARL){
             return 0.3F;
         }
-        if(this == JACK_O_LANTERN || this == SNOWY){
+        if(this == SPOOKY || this == SNOWY){
             return 0.1F;
         }
         if(this == HONEY){

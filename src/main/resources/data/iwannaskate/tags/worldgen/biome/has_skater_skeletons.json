@@ -1,0 +1,7 @@
+{
+  "#comment": "biomes that the skater skeleton can spawn in.",
+  "replace": false,
+  "values": [
+    "#minecraft:is_overworld"
+  ]
+}

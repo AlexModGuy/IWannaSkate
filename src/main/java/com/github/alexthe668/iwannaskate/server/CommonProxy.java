@@ -1,9 +1,11 @@
 package com.github.alexthe668.iwannaskate.server;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
+import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
 import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -41,5 +43,8 @@ public class CommonProxy {
     }
 
     public void onEntityStatus(Entity entity, byte updateKind) {
+    }
+
+    public void reloadConfig() {
     }
 }

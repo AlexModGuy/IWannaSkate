@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#iwannaskate:has_skater_skeletons",
+  "spawners":
+  {
+    "type": "iwannaskate:skater_skeleton",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

@@ -35,30 +35,32 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
     public static void tick(){
         prevFlipProgresses.putAll(flipProgresses);
-        ItemStack currentMouseOver = ((ClientProxy)(IWannaSkateMod.PROXY)).lastHoveredItem;
-        if(currentMouseOver != null) {
-            float prev = flipProgresses.getOrDefault(currentMouseOver, 0F);
-            if(prev < FLIP_TIME){
-                flipProgresses.put(currentMouseOver, prev + 1);
+        if(IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
+            ItemStack currentMouseOver = ((ClientProxy) (IWannaSkateMod.PROXY)).lastHoveredItem;
+            if (currentMouseOver != null) {
+                float prev = flipProgresses.getOrDefault(currentMouseOver, 0F);
+                if (prev < FLIP_TIME) {
+                    flipProgresses.put(currentMouseOver, prev + 1);
+                }
             }
-        }
 
-        if(!flipProgresses.isEmpty()){
-            Iterator<Map.Entry<ItemStack, Float>> it = flipProgresses.entrySet().iterator();
-            while (it.hasNext()){
-                Map.Entry<ItemStack, Float> next = it.next();
-                float progress = next.getValue();
-                if(currentMouseOver == null || next.getKey() != currentMouseOver){
-                    if (progress == 0){
-                        it.remove();
-                    }else{
-                        next.setValue(progress - 1);
+            if (!flipProgresses.isEmpty()) {
+                Iterator<Map.Entry<ItemStack, Float>> it = flipProgresses.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<ItemStack, Float> next = it.next();
+                    float progress = next.getValue();
+                    if (currentMouseOver == null || next.getKey() != currentMouseOver) {
+                        if (progress == 0) {
+                            it.remove();
+                        } else {
+                            next.setValue(progress - 1);
+                        }
                     }
                 }
             }
+            ((ClientProxy) (IWannaSkateMod.PROXY)).lastHoveredItem = null;
         }
-        ((ClientProxy)(IWannaSkateMod.PROXY)).lastHoveredItem = null;
-        if(ticks % 40 == 0){
+        if (ticks % 40 == 0) {
             randomSkateData = SkateboardMaterials.generateRandomData(Minecraft.getInstance().level.random);
         }
         ticks++;

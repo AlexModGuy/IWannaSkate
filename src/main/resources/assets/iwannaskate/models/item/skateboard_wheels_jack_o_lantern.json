@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "iwannaskate:item/skateboard_wheels_jack_o_lantern"
-  }
-}

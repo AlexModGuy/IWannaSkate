@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.client.render.entity;
 
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.model.ModelPartType;
 import com.github.alexthe668.iwannaskate.client.model.ModelPartWrapper;
 import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
@@ -83,7 +84,7 @@ public class SkatingModelPositioner {
         ModelPartWrapper[] leftLeg = ModelPartType.LEFT_LEG.findIn(skater, model);
         float ageInTicks = skater.tickCount + partialTicks;
         float pedalAmount = skateboard.getPedalAmount(partialTicks);
-        boolean pedalFootLeft = skater.getMainArm() == HumanoidArm.LEFT;
+        boolean pedalFootLeft = isPedalFootLeft(skater);
         int leftMulti = pedalFootLeft ? -1 : 1;
         //for some reason, z value of body is not reset each frame, has to be done manually
         float bodyZ = body.length > 0 && body[0].getModelPart() != null ? body[0].getModelPart().z : 0;
@@ -173,10 +174,13 @@ public class SkatingModelPositioner {
         }
     }
 
+    private static boolean isPedalFootLeft(LivingEntity skater) {
+        return IWannaSkateMod.CLIENT_CONFIG.invertSide.get() == (skater.getMainArm() != HumanoidArm.LEFT);
+    }
 
     private static void rotateForPose(LivingEntity skater, EntityModel model, PoseStack stack, float partialTicks, SkateboardEntity skateboard, SkaterPose pose, float progress) {
         ModelRootRegistry.SkateModelParts animationData = ModelRootRegistry.INSTANCE.getAnimationData(model, skater.getType());
-        boolean pedalFootLeft = skater.getMainArm() == HumanoidArm.LEFT;
+        boolean pedalFootLeft = isPedalFootLeft(skater);
         int leftMulti = pedalFootLeft ? -1 : 1;
         if(pose.useBoardPitch()){
             float f = skateboard.getViewXRot(partialTicks) * progress;

@@ -90,5 +90,55 @@
       }
     ],
     "subtitle": "iwannaskate.sound.subtitle.skateboard_jump_land"
+  },
+  "skater_skeleton_idle": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skater_skeleton_idle_0"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_idle_1"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_idle_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skater_skeleton_idle"
+  },
+  "skater_skeleton_walk": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skater_skeleton_walk_0"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_walk_1"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_walk_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skater_skeleton_walk"
+  },
+  "skater_skeleton_hurt": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skater_skeleton_hurt_0"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_hurt_1"
+      },
+      {
+        "name": "iwannaskate:skater_skeleton_hurt_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skater_skeleton_hurt"
+  },
+  "skater_skeleton_die": {
+    "sounds": [
+      {
+        "name": "iwannaskate:skater_skeleton_die_0"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.skater_skeleton_die"
   }
 }

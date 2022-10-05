@@ -24,9 +24,16 @@ public class IWSEnchantmentRegistry {
     public static final RegistryObject<Enchantment> HARDWOOD = DEF_REG.register("hardwood", () -> new SkateboardEnchantment("hardwood", Enchantment.Rarity.UNCOMMON, 1, 12));
     public static final RegistryObject<Enchantment> BASHING = DEF_REG.register("bashing", () -> new SkateboardEnchantment("bashing", Enchantment.Rarity.UNCOMMON, 4, 8));
     public static final RegistryObject<Enchantment> ONBOARDING = DEF_REG.register("onboarding", () -> new SkateboardEnchantment("onboarding", Enchantment.Rarity.UNCOMMON, 1, 14));
+    public static final RegistryObject<Enchantment> BENTHIC = DEF_REG.register("benthic", () -> new SkateboardEnchantment("benthic", Enchantment.Rarity.RARE, 1, 16));
+    public static final RegistryObject<Enchantment> SLOW_MOTION = DEF_REG.register("slow_motion", () -> new SkateboardEnchantment("slow_motion", Enchantment.Rarity.RARE, 2, 15));
 
     public static boolean areCompatible(Enchantment enchantment1, Enchantment enchantment2) {
-
+        if(enchantment1 == SURFING.get()){
+            return enchantment2 != BENTHIC.get();
+        }
+        if(enchantment1 == BENTHIC.get()){
+            return enchantment2 != SURFING.get();
+        }
         return true;
     }
 }

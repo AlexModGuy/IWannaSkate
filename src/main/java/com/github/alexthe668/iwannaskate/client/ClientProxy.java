@@ -16,6 +16,7 @@ import com.github.alexthe668.iwannaskate.client.sound.SkateboardSound;
 import com.github.alexthe668.iwannaskate.server.CommonProxy;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
+import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -25,6 +26,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,13 +54,17 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onRenderLevel(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
+            if(IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+                int ticksPerSecond = Minecraft.getInstance().player == null ? 20 : ((SlowableEntity)Minecraft.getInstance().player).getTickRate();
+                Minecraft.getInstance().timer.msPerTick = 1000.0F / ticksPerSecond;
+            }
             IWSItemstackRenderer.tick();
         }
     }
 
     @SubscribeEvent
     public void onRenderTooltipColor(RenderTooltipEvent.Color event) {
-        if (event.getItemStack().getItem() instanceof BaseSkateboardItem skateboardItem && skateboardItem.canFlipInInventory(event.getItemStack())) {
+        if (event.getItemStack().getItem() instanceof BaseSkateboardItem skateboardItem && skateboardItem.canFlipInInventory(event.getItemStack()) && IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
             lastHoveredItem = event.getItemStack();
         }else{
             lastHoveredItem = null;
@@ -67,11 +73,11 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
-        if(event.getOverlay().id().equals(VanillaGuiOverlay.JUMP_BAR.id()) && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard){
+        if(event.getOverlay().id().equals(VanillaGuiOverlay.JUMP_BAR.id()) && IWannaSkateMod.CLIENT_CONFIG.showInertiaIndicator.get() && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard){
             int screenWidth = event.getWindow().getGuiScaledWidth();
             int screenHeight = event.getWindow().getGuiScaledHeight();
-            int j = screenWidth / 2 - 123;
-            int k = screenHeight - 12;
+            int j = screenWidth / 2 - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorX.get();
+            int k = screenHeight - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorY.get();
             float f = skateboard.getForwards() / skateboard.getMaxForwardsTicks();
             event.getPoseStack().pushPose();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -118,7 +124,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void onEntityStatus(Entity entity, byte updateKind) {
-        if (entity instanceof SkateboardEntity skateboard && entity.isAlive() && updateKind == 67) {
+        if (entity instanceof SkateboardEntity skateboard && entity.isAlive() && updateKind == 67 && IWannaSkateMod.CLIENT_CONFIG.skateboardLoopSounds.get()) {
             SkateboardSound sound;
             if (SKATEBOARD_SOUND_MAP.get(entity.getId()) == null || SKATEBOARD_SOUND_MAP.get(entity.getId()).isDifferentBoard(entity)) {
                 sound = new SkateboardSound(SkateSoundType.getForSkateboard(skateboard), 0.0F, skateboard);
@@ -130,6 +136,10 @@ public class ClientProxy extends CommonProxy {
                 Minecraft.getInstance().getSoundManager().play(sound);
             }
         }
+    }
+
+    public void reloadConfig() {
+        Minecraft.getInstance().timer.msPerTick = 50.0F;
     }
 
     public static void setupParticles(RegisterParticleProvidersEvent registry) {

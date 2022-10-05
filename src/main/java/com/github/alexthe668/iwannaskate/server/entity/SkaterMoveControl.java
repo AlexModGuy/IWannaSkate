@@ -32,7 +32,7 @@ public class SkaterMoveControl extends MoveControl {
                 float diff = Mth.wrapDegrees(360 + targetYRot - currentYRot);
                 if(Math.abs(diff) > 15){
                     int skill = this.isSkilled() ? 15 : 0;
-                    skateboard.setZRot(skateboard.approachRotation(skateboard.getZRot(), Math.signum(diff) * (35 + skill), sidewinder * 15 + skill));
+                    skateboard.setZRot(skateboard.approachRotation(skateboard.getZRot(), Math.signum(diff) * (35 + skill), 5));
                 }
                 if(sub.length() < 1 || sub.length() < 4 && mob.getRandom().nextInt(50) == 0){
                     this.operation = Operation.WAIT;

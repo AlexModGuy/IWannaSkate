@@ -1,0 +1,7 @@
+{
+  "#comment": "biomes that no hostile mobs can spawn in.",
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_fields"
+  ]
+}
