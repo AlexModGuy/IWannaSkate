@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iwannaskate:skateboard_deck"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.skateboard_deck.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.skateboard_deck.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/root",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": ["iwannaskate:skateboard_deck"]
+                    }
+                ]
+            }
+        }
+    }
+}

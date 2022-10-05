@@ -9,6 +9,7 @@ import com.github.alexthe668.iwannaskate.server.IWSServerConfig;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
+import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
@@ -20,7 +21,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -97,6 +97,7 @@ public class IWannaSkateMod {
     private void commonSetup(final FMLCommonSetupEvent event) {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardPartMessage.class, SkateboardPartMessage::write, SkateboardPartMessage::read, SkateboardPartMessage.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardKeyMessage.class, SkateboardKeyMessage::write, SkateboardKeyMessage::read, SkateboardKeyMessage.Handler::handle);
+        IWSAdvancements.init();
     }
 
     public static <MSG> void sendMSGToAll(MSG message) {

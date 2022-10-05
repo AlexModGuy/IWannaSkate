@@ -1,0 +1,19 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:iron_helmet"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.take_skate_damage.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.take_skate_damage.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/skateboard",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:take_skate_damage"
+        }
+    }
+}

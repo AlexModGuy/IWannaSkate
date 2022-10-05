@@ -5,10 +5,7 @@ import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
-import com.github.alexthe668.iwannaskate.server.misc.IWSDamageTypes;
-import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
-import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
-import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
+import com.github.alexthe668.iwannaskate.server.misc.*;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.google.common.base.Predicates;
 import net.minecraft.core.BlockPos;
@@ -506,7 +503,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         if (Math.abs(heightDiff) > 0) {
             this.setForwards(Mth.clamp(this.getForwards() - heightDiff * 0.8F, 0, getMaxForwardsTicks()));
         }
-        this.setGrinding(this.isOnGround() && this.getBlockStateOn().is(IWSTags.GRINDS));
+        this.setGrinding(this.isOnGround() && (this.getBlockStateOn().is(IWSTags.GRINDS) || this.getFeetBlockState().is(IWSTags.GRINDS)));
         boolean onWater = this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
         if (onWater) {
             this.setOnGround(true);
@@ -799,6 +796,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             } else {
                 if (!this.trickFlag) {
                     if (this.isGrinding()) {
+                        IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.TRICK_GRIND);
                         this.setSkaterPose(SkaterPose.GRIND);
                     } else {
                         if (this.getDeltaMovement().length() > 0.02F) {
@@ -854,6 +852,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
                     }
                 }
                 if (!damageBlocked) {
+                    IWSAdvancements.trigger(passenger, IWSAdvancements.TAKE_SKATE_DAMAGE);
                     passenger.hurt(IWSDamageTypes.SKATE_DAMAGE, 2 + 2 * f1);
                 }
                 passenger.stopRiding();
@@ -1037,9 +1036,11 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         int aerial = this.getEnchantLevel(IWSEnchantmentRegistry.AERIAL.get());
         if (barAmount >= 80) {
             this.setSkaterPose(SkaterPose.KICKFLIP);
+            IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.TRICK_KICKFLIP);
             this.jumpFor = aerial * 2 + 8;
         } else {
             this.setSkaterPose(SkaterPose.OLLIE);
+            IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.TRICK_OLLIE);
             this.jumpFor = aerial * 2 + 4 + barAmount / 20;
         }
         this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_START.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
@@ -1058,6 +1059,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         float listenDistance = 5.0F + 2.0F * this.getEnchantLevel(IWSEnchantmentRegistry.AERIAL.get());
         if (this.isVehicle() && fallDistance > listenDistance && !this.hasEnchant(IWSEnchantmentRegistry.SECURED.get())) {
             for (Entity entity : this.getPassengers()) {
+                IWSAdvancements.trigger(entity, IWSAdvancements.TAKE_SKATE_DAMAGE);
                 entity.causeFallDamage(fallDistance, damageMod, IWSDamageTypes.SKATE_DAMAGE);
             }
             if (fallDistance > listenDistance + 3) {

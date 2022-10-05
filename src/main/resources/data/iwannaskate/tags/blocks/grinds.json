@@ -4,6 +4,7 @@
   "values": [
     "minecraft:iron_bars",
     "#minecraft:fences",
+    "#minecraft:rails",
     "#minecraft:walls"
   ]
 }

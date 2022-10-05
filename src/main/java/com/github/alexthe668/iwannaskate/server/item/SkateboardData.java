@@ -88,7 +88,7 @@ public class SkateboardData {
 
     public DyeColor getGripTapeColor(){
         if(hasGripTape()){
-            return DyeColor.values()[gripTapeOrdinal];
+            return DyeColor.values()[Mth.clamp(gripTapeOrdinal, 0, DyeColor.values().length - 1)];
         }
         return DyeColor.BLACK;
     }

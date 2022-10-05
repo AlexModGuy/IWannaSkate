@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "citadel:fancy_item",
+            "nbt": "{DisplayItem:\"iwannaskate:skateboard\", DisplayBob:1, DisplayZoom:0, DisplayScale:1, DisplaySpin:0, DisplayShake:0, DisplayItemNBT:{Skateboard:{MadeOf:\"minecraft:birch_slab\", GripTape:3, WheelType:4}}}"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.trick_ollie.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.trick_ollie.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/skateboard",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:trick_ollie"
+        }
+    }
+}

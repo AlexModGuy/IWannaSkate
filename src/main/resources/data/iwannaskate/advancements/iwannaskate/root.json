@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "iwannaskate:skateboard_wheels"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.root.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.root.desc"
+        },
+        "background": "minecraft:textures/block/smooth_stone.png",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden" : false
+    },
+    "criteria": {
+        "item_criteria": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "iwannaskate:skateboard_wheels"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "iwannaskate:shimmering_wax"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.enchant_skateboard.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.enchant_skateboard.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/skateboard",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:enchanted_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "iwannaskate:skateboard"
+                    ]
+                }
+            }
+        }
+    }
+}
