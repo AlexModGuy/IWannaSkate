@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.client.model.IWSModelLayers;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.CommonProxy;
 import com.github.alexthe668.iwannaskate.server.IWSServerConfig;
+import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
@@ -79,6 +80,7 @@ public class IWannaSkateMod {
         modEventBus.addListener(this::setupEntityModelLayers);
         modEventBus.addListener(this::onConfigReloaded);
         IWSItemRegistry.DEF_REG.register(modEventBus);
+        IWSBlockRegistry.DEF_REG.register(modEventBus);
         IWSRecipeRegistry.DEF_REG.register(modEventBus);
         IWSEntityRegistry.DEF_REG.register(modEventBus);
         IWSEnchantmentRegistry.DEF_REG.register(modEventBus);

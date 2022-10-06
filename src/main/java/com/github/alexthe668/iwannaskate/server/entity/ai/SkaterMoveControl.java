@@ -1,6 +1,8 @@
-package com.github.alexthe668.iwannaskate.server.entity;
+package com.github.alexthe668.iwannaskate.server.entity.ai;
 
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
+import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
+import com.github.alexthe668.iwannaskate.server.entity.SkaterPose;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

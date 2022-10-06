@@ -32,7 +32,7 @@ public class IWSServerConfig {
         slowMotionDistance = builder.comment("determines how far in blocks entities are effected by slow motion.").translation("slow_motion_distance").defineInRange("slow_motion_distance", 30, 1, 2000);
         builder.pop();
         builder.push("board-customization");
-        skateboardExpAnvilRateModifier = builder.comment("Adding enchantments to the skateboard via the anvil is made cheaper by multiplying the total amount of exp cost by this number. 1.0 = disabled, 100% usual exp, 0.0 = 1 exp").translation("skateboard_exp_anvil_rate_modifier").defineInRange("skateboard_exp_anvil_rate_modifier", 0.25D, 0D, 1D);
+        skateboardExpAnvilRateModifier = builder.comment("Adding enchantments to the skateboard via the anvil is made cheaper by multiplying the total amount of exp cost by this number. 1.0 = disabled, 100% usual exp, 0.0 = 1 exp").translation("skateboard_exp_anvil_rate_modifier").defineInRange("skateboard_exp_anvil_rate_modifier", 0.75D, 0D, 1D);
         builder.pop();
 
     }

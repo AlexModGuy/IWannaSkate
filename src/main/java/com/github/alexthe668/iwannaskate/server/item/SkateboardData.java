@@ -1,7 +1,9 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
+import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -11,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -152,6 +155,19 @@ public class SkateboardData {
         if(stack.isEnchanted()){
             tooltip.add(Component.literal(""));
             tooltip.add(Component.translatable("item.iwannaskate.skateboard.enchanted").withStyle(chatColor, ChatFormatting.UNDERLINE));
+            ListTag enchantmentList = stack.getEnchantmentTags();
+            int maxPreview = 4;
+            for(int i = 0; i < enchantmentList.size(); ++i) {
+                if(i < maxPreview || IWannaSkateMod.PROXY.isKeyDown(1)){
+                    CompoundTag compoundtag = enchantmentList.getCompound(i);
+                    Registry.ENCHANTMENT.getOptional(EnchantmentHelper.getEnchantmentId(compoundtag)).ifPresent((enchantment) -> {
+                        tooltip.add(Component.literal("  -").withStyle(chatColor).append(enchantment.getFullname(EnchantmentHelper.getEnchantmentLevel(compoundtag))));
+                    });
+                }
+            }
+            if(enchantmentList.size() >= maxPreview && !IWannaSkateMod.PROXY.isKeyDown(1)){
+                tooltip.add(Component.translatable("item.iwannaskate.skateboard.show_more").withStyle(chatColor));
+            }
         }
    }
 

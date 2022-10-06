@@ -3,11 +3,11 @@ package com.github.alexthe668.iwannaskate.server.entity;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
+import com.github.alexthe668.iwannaskate.server.entity.ai.SkaterMoveControl;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.*;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
-import com.google.common.base.Predicates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -18,7 +18,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +35,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.network.NetworkHooks;
@@ -295,7 +293,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         return rotated.yRot(-this.getViewYRot(partialTicks) * ((float) Math.PI / 180F));
     }
 
-    protected float approachRotation(float current, float target, float max) {
+    public float approachRotation(float current, float target, float max) {
         float f = Mth.wrapDegrees(target - current);
         if (f > max) {
             f = max;
@@ -885,6 +883,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             passenger.moveControl = new SkaterMoveControl(passenger, passenger.getMoveControl());
         }
         passenger.yBodyRot = this.getYRot();
+        passenger.yHeadRot = Mth.clamp(passenger.yHeadRot, passenger.yBodyRot - 90, passenger.yBodyRot + 90);
     }
 
     public void positionRider(Entity passenger) {

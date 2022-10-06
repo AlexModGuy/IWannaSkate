@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.client.render.entity;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.model.IWSModelLayers;
+import com.github.alexthe668.iwannaskate.client.model.WanderingSkaterModel;
 import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -22,13 +23,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, VillagerModel<WanderingSkaterEntity>> {
+public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, WanderingSkaterModel> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/wandering_skater.png");
 
     public WanderingSkaterRenderer(EntityRendererProvider.Context context) {
-        super(context, new VillagerModel<>(context.bakeLayer(IWSModelLayers.WANDERING_SKATER)), 0.5F);
+        super(context, new WanderingSkaterModel(context.bakeLayer(IWSModelLayers.WANDERING_SKATER)), 0.5F);
         this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
-        this.addLayer(new CrossedArmsItemLayer<>(this, context.getItemInHandRenderer()));
         this.addLayer(new SkateboardItemLayer(this, context.getItemInHandRenderer()));
     }
 
@@ -40,7 +40,7 @@ public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, 
         poseStack.scale(0.9375F, 0.9375F, 0.9375F);
     }
 
-    class SkateboardItemLayer extends RenderLayer<WanderingSkaterEntity, VillagerModel<WanderingSkaterEntity>> {
+    class SkateboardItemLayer extends RenderLayer<WanderingSkaterEntity, WanderingSkaterModel> {
         private final ItemInHandRenderer itemInHandRenderer;
 
         public SkateboardItemLayer(WanderingSkaterRenderer renderer, ItemInHandRenderer p_234819_) {
@@ -50,12 +50,23 @@ public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, 
 
         public void render(PoseStack poseStack, MultiBufferSource bufferSource, int i, WanderingSkaterEntity skater, float f, float f1, float f2, float f3, float f4, float f5) {
             poseStack.pushPose();
-            poseStack.translate(0.0D, (double)0.1F, (double)0.1F);
-            poseStack.mulPose(Vector3f.ZN.rotationDegrees(35.0F));
+            float swing = skater.getAttackingProgress(f2);
+            float swing2 = (float) Math.sin(swing * Math.PI);
+            this.getParentModel().translateToArms(poseStack);
+            poseStack.translate( -swing2 * 0.5F + swing * 0.2F, (double)0.1F - 1.2F * swing2 + swing * 0.2F, (double)0.1F - swing * 1.1F);
+            poseStack.mulPose(Vector3f.ZN.rotationDegrees(35.0F * (1 - swing)));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(180.0F + swing * 90.0F));
+            poseStack.mulPose(Vector3f.YN.rotationDegrees(90.0F * (1 - swing)));
+            ItemStack offhand = skater.getItemBySlot(EquipmentSlot.OFFHAND);
+            this.itemInHandRenderer.renderItem(skater, offhand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, bufferSource, i);
+            poseStack.popPose();
+
+            poseStack.pushPose();
+            this.getParentModel().translateToArms(poseStack);
+            poseStack.translate(0.0D, (double)0.3F, (double)-0.35F);
             poseStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-            poseStack.mulPose(Vector3f.YN.rotationDegrees(90.0F));
-            ItemStack itemstack = skater.getItemBySlot(EquipmentSlot.OFFHAND);
-            this.itemInHandRenderer.renderItem(skater, itemstack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, bufferSource, i);
+            ItemStack itemstack = skater.getItemBySlot(EquipmentSlot.MAINHAND);
+            this.itemInHandRenderer.renderItem(skater, itemstack, ItemTransforms.TransformType.GROUND, false, poseStack, bufferSource, i);
             poseStack.popPose();
         }
     }

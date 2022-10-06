@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +27,7 @@ public class SkateboardItem extends BaseSkateboardItem {
         super(properties);
     }
 
-    public boolean canFlipInInventory(ItemStack stack){
+    public boolean canFlipInInventory(ItemStack stack) {
         return SkateboardData.fromStack(stack).hasBanner();
     }
 
@@ -37,6 +38,12 @@ public class SkateboardItem extends BaseSkateboardItem {
     @Override
     public int getEnchantmentValue() {
         return 1;
+    }
+
+    @Override
+    public int getDefaultTooltipHideFlags(@NotNull ItemStack stack) {
+        //hide enchantments so that they can be truncated
+        return ItemStack.TooltipPart.ENCHANTMENTS.getMask();
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

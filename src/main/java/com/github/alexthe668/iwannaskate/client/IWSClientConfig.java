@@ -5,6 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class IWSClientConfig {
 
     public final ForgeConfigSpec.BooleanValue showInertiaIndicator;
+    public final ForgeConfigSpec.BooleanValue hideExperienceBar;
     public final ForgeConfigSpec.IntValue inertiaIndicatorX;
     public final ForgeConfigSpec.IntValue inertiaIndicatorY;
     public final ForgeConfigSpec.BooleanValue flipBoardItems;
@@ -15,6 +16,7 @@ public class IWSClientConfig {
     public IWSClientConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("display");
         showInertiaIndicator = builder.comment("when enabled, shows a skateboard icon on the user HUD that indicates their current inertia.").translation("show_inertia_indicator").define("show_inertia_indicator", true);
+        hideExperienceBar = builder.comment("when enabled, hides the experience bar when on a skateboard, so that it will not clutter the UI.").translation("hide_experience_bar").define("hide_experience_bar", true);
         inertiaIndicatorX = builder.comment("determines how far to the left the inertia indicator renders on the screen. Negative numbers will render it on the right. ").translation("inertia_indicator_x").defineInRange("inertia_indicator_x", 123, -12000, 12000);
         inertiaIndicatorY = builder.comment("determines how far from bottom the inertia indicator renders on the screen.").translation("inertia_indicator_y").defineInRange("inertia_indicator_y", 12, -12000, 12000);
         flipBoardItems = builder.comment("when enabled, a skateboard with a banner pattern will flip over when the mouse is over it in the inventory.").translation("flip_board_items").define("flip_board_items", true);

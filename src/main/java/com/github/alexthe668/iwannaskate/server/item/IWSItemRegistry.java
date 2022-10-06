@@ -1,9 +1,12 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
+import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,6 +23,7 @@ public class IWSItemRegistry {
     public static final RegistryObject<Item> SKATEBOARD_DECK = DEF_REG.register("skateboard_deck", () -> new BaseSkateboardItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SKATEBOARD_TRUCK = DEF_REG.register("skateboard_truck", () -> new Item(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SHIMMERING_WAX = DEF_REG.register("shimmering_wax", () -> new SimpleFoiledItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
+    public static final RegistryObject<Item> PIZZA_SLICE = DEF_REG.register("pizza_slice", () -> new PizzaItem(IWSBlockRegistry.PIZZA, new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.2F).build())));
     static {
         SkateboardWheels.init();
     }

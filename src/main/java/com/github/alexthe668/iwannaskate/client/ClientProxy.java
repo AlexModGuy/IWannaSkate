@@ -24,6 +24,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
@@ -74,7 +75,14 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
+    public void onPreRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
+        if(event.getOverlay().id().equals(VanillaGuiOverlay.EXPERIENCE_BAR.id()) && IWannaSkateMod.CLIENT_CONFIG.hideExperienceBar.get() && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPostRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
         if(event.getOverlay().id().equals(VanillaGuiOverlay.JUMP_BAR.id()) && IWannaSkateMod.CLIENT_CONFIG.showInertiaIndicator.get() && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard){
             int screenWidth = event.getWindow().getGuiScaledWidth();
             int screenHeight = event.getWindow().getGuiScaledHeight();
@@ -121,6 +129,9 @@ public class ClientProxy extends CommonProxy {
     public boolean isKeyDown(int keyType) {
         if(keyType == 0){
             return Minecraft.getInstance().options.keySprint.isDown();
+        }
+        if(keyType == 1){
+            return Screen.hasShiftDown();
         }
         return false;
     }

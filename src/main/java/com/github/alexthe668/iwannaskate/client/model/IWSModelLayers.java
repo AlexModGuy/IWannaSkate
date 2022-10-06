@@ -18,7 +18,7 @@ public class IWSModelLayers {
 
     public static void register(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SKATER_SKELETON, () -> SkeletonModel.createBodyLayer());
-        event.registerLayerDefinition(WANDERING_SKATER, () -> LayerDefinition.create(VillagerModel.createBodyModel(), 64, 64));
+        event.registerLayerDefinition(WANDERING_SKATER, () -> WanderingSkaterModel.createBodyLayer());
     }
 
     private static ModelLayerLocation createLocation(String model, String layer) {

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "slices=1": {
+      "model": "iwannaskate:block/pizza_1"
+    },
+    "slices=2": {
+      "model": "iwannaskate:block/pizza_2"
+    },
+    "slices=3": {
+      "model": "iwannaskate:block/pizza_3"
+    },
+    "slices=4": {
+      "model": "iwannaskate:block/pizza_4"
+    },
+    "slices=5": {
+      "model": "iwannaskate:block/pizza_5"
+    },
+    "command=6": {
+      "model": "iwannaskate:block/pizza_6"
+    }
+  }
+}

@@ -46,7 +46,7 @@ public class CommonProxy {
     @SubscribeEvent
     public void onAnvilUpdate(AnvilUpdateEvent event) {
         double rate = IWannaSkateMod.COMMON_CONFIG.skateboardExpAnvilRateModifier.get();
-        if(event.getLeft().is(IWSItemRegistry.SKATEBOARD.get()) && event.getRight().is(Items.ENCHANTED_BOOK) && rate != 1.0D){
+        if(event.getLeft().is(IWSItemRegistry.SKATEBOARD.get()) && event.getRight().is(Items.ENCHANTED_BOOK) && rate != 1.0D && event.getCost() > 1){
             int initialCost = event.getCost();
             ItemStack copy = event.getLeft().copy();
             boolean incompatible = false;
@@ -60,13 +60,14 @@ public class CommonProxy {
                     }
                 }
                 if(!incompatible){
+                    initialCost += entry.getKey().getMaxCost(entry.getValue());
                     map.put(entry.getKey(), before + entry.getValue());
                 }
             }
-            if(!incompatible){
+            if(!incompatible && initialCost > 5){
                 EnchantmentHelper.setEnchantments(map, copy);
                 event.setOutput(copy);
-                event.setCost((int) Math.ceil(initialCost * rate));
+                event.setCost(Math.max(1, (int) Math.ceil(initialCost * rate)));
             }
         }
     }

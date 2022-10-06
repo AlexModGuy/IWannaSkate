@@ -18,7 +18,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -88,6 +87,12 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         return itemStack;
     }
 
+    public static boolean checkSkaterSkeletonSpawnRules(EntityType type, ServerLevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+        BlockPos blockpos = pos.below();
+        boolean prev = checkMonsterSpawnRules(type, levelAccessor, spawnType, pos, randomSource);
+        return prev && (spawnType == MobSpawnType.SPAWNER || IWannaSkateMod.COMMON_CONFIG.spawnSkaterSkeletons.get() && !levelAccessor.getBiome(blockpos).is(IWSTags.NO_MONSTERS) && levelAccessor.getBlockState(blockpos).is(IWSTags.SPAWNS_SKATER_SKELETONS) && levelAccessor.getBlockState(blockpos).isValidSpawn(levelAccessor, blockpos, type));
+    }
+
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SKATEBOARD_UUID, Optional.empty());
@@ -100,7 +105,6 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
             this.setSkateboardUUID(compound.getUUID("SkateboardUUID"));
         }
     }
-
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -200,7 +204,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
             }
         }
         if (!this.isPassenger() && skateboard != null) {
-            if(this.isAlive() && attemptRecoveryTimer < 60){
+            if (this.isAlive() && attemptRecoveryTimer < 60) {
                 if (this.distanceToSqr(skateboard) > 1F) {
                     if (!level.isClientSide) {
                         this.getNavigation().moveTo(skateboard.getX(), skateboard.getY(0.5F), skateboard.getZ(), 1F);
@@ -208,8 +212,8 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
                 } else {
                     this.startRiding(skateboard);
                 }
-            }else if(skateboard instanceof  SkateboardEntity){
-                this.setItemSlot(EquipmentSlot.MAINHAND, ((SkateboardEntity)skateboard).getItemStack().copy());
+            } else if (skateboard instanceof SkateboardEntity) {
+                this.setItemSlot(EquipmentSlot.MAINHAND, ((SkateboardEntity) skateboard).getItemStack().copy());
                 this.swing(InteractionHand.MAIN_HAND, true);
                 skateboard.remove(RemovalReason.DISCARDED);
                 attemptRecoveryTimer = 0;
@@ -219,16 +223,11 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     private boolean canPlaceBoard() {
-        return IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsUseSkateboards.get() && this.isOnGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
+        return IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsUseSkateboards.get() && this.isAlive() && this.isOnGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
     }
 
     private boolean shouldDismountBoard(SkateboardEntity board) {
         return slowTimer > 60 || board.isRemoveLogic() || this.getTarget() == null && skateTimer > 700 || !this.isAlive();
-    }
-
-    public static boolean checkSkaterSkeletonSpawnRules(EntityType type, LevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
-        BlockPos blockpos = pos.below();
-        return spawnType == MobSpawnType.SPAWNER || IWannaSkateMod.COMMON_CONFIG.spawnSkaterSkeletons.get() && !levelAccessor.getBiome(blockpos).is(IWSTags.NO_MONSTERS) && levelAccessor.getBlockState(blockpos).is(IWSTags.SPAWNS_SKATER_SKELETONS) && levelAccessor.getBlockState(blockpos).isValidSpawn(levelAccessor, blockpos, type);
     }
 
     public boolean checkSpawnRules(LevelAccessor levelAccessor, MobSpawnType type) {
@@ -263,6 +262,11 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     @Override
+    public void die(DamageSource source) {
+     super.die(source);
+    }
+
+    @Override
     protected void dropAllDeathLoot(DamageSource source) {
         Entity entity = source.getEntity();
 
@@ -282,17 +286,17 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         Collection<ItemEntity> processedDrops = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        for(ItemEntity itemEntity : drops){
-            if(itemEntity.getItem().is(IWSTags.SKATEBOARD_WHEELS) && this.getRandom().nextFloat() < IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsHolidayWheelsDropChance.get()){
+        for (ItemEntity itemEntity : drops) {
+            if (itemEntity.getItem().is(IWSTags.SKATEBOARD_WHEELS) && this.getRandom().nextFloat() < IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsHolidayWheelsDropChance.get()) {
                 int count = itemEntity.getItem().getCount();
-                if(calendar.get(2) + 1 == 10){
+                if (calendar.get(2) + 1 == 10) {
                     itemEntity.setItem(new ItemStack(SkateboardWheels.SPOOKY.getItemRegistryObject().get(), count));
                 }
-                if(calendar.get(2) + 1 == 12){
+                if (calendar.get(2) + 1 == 12) {
                     itemEntity.setItem(new ItemStack(SkateboardWheels.SNOWY.getItemRegistryObject().get(), count));
                 }
                 processedDrops.add(itemEntity);
-            }else{
+            } else {
                 processedDrops.add(itemEntity);
             }
         }
