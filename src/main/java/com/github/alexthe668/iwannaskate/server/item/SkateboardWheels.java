@@ -29,21 +29,27 @@ public enum SkateboardWheels {
     GREEN,
     RED,
     BLACK,
-    ENDERPEARL,
-    FLAME,
-    SOUL_FLAME,
-    RAINBOW,
-    SPOOKY,
-    SNOWY,
-    SHOCKING,
-    HONEY,
-    AESTHETIC;
+    ENDERPEARL(true),
+    FLAME(true),
+    SOUL_FLAME(true),
+    RAINBOW(true),
+    SPOOKY(false),
+    SNOWY(false),
+    SHOCKING(true),
+    HONEY(true),
+    AESTHETIC(true);
 
     private final ResourceLocation texture;
+    private final boolean isTrade;
     private RegistryObject<Item> itemRegistryObject;
 
-    SkateboardWheels(){
+    SkateboardWheels() {
+        this(false);
+    }
+
+    SkateboardWheels(boolean isTrade){
         this.texture = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_" + this.name().toLowerCase() + ".png");
+        this.isTrade = isTrade;
     }
 
     public static void init(){
@@ -66,6 +72,10 @@ public enum SkateboardWheels {
 
     public RegistryObject<Item> getItemRegistryObject() {
         return itemRegistryObject;
+    }
+
+    public boolean isTrade(){
+        return isTrade;
     }
 
     @Nullable

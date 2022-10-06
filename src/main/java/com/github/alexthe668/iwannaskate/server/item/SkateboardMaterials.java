@@ -43,20 +43,22 @@ public class SkateboardMaterials {
         return ForgeRegistries.ITEMS.getValues().stream().filter(item -> item.builtInRegistryHolder().is(ItemTags.BANNERS)).collect(ImmutableSet.toImmutableSet());
     }
 
-    public static SkateboardData generateRandomData(RandomSource random){
+    public static SkateboardData generateRandomData(RandomSource random, boolean onlyWood){
         List<Item> materials = getSkateboardMaterials().stream().toList();
         Item material = materials.get(materials.size() > 1 ? random.nextInt(materials.size() - 1) : 0);
         SkateboardData data = new SkateboardData(ForgeRegistries.ITEMS.getKey(material));
-        if(random.nextInt(17) != 0){
-            data.setGripTape(DyeColor.values()[random.nextInt(DyeColor.values().length - 1)]);
-        }
-        data.setWheelType(SkateboardWheels.values()[random.nextInt(SkateboardWheels.values().length - 1)]);
-        if(random.nextInt(5) != 0) {
-            List<Item> banners = getBanners().stream().toList();
-            Item banner = banners.get(banners.size() > 1 ? random.nextInt(banners.size() - 1) : 0);
-            CompoundTag bannerTag = new CompoundTag();
-            bannerTag.putInt("Base", ((BannerItem)banner).getColor().getId());
-            data.setBanner(bannerTag);
+        if(!onlyWood){
+            if(random.nextInt(17) != 0){
+                data.setGripTape(DyeColor.values()[random.nextInt(DyeColor.values().length - 1)]);
+            }
+            data.setWheelType(SkateboardWheels.values()[random.nextInt(SkateboardWheels.values().length - 1)]);
+            if(random.nextInt(5) != 0) {
+                List<Item> banners = getBanners().stream().toList();
+                Item banner = banners.get(banners.size() > 1 ? random.nextInt(banners.size() - 1) : 0);
+                CompoundTag bannerTag = new CompoundTag();
+                bannerTag.putInt("Base", ((BannerItem)banner).getColor().getId());
+                data.setBanner(bannerTag);
+            }
         }
         return data;
     }

@@ -97,9 +97,10 @@ public class ModelRootRegistry implements ResourceManagerReloadListener {
                 if(type == ModelPartType.HEAD && model instanceof HasHeadModelParts listModel){
                     listModel.getHeadModelParts().forEach(part -> parts.add(new ModelPartWrapper((ModelPart) part)));
                 }else{
-                    ModelPart part = partName.equals("root") && type == ModelPartType.BODY ? root : getNestedChildPart(root, partName);
+                    boolean isRoot = partName.equals("root") && type == ModelPartType.BODY;
+                    ModelPart part = isRoot ? root : getNestedChildPart(root, partName);
                     if(part != null){
-                        parts.add(new ModelPartWrapper(part));
+                        parts.add(new ModelPartWrapper(part, isRoot));
                     }
                 }
             }catch (NoSuchElementException exception){

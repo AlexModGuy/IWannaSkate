@@ -37,15 +37,9 @@ public class RecipeSkateboardShimmer extends CustomRecipe {
                     if (!itemstack2.is(IWSItemRegistry.SKATEBOARD.get())) {
                         return false;
                     }
-
                     if (!skateboard.isEmpty()) {
                         return false;
                     }
-
-                    if (SkateboardData.fromStack(itemstack2).hasGripTape()) {
-                        return false;
-                    }
-
                     skateboard = itemstack2;
                 }
             }

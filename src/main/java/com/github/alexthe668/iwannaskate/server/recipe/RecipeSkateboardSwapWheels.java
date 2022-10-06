@@ -48,11 +48,6 @@ public class RecipeSkateboardSwapWheels extends CustomRecipe {
                     if (!skateboard.isEmpty()) {
                         return false;
                     }
-
-                    if (SkateboardData.fromStack(itemstack2).hasGripTape()) {
-                        return false;
-                    }
-
                     skateboard = itemstack2;
                 }
             }

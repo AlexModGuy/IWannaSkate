@@ -18,6 +18,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,9 +86,8 @@ public class SkatingModelPositioner {
         float ageInTicks = skater.tickCount + partialTicks;
         float pedalAmount = skateboard.getPedalAmount(partialTicks);
         boolean pedalFootLeft = isPedalFootLeft(skater);
+        boolean isBodyParentToLegs = Arrays.stream(body).anyMatch((ModelPartWrapper::isRoot));
         int leftMulti = pedalFootLeft ? -1 : 1;
-        //for some reason, z value of body is not reset each frame, has to be done manually
-        float bodyZ = body.length > 0 && body[0].getModelPart() != null ? body[0].getModelPart().z : 0;
         if(pose.isSideways() && !faceForwards){
             rotateModelPart(head, progress, 0, (float) Math.toRadians(-70 * leftMulti), 0);
         }
@@ -98,17 +98,25 @@ public class SkatingModelPositioner {
         if(pose == SkaterPose.PEDAL){
             float swing = (float) Math.sin(ageInTicks * 0.4F * animSpeed) * pedalAmount * animStrength;
             positionModelPart(body, progress, 0, 0, 1);
-            rotateModelPart(body, progress, (float) Math.toRadians(15F), 0, 0);
+            rotateModelPart(body, progress, (float) Math.toRadians(animStrength * 15F), 0, 0);
+            if(isBodyParentToLegs){
+                rotateModelPart(leftLeg, progress, (float) Math.toRadians(animStrength * -15F), 0, 0);
+                rotateModelPart(rightLeg, progress, (float) Math.toRadians(animStrength * -15F), 0, 0);
+            }
             rotateModelPart(leftArm, progress, (float) Math.toRadians(-35F - swing * 15) * pedalAmount, (float) Math.toRadians(-5F), (float) Math.toRadians(-10F));
             rotateModelPart(rightArm, progress, (float) Math.toRadians(-35F - swing * 15) * pedalAmount, (float) Math.toRadians(5F), (float) Math.toRadians(10F));
             if (pedalFootLeft) {
-                positionModelPart(leftLeg, progress, 0, -Math.abs(swing * 3), 1 + Math.abs(swing * 2));
-                positionModelPart(rightLeg, progress, 0, -3, 2);
+                if(!isBodyParentToLegs){
+                    positionModelPart(leftLeg, progress, 0, -Math.abs(swing * 3), 1 + Math.abs(swing * 2));
+                    positionModelPart(rightLeg, progress, 0, -3, 2);
+                }
                 rotateModelPart(leftLeg, progress, (float) Math.toRadians(15F - swing * 70), 0, 0);
                 rotateModelPart(rightLeg, progress, (float) Math.toRadians(-10F), 0, 0);
             } else {
-                positionModelPart(rightLeg, progress, 0, -Math.abs(swing * 3), 1 + Math.abs(swing * 2));
-                positionModelPart(leftLeg, progress, 0, -3, 2);
+                if(!isBodyParentToLegs) {
+                    positionModelPart(rightLeg, progress, 0, -Math.abs(swing * 3), 1 + Math.abs(swing * 2));
+                    positionModelPart(leftLeg, progress, 0, -3, 2);
+                }
                 rotateModelPart(rightLeg, progress, (float) Math.toRadians(15F - swing * 70), 0, 0);
                 rotateModelPart(leftLeg, progress, (float) Math.toRadians(-10F), 0, 0);
             }
@@ -119,11 +127,17 @@ public class SkatingModelPositioner {
             rotateModelPart(leftLeg, progress, (float) Math.toRadians(-15F), 0, (float) Math.toRadians(-25F));
             rotateModelPart(rightArm, progress, 0, (float) Math.toRadians(65F), (float) Math.toRadians(65F));
             rotateModelPart(leftArm, progress, 0, (float) Math.toRadians(-65F), (float) Math.toRadians(-65F));
-            positionModelPart(rightLeg, progress, 0, -3, 6);
-            positionModelPart(leftLeg, progress, 0, -3, 6);
+            if(!isBodyParentToLegs) {
+                positionModelPart(rightLeg, progress, 0, -3, 6);
+                positionModelPart(leftLeg, progress, 0, -3, 6);
+            }else{
+                positionModelPart(body, progress, 0, 0, -6);
+            }
         }else if(pose == SkaterPose.OLLIE){
-            positionModelPart(rightLeg, progress, 0, -3, 5);
-            positionModelPart(leftLeg, progress, 0, -3, 5);
+            if(!isBodyParentToLegs) {
+                positionModelPart(rightLeg, progress, 0, -3, 5);
+                positionModelPart(leftLeg, progress, 0, -3, 5);
+            }
             rotateModelPart(body, progress, (float) Math.toRadians(30), (float) Math.toRadians(-10), 0);
             rotateModelPart(head, progress, (float) Math.toRadians(-30), (float) Math.toRadians(-40), 0);
             if (pedalFootLeft) {
@@ -140,15 +154,19 @@ public class SkatingModelPositioner {
         }else if(pose == SkaterPose.KICKFLIP){
             rotateModelPart(body, progress, (float) Math.toRadians(45), 0, 0);
             if (pedalFootLeft) {
-                positionModelPart(rightLeg, progress, 0, -4, 8);
-                positionModelPart(leftLeg, progress, 0, -4, 4);
+                if(!isBodyParentToLegs) {
+                    positionModelPart(rightLeg, progress, 0, -4, 8);
+                    positionModelPart(leftLeg, progress, 0, -4, 4);
+                }
                 rotateModelPart(rightLeg, progress, (float) Math.toRadians(-35F), (float) Math.toRadians(5F), (float) Math.toRadians(35F));
                 rotateModelPart(leftLeg, progress, (float) Math.toRadians(25F), 0, (float) Math.toRadians(-25F));
                 rotateModelPart(leftArm, progress, 0, (float) Math.toRadians(-65F), (float) Math.toRadians(-100F));
                 rotateModelPart(rightArm, progress, 0, (float) Math.toRadians(65F), (float) Math.toRadians(80F));
             }else{
-                positionModelPart(rightLeg, progress, 0, -4, 4);
-                positionModelPart(leftLeg, progress, 0, -4, 8);
+                if(!isBodyParentToLegs) {
+                    positionModelPart(rightLeg, progress, 0, -4, 4);
+                    positionModelPart(leftLeg, progress, 0, -4, 8);
+                }
                 rotateModelPart(leftLeg, progress, (float) Math.toRadians(-35F), (float) Math.toRadians(-5F), (float) Math.toRadians(-35F));
                 rotateModelPart(rightLeg, progress, (float) Math.toRadians(25F), 0, (float) Math.toRadians(25F));
                 rotateModelPart(rightArm, progress, 0, (float) Math.toRadians(65F), (float) Math.toRadians(100F));
@@ -159,8 +177,10 @@ public class SkatingModelPositioner {
             rotateModelPart(head, progress, (float) Math.toRadians(15), 0, 0);
             rotateModelPart(rightLeg, progress, (float) Math.toRadians(-25 * leftMulti), 0, 0);
             rotateModelPart(leftLeg, progress, (float) Math.toRadians(25 * leftMulti), 0, 0);
-            positionModelPart(rightLeg, progress, 0, -1, 2);
-            positionModelPart(leftLeg, progress, 0, -1, 2);
+            if(!isBodyParentToLegs) {
+                positionModelPart(rightLeg, progress, 0, -1, 2);
+                positionModelPart(leftLeg, progress, 0, -1, 2);
+            }
             if(pedalFootLeft){
                 rotateModelPart(leftArm, progress, (float) Math.toRadians(-50), (float) Math.toRadians(-20), (float) Math.toRadians(-30F));
                 rotateModelPart(rightArm, progress, (float) Math.toRadians(70), (float) Math.toRadians(-20), (float) Math.toRadians(30F));
@@ -168,9 +188,6 @@ public class SkatingModelPositioner {
                 rotateModelPart(rightArm, progress, (float) Math.toRadians(-50), (float) Math.toRadians(20), (float) Math.toRadians(30F));
                 rotateModelPart(leftArm, progress, (float) Math.toRadians(70), (float) Math.toRadians(20), (float) Math.toRadians(-30F));
             }
-        }
-        if(body.length > 0 && body[0].getModelPart() != null){
-            body[0].getModelPart().z = bodyZ;
         }
     }
 

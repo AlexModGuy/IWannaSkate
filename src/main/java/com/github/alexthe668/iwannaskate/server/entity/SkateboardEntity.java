@@ -1155,4 +1155,10 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             restoreSlowedEntities();
         }
     }
+
+    @Override
+    public boolean shouldRender(double x, double y, double z) {
+        boolean prev = super.shouldRender(x, y, z);
+        return prev || this.isVehicle() && this.getFirstPassenger() != null && this.getFirstPassenger().shouldRender(x, y, z);
+    }
 }

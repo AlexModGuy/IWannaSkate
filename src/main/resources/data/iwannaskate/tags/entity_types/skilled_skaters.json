@@ -2,6 +2,7 @@
   "#comment": "All entities that are better at skating, can preform jumps/tricks regularly and turn quick.",
   "replace": false,
   "values": [
-    "iwannaskate:skater_skeleton"
+    "iwannaskate:skater_skeleton",
+    "iwannaskate:wandering_skater"
   ]
 }

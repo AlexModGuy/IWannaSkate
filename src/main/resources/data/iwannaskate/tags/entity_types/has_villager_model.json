@@ -4,6 +4,7 @@
   "values": [
     "minecraft:villager",
     "minecraft:wandering_trader",
-    "minecraft:witch"
+    "minecraft:witch",
+    "iwannaskate:wandering_skater"
   ]
 }

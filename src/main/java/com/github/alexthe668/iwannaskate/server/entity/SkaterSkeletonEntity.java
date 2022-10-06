@@ -8,9 +8,11 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSDamageTypes;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -82,6 +84,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         bannerTag.putInt("Base", DyeColor.RED.getId());
         data.setBanner(bannerTag);
         SkateboardData.setStackData(itemStack, data);
+        itemStack.setHoverName(Component.translatable("item.iwannaskate.skateboard.skater_skeleton").withStyle(ChatFormatting.DARK_RED));
         return itemStack;
     }
 
@@ -296,10 +299,4 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, processedDrops, i, lastHurtByPlayerTime > 0))
             processedDrops.forEach(e -> level.addFreshEntity(e));
     }
-
-    private void spawnAndLocalizeToHoliday(ItemEntity e) {
-
-        level.addFreshEntity(e);
-    }
-
 }

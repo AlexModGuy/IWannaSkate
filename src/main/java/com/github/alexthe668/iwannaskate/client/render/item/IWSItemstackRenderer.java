@@ -61,7 +61,7 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
             ((ClientProxy) (IWannaSkateMod.PROXY)).lastHoveredItem = null;
         }
         if (ticks % 40 == 0) {
-            randomSkateData = SkateboardMaterials.generateRandomData(Minecraft.getInstance().level.random);
+            randomSkateData = SkateboardMaterials.generateRandomData(Minecraft.getInstance().level.random, false);
         }
         ticks++;
     }

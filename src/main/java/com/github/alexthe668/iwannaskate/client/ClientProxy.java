@@ -9,6 +9,7 @@ import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.client.render.IWSRenderTypes;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkateboardRenderer;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkaterSkeletonRenderer;
+import com.github.alexthe668.iwannaskate.client.render.entity.WanderingSkaterRenderer;
 import com.github.alexthe668.iwannaskate.client.render.item.IWSItemRenderProperties;
 import com.github.alexthe668.iwannaskate.client.render.item.IWSItemstackRenderer;
 import com.github.alexthe668.iwannaskate.client.sound.SkateSoundType;
@@ -17,6 +18,7 @@ import com.github.alexthe668.iwannaskate.server.CommonProxy;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
+import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -105,6 +107,7 @@ public class ClientProxy extends CommonProxy {
         modEventBus.addListener(ClientProxy::onTexturesLoaded);
         EntityRenderers.register(IWSEntityRegistry.SKATEBOARD.get(), SkateboardRenderer::new);
         EntityRenderers.register(IWSEntityRegistry.SKATER_SKELETON.get(), SkaterSkeletonRenderer::new);
+        EntityRenderers.register(IWSEntityRegistry.WANDERING_SKATER.get(), WanderingSkaterRenderer::new);
     }
 
     public Object getISTERProperties() {

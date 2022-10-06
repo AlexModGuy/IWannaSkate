@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "iwannaskate:rainbow_skateboard_wheels"
+            "item": "iwannaskate:skateboard_wheels_rainbow"
         },
         "title": {
             "translate": "advancements.iwannaskate.novelty_wheels.title"
@@ -10,7 +10,7 @@
             "translate": "advancements.iwannaskate.novelty_wheels.desc"
         }
     },
-    "parent": "iwannaskate:iwannaskate/skateboard_deck",
+    "parent": "iwannaskate:iwannaskate/skateboard",
     "criteria": {
         "item_criteria": {
             "trigger": "minecraft:inventory_changed",
