@@ -1,22 +1,36 @@
 {
-  "variants": {
-    "slices=1": {
-      "model": "iwannaskate:block/pizza_1"
+  "multipart": [
+    {
+      "when": {
+        "slice_1": "true"
+      },
+      "apply": {
+        "model": "iwannaskate:block/pizza_slice_1"
+      }
     },
-    "slices=2": {
-      "model": "iwannaskate:block/pizza_2"
+    {
+      "when": {
+        "slice_2": "true"
+      },
+      "apply": {
+        "model": "iwannaskate:block/pizza_slice_2"
+      }
     },
-    "slices=3": {
-      "model": "iwannaskate:block/pizza_3"
+    {
+      "when": {
+        "slice_3": "true"
+      },
+      "apply": {
+        "model": "iwannaskate:block/pizza_slice_3"
+      }
     },
-    "slices=4": {
-      "model": "iwannaskate:block/pizza_4"
-    },
-    "slices=5": {
-      "model": "iwannaskate:block/pizza_5"
-    },
-    "command=6": {
-      "model": "iwannaskate:block/pizza_6"
+    {
+      "when": {
+        "slice_4": "true"
+      },
+      "apply": {
+        "model": "iwannaskate:block/pizza_slice_4"
+      }
     }
-  }
+  ]
 }

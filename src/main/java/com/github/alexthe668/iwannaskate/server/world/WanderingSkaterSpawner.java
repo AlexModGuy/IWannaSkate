@@ -59,7 +59,7 @@ public class WanderingSkaterSpawner  {
             worldinfo.setSkaterSpawnDelay(this.delay);
             if (this.delay <= 0) {
                 this.delay = IWannaSkateMod.COMMON_CONFIG.wanderingSkaterSpawnDelay.get();
-                if (this.world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+                if (this.world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && this.world.getGameRules().getBoolean(GameRules.RULE_DO_TRADER_SPAWNING)) {
                     float prevChance = this.chance;
                     this.chance = Mth.clamp(this.chance + IWannaSkateMod.COMMON_CONFIG.wanderingSkaterSpawnChance.get().floatValue(), 0, 1F);
                     worldinfo.setSkaterSpawnChance(this.chance);

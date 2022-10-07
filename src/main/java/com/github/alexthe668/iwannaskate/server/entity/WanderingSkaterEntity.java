@@ -18,6 +18,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -70,6 +71,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
     private int healCooldown = 0;
     @Nullable
     private BlockPos wanderingSkaterTarget;
+    private int playerAggroTime;
 
     public WanderingSkaterEntity(EntityType<? extends WanderingTrader> type, Level level) {
         super(type, level);
@@ -96,13 +98,13 @@ public class WanderingSkaterEntity extends WanderingTrader {
         });
         this.goalSelector.addGoal(1, new TradeWithPlayerGoal(this));
         this.goalSelector.addGoal(1, new LookAtTradingPlayerGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 0.5D));
         this.goalSelector.addGoal(2, new WanderingSkaterApproachPositionGoal(this, 2.0D, 0.35D));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.35D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.35D));
         this.goalSelector.addGoal(9, new InteractGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new DefensiveTargetGoal<>(this, Zombie.class));
         this.targetSelector.addGoal(1, new DefensiveTargetGoal<>(this, Evoker.class));
         this.targetSelector.addGoal(1, new DefensiveTargetGoal<>(this, Pillager.class));
@@ -117,9 +119,20 @@ public class WanderingSkaterEntity extends WanderingTrader {
         data.setGripTape(DyeColor.GRAY);
         CompoundTag bannerTag = new CompoundTag();
         ListTag patterns = new ListTag();
-        //TODO
+        CompoundTag layer1 = new CompoundTag();
+        layer1.putString("Pattern", "gru");
+        layer1.putInt("Color", 13);
+        patterns.add(layer1);
+        CompoundTag layer2 = new CompoundTag();
+        layer2.putString("Pattern", "flo");
+        layer2.putInt("Color", 12);
+        patterns.add(layer2);
+        CompoundTag layer3 = new CompoundTag();
+        layer3.putString("Pattern", "flo");
+        layer3.putInt("Color", 1);
+        patterns.add(layer3);
         bannerTag.put("Patterns", patterns);
-        bannerTag.putInt("Base", DyeColor.LIGHT_BLUE.getId());
+        bannerTag.putInt("Base", DyeColor.LIME.getId());
         data.setBanner(bannerTag);
         SkateboardData.setStackData(itemStack, data);
         itemStack.setHoverName(Component.translatable("item.iwannaskate.skateboard.wandering_skater").withStyle(ChatFormatting.DARK_AQUA));
@@ -130,6 +143,27 @@ public class WanderingSkaterEntity extends WanderingTrader {
     @Override
     public double getVisibilityPercent(@Nullable Entity targeter) {
         return super.getVisibilityPercent(targeter) * 0.35F;
+    }
+
+
+    protected SoundEvent getAmbientSound() {
+        return this.isTrading() ? IWSSoundRegistry.WANDERING_SKATER_MAYBE.get() : IWSSoundRegistry.WANDERING_SKATER_IDLE.get();
+    }
+
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return IWSSoundRegistry.WANDERING_SKATER_HURT.get();
+    }
+
+    protected SoundEvent getDeathSound() {
+        return IWSSoundRegistry.WANDERING_SKATER_DIE.get();
+    }
+
+    protected SoundEvent getTradeUpdatedSound(boolean yes) {
+        return yes ? IWSSoundRegistry.WANDERING_SKATER_YES.get() : IWSSoundRegistry.WANDERING_SKATER_NO.get();
+    }
+
+    public SoundEvent getNotifyTradeSound() {
+        return IWSSoundRegistry.WANDERING_SKATER_YES.get();
     }
 
     protected void defineSynchedData() {
@@ -281,6 +315,25 @@ public class WanderingSkaterEntity extends WanderingTrader {
         }
         if(healCooldown > 0){
             healCooldown--;
+        }
+
+        if(playerAggroTime > 0){
+            playerAggroTime--;
+        }else if (target instanceof Player) {
+            this.setTarget(null);
+            this.setLastHurtByMob(null);
+        }
+
+    }
+
+    @Override
+    public void setLastHurtByMob(@Nullable LivingEntity target) {
+        LivingEntity current = this.getLastHurtByMob();
+        if(target instanceof Player && (current == null || !current.is(target))){
+            this.setTarget(target);
+            playerAggroTime = 100;
+        }else{
+            super.setLastHurtByMob(target);
         }
     }
 

@@ -21,5 +21,11 @@ public class IWSSoundRegistry {
     public static final RegistryObject<SoundEvent> SKATER_SKELETON_WALK = DEF_REG.register("skater_skeleton_walk", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "skater_skeleton_walk")));
     public static final RegistryObject<SoundEvent> SKATER_SKELETON_HURT = DEF_REG.register("skater_skeleton_hurt", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "skater_skeleton_hurt")));
     public static final RegistryObject<SoundEvent> SKATER_SKELETON_DIE = DEF_REG.register("skater_skeleton_die", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "skater_skeleton_die")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_IDLE = DEF_REG.register("wandering_skater_idle", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_idle")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_HURT = DEF_REG.register("wandering_skater_hurt", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_hurt")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_DIE = DEF_REG.register("wandering_skater_die", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_die")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_YES = DEF_REG.register("wandering_skater_yes", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_yes")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_MAYBE = DEF_REG.register("wandering_skater_maybe", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_maybe")));
+    public static final RegistryObject<SoundEvent> WANDERING_SKATER_NO = DEF_REG.register("wandering_skater_no", () -> new SoundEvent(new ResourceLocation(IWannaSkateMod.MODID, "wandering_skater_no")));
 
 }

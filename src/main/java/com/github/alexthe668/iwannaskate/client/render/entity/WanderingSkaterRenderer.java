@@ -53,10 +53,10 @@ public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, 
             float swing = skater.getAttackingProgress(f2);
             float swing2 = (float) Math.sin(swing * Math.PI);
             this.getParentModel().translateToArms(poseStack);
-            poseStack.translate( -swing2 * 0.5F + swing * 0.2F, (double)0.1F - 1.2F * swing2 + swing * 0.2F, (double)0.1F - swing * 1.1F);
+            poseStack.translate( -swing2 * 0.5F + swing * 0.2F, (double)0.1F - 1.2F * swing2 + swing * 0.2F, (double)0.05 - swing * 1.1F);
             poseStack.mulPose(Vector3f.ZN.rotationDegrees(35.0F * (1 - swing)));
-            poseStack.mulPose(Vector3f.XP.rotationDegrees(180.0F + swing * 90.0F));
-            poseStack.mulPose(Vector3f.YN.rotationDegrees(90.0F * (1 - swing)));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(170.0F + swing * 100.0F));
+            poseStack.mulPose(Vector3f.YN.rotationDegrees(100.0F * (1 - swing)));
             ItemStack offhand = skater.getItemBySlot(EquipmentSlot.OFFHAND);
             this.itemInHandRenderer.renderItem(skater, offhand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, bufferSource, i);
             poseStack.popPose();

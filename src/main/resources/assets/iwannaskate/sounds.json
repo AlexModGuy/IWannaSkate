@@ -140,5 +140,86 @@
       }
     ],
     "subtitle": "iwannaskate.sound.subtitle.skater_skeleton_die"
+  },
+  "wandering_skater_idle": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_idle_0"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_idle_1"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_idle_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_idle"
+  },
+  "wandering_skater_hurt": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_hurt_0"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_hurt_1"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_hurt_2"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_hurt_3"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_hurt"
+  },
+  "wandering_skater_die": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_die_0"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_die"
+  },
+  "wandering_skater_no": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_no_0"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_no_1"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_no_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_no"
+  },
+  "wandering_skater_yes": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_yes_0"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_yes_1"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_yes_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_yes"
+  },
+  "wandering_skater_maybe": {
+    "sounds": [
+      {
+        "name": "iwannaskate:wandering_skater_maybe_0"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_maybe_1"
+      },
+      {
+        "name": "iwannaskate:wandering_skater_maybe_2"
+      }
+    ],
+    "subtitle": "iwannaskate.sound.subtitle.wandering_skater_maybe"
   }
 }
