@@ -93,7 +93,7 @@ public enum ModelPartType {
             case LEFT_ARM:
                 return new ModelPartWrapper[]{new ModelPartWrapper(model.leftArm), new ModelPartWrapper(model.leftSleeve)};
             case RIGHT_ARM:
-                return new ModelPartWrapper[]{new ModelPartWrapper(model.rightArm), new ModelPartWrapper(model.leftSleeve)};
+                return new ModelPartWrapper[]{new ModelPartWrapper(model.rightArm), new ModelPartWrapper(model.rightSleeve)};
         }
         return EMPTY;
     }

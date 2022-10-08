@@ -24,6 +24,7 @@ public class IWSItemRegistry {
     public static final RegistryObject<Item> SKATEBOARD_TRUCK = DEF_REG.register("skateboard_truck", () -> new Item(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SHIMMERING_WAX = DEF_REG.register("shimmering_wax", () -> new SimpleFoiledItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> PIZZA_SLICE = DEF_REG.register("pizza_slice", () -> new PizzaItem(IWSBlockRegistry.PIZZA, new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.2F).build())));
+    public static final RegistryObject<Item> ENERGY_DRINK = DEF_REG.register("energy_drink", () -> new EnergyDrinkItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.35F).build())));
     static {
         SkateboardWheels.init();
     }

@@ -57,7 +57,7 @@ public class BoardColorSampler {
                         colors[i] = color;
                     }
                 }
-            } catch (NullPointerException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 colors = DEFAULT_COLORS;
             }

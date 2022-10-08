@@ -20,14 +20,20 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
 import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
+import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,6 +54,7 @@ public class ClientProxy extends CommonProxy {
 
     public ItemStack lastHoveredItem = null;
     private static final ResourceLocation SKATEBOARD_INDICATOR_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/skateboard_peddle_indicator.png");
+    protected static final ResourceLocation OVERCAFFENIATED_OVERLAY = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/overcaffeniated_overlay.png");
     public static final Map<Integer, SkateboardSound> SKATEBOARD_SOUND_MAP = new HashMap<>();
 
     public static void onTexturesLoaded(TextureStitchEvent.Post event) {
@@ -79,6 +86,7 @@ public class ClientProxy extends CommonProxy {
         if(event.getOverlay().id().equals(VanillaGuiOverlay.EXPERIENCE_BAR.id()) && IWannaSkateMod.CLIENT_CONFIG.hideExperienceBar.get() && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard) {
             event.setCanceled(true);
         }
+
     }
 
     @SubscribeEvent
@@ -96,6 +104,35 @@ public class ClientProxy extends CommonProxy {
             GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 0, 29, 9, 64, 64);
             GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
             event.getPoseStack().popPose();
+        }
+        if(event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+            int screenWidth = event.getWindow().getGuiScaledWidth();
+            int screenHeight = event.getWindow().getGuiScaledHeight();
+            RenderSystem.disableDepthTest();
+            RenderSystem.depthMask(false);
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            RenderSystem.setShaderColor(1.0F, 0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, OVERCAFFENIATED_OVERLAY);
+            Tesselator tesselator = Tesselator.getInstance();
+            BufferBuilder bufferbuilder = tesselator.getBuilder();
+            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            bufferbuilder.vertex(0.0D, (double)screenHeight, -90.0D).uv(0.0F, 1.0F).endVertex();
+            bufferbuilder.vertex((double)screenWidth, (double)screenHeight, -90.0D).uv(1.0F, 1.0F).endVertex();
+            bufferbuilder.vertex((double)screenWidth, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
+            bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 0.0F).endVertex();
+            tesselator.end();
+            RenderSystem.depthMask(true);
+            RenderSystem.enableDepthTest();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.defaultBlendFunc();
+        }
+    }
+
+    @SubscribeEvent
+    public void onComputeFOV(ComputeFovModifierEvent event) {
+        if(Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+            event.setNewFovModifier(event.getFovModifier() + 1);
         }
     }
 

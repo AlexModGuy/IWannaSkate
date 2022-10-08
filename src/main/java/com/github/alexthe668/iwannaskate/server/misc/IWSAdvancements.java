@@ -12,12 +12,14 @@ public class IWSAdvancements {
     public static final IWSAdvancementTrigger TRICK_OLLIE = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "trick_ollie"));
     public static final IWSAdvancementTrigger TRICK_KICKFLIP = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "trick_kickflip"));
     public static final IWSAdvancementTrigger TRICK_GRIND = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "trick_grind"));
+    public static final IWSAdvancementTrigger SLOW_MOTION = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "slow_motion"));
 
     public static void init(){
         CriteriaTriggers.register(TAKE_SKATE_DAMAGE);
         CriteriaTriggers.register(TRICK_OLLIE);
         CriteriaTriggers.register(TRICK_KICKFLIP);
         CriteriaTriggers.register(TRICK_GRIND);
+        CriteriaTriggers.register(SLOW_MOTION);
     }
 
     public static void trigger(Entity entity, IWSAdvancementTrigger trigger){

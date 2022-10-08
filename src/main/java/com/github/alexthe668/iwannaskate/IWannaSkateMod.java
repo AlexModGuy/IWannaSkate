@@ -14,6 +14,7 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
+import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
 import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -86,6 +87,7 @@ public class IWannaSkateMod {
         IWSEnchantmentRegistry.DEF_REG.register(modEventBus);
         IWSSoundRegistry.DEF_REG.register(modEventBus);
         IWSParticleRegistry.DEF_REG.register(modEventBus);
+        IWSEffectRegistry.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(PROXY);
         PROXY.init();

@@ -8,6 +8,8 @@ import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.*;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
+import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -23,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
@@ -396,7 +399,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     }
 
     private boolean takesDistanceDurabilityDamage() {
-        return this.getFirstPassenger() != null && ((this.getFirstPassenger() instanceof Player player && !player.isCreative()) || !(this.getFirstPassenger() instanceof Player player) && !this.getFirstPassenger().getType().is(IWSTags.MAINTAINS_SKATEBOARD_DURABILITY));
+        return this.getFirstPassenger() != null && ((this.getFirstPassenger() instanceof Player player && !player.isCreative()) || !(this.getFirstPassenger() instanceof Player) && !this.getFirstPassenger().getType().is(IWSTags.MAINTAINS_SKATEBOARD_DURABILITY));
     }
 
     public double getSlowdown() {
@@ -1044,9 +1047,20 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         }
         this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_START.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
         sprintDown = this.jumpFor;
-        if(this.hasEnchant(IWSEnchantmentRegistry.SLOW_MOTION.get()) && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+        if(this.getSlowMotionLevel() > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+            IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SLOW_MOTION);
             slowMoFor = 100;
         }
+    }
+
+    private int getSlowMotionLevel() {
+        if(this.getFirstPassenger() instanceof Player player){
+            if(player.hasEffect(IWSEffectRegistry.HIGH_OCTANE.get())){
+                MobEffectInstance instance = player.getEffect(IWSEffectRegistry.HIGH_OCTANE.get());
+                return instance == null ? 1 : instance.getAmplifier() + 1;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -1115,7 +1129,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     }
 
     public int getSlowMoTickSpeed(){
-        int i = this.getEnchantLevel(IWSEnchantmentRegistry.SLOW_MOTION.get());
+        int i = this.getSlowMotionLevel();
         if(i > 0){
             return i > 2 ? 2 : 10 - 5 * (i - 1);
         }
@@ -1127,6 +1141,12 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             return false;
         }
         return !slowedDownEntities.contains(entity);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return this.getItemStack().copy();
     }
 
     @Override

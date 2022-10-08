@@ -3,8 +3,10 @@ package com.github.alexthe668.iwannaskate.server;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
+import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
 import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
 import com.github.alexthe668.iwannaskate.server.world.WanderingSkaterSpawner;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -73,6 +76,14 @@ public class CommonProxy {
     }
 
     @SubscribeEvent
+    public void onPlayerTrySleepInBed(PlayerSleepInBedEvent event) {
+        if(event.getEntity().hasEffect(IWSEffectRegistry.HIGH_OCTANE.get()) || event.getEntity().hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+            event.setResult(Player.BedSleepingProblem.OTHER_PROBLEM);
+            event.getEntity().displayClientMessage(Component.translatable("item.iwannaskate.energy_drink.no_sleep"), true);
+        }
+    }
+
+        @SubscribeEvent
     public void onServerTick(TickEvent.LevelTickEvent tick) {
         if (!tick.level.isClientSide && tick.level instanceof ServerLevel serverWorld) {
             WANDERING_SKATER_SPAWNER_MAP.computeIfAbsent(serverWorld,

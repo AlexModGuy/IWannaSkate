@@ -424,9 +424,9 @@ public class WanderingSkaterEntity extends WanderingTrader {
                 new SellingItemTrade(new ItemStack(Items.IRON_NUGGET, 18), 4, 3, 5),
                 new SellingItemTrade(new ItemStack(Items.IRON_HELMET, 1), 7, 2, 5),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.PIZZA_SLICE.get(), 5), 2, 5, 3),
+                new SellingItemTrade(new ItemStack(IWSItemRegistry.ENERGY_DRINK.get(), 6), 2, 5, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()), 2, 4, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD.get()), 11, 1, 3),
-                new SellingEnchantedBook(IWSEnchantmentRegistry.SLOW_MOTION.get(), 30, 2, 3),
                 new SellingEnchantedBook(IWSEnchantmentRegistry.SURFING.get(), 30, 2, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.SHIMMERING_WAX.get(), 1), 3, 4, 3),
         };

@@ -3,7 +3,9 @@ package com.github.alexthe668.iwannaskate.mixin.client;
 import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkatingModelPositioner;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
+import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -38,6 +40,9 @@ public class LivingEntityRendererMixin {
     protected void iws_setupRotations(LivingEntity livingEntity, PoseStack poseStack, float ageInTicks, float bodyYRot, float partialTick, CallbackInfo ci) {
         if(livingEntity.getVehicle() instanceof SkateboardEntity skateboard){
             SkatingModelPositioner.setupSkaterRotations(livingEntity, model, skateboard, poseStack, bodyYRot, partialTick);
+        }
+        if(livingEntity.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+            poseStack.mulPose(Vector3f.YP.rotationDegrees((float)(Math.cos((double)ageInTicks * 3.25D) * Math.PI * (double)0.4F)));
         }
     }
 

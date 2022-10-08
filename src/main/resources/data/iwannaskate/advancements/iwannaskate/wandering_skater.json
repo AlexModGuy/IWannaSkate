@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "iwannaskate:pizza_slice"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.wandering_skater.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.wandering_skater.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/root",
+    "criteria": {
+        "example": {
+            "trigger": "minecraft:player_interacted_with_entity",
+            "conditions": {
+                "entity": {
+                    "type": "iwannaskate:wandering_skater"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "citadel:effect_item",
+            "nbt": "{DisplayEffect:\"iwannaskate:high_octane\"}"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.slow_motion.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.slow_motion.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/energy_drink",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:slow_motion"
+        }
+    }
+}

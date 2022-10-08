@@ -1,13 +1,13 @@
 {
     "display": {
         "icon": {
-            "item": "iwannaskate:skateboard_wheels_rainbow"
+            "item": "iwannaskate:energy_drink"
         },
         "title": {
-            "translate": "advancements.iwannaskate.novelty_wheels.title"
+            "translate": "advancements.iwannaskate.energy_drink.title"
         },
         "description": {
-            "translate": "advancements.iwannaskate.novelty_wheels.desc"
+            "translate": "advancements.iwannaskate.energy_drink.desc"
         }
     },
     "parent": "iwannaskate:iwannaskate/wandering_skater",
@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "tag": "iwannaskate:novelty_skateboard_wheels"
+                        "items": ["iwannaskate:energy_drink"]
                     }
                 ]
             }
