@@ -5,6 +5,7 @@ import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.SimpleFoiledItem;
@@ -22,7 +23,9 @@ public class IWSItemRegistry {
     public static final RegistryObject<Item> SKATEBOARD = DEF_REG.register("skateboard", () -> new SkateboardItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE).durability(1000)));
     public static final RegistryObject<Item> SKATEBOARD_DECK = DEF_REG.register("skateboard_deck", () -> new BaseSkateboardItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SKATEBOARD_TRUCK = DEF_REG.register("skateboard_truck", () -> new Item(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
+    public static final RegistryObject<Item> SKATEBOARD_RACK = DEF_REG.register("skateboard_rack", () -> new IWSBlockItem(IWSBlockRegistry.SKATEBOARD_RACK, new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SHIMMERING_WAX = DEF_REG.register("shimmering_wax", () -> new SimpleFoiledItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
+    public static final RegistryObject<Item> SPIKED_SKATER_HELMET = DEF_REG.register("spiked_skater_helmet", () -> new SkaterHelmetItem(ArmorMaterials.IRON, new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> PIZZA_SLICE = DEF_REG.register("pizza_slice", () -> new PizzaItem(IWSBlockRegistry.PIZZA, new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.2F).build())));
     public static final RegistryObject<Item> ENERGY_DRINK = DEF_REG.register("energy_drink", () -> new EnergyDrinkItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.35F).build())));
     static {

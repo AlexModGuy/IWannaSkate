@@ -39,6 +39,9 @@ public class CommonProxy {
         return null;
     }
 
+    public Object getArmorRenderProperties() {
+        return null;
+    }
 
     @SubscribeEvent
     public void onTagsLoaded(TagsUpdatedEvent event){

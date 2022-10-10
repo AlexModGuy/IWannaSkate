@@ -7,6 +7,7 @@ import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.CommonProxy;
 import com.github.alexthe668.iwannaskate.server.IWSServerConfig;
 import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
+import com.github.alexthe668.iwannaskate.server.blockentity.IWSBlockEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
@@ -14,6 +15,7 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
+import com.github.alexthe668.iwannaskate.server.network.SkateboardRackMessage;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
 import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
 import com.mojang.logging.LogUtils;
@@ -88,6 +90,7 @@ public class IWannaSkateMod {
         IWSSoundRegistry.DEF_REG.register(modEventBus);
         IWSParticleRegistry.DEF_REG.register(modEventBus);
         IWSEffectRegistry.DEF_REG.register(modEventBus);
+        IWSBlockEntityRegistry.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(PROXY);
         PROXY.init();
@@ -101,6 +104,7 @@ public class IWannaSkateMod {
     private void commonSetup(final FMLCommonSetupEvent event) {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardPartMessage.class, SkateboardPartMessage::write, SkateboardPartMessage::read, SkateboardPartMessage.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardKeyMessage.class, SkateboardKeyMessage::write, SkateboardKeyMessage::read, SkateboardKeyMessage.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardRackMessage.class, SkateboardRackMessage::write, SkateboardRackMessage::read, SkateboardRackMessage.Handler::handle);
         IWSAdvancements.init();
     }
 

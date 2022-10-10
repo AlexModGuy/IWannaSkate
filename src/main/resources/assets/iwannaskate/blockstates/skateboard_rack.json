@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "iwannaskate:block/skateboard_rack",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "iwannaskate:block/skateboard_rack"
+    },
+    "facing=south": {
+      "model": "iwannaskate:block/skateboard_rack",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "iwannaskate:block/skateboard_rack",
+      "y": 270
+    }
+  }
+}

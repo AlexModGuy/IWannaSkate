@@ -236,7 +236,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(random, difficulty);
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(IWSItemRegistry.SPIKED_SKATER_HELMET.get()));
         this.setItemSlot(EquipmentSlot.MAINHAND, createSkateboard());
     }
 

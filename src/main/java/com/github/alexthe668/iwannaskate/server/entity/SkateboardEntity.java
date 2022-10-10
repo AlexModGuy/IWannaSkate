@@ -4,12 +4,12 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.ai.SkaterMoveControl;
+import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.*;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,6 +28,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -101,8 +102,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     private double totalDistanceTraveled = 0;
     private double lastDamagedDistance = 0;
     private int soundTimer = 0;
-    private List<Entity> slowedDownEntities = new ArrayList<>();
+    private final List<Entity> slowedDownEntities = new ArrayList<>();
     private int slowMoFor = 0;
+    private Player returnToPlayer = null;
 
     public SkateboardEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -376,19 +378,32 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
                     }
                 }
             }
+            if(this.totalDistanceTraveled % 100 < 1.0){
+                if(this.totalDistanceTraveled > 10000){
+                    IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_10K);
+                }
+            }
             this.tickRotation();
         }
         this.tickMultipart();
         this.tickControls();
         this.tickSound();
         if (this.entityData.get(REMOVE_SOON)) {
-            this.removeIn--;
-            this.setZRot((float) Math.sin(this.removeIn * 0.3F * Math.PI) * 50F);
-            if (this.removeIn <= 0 && !this.level.isClientSide) {
-                this.removeIn = 0;
-                spawnAtLocation(this.getItemStack().copy());
+            if (this.hasEnchant(IWSEnchantmentRegistry.INSTANT_RETURN.get()) && returnToPlayer != null) {
+                if (!level.isClientSide && !returnToPlayer.addItem(this.getItemStack().copy())) {
+                    spawnAtLocation(this.getItemStack().copy());
+                }
                 this.discard();
+            } else {
+                this.removeIn--;
+                this.setZRot((float) Math.sin(this.removeIn * 0.3F * Math.PI) * 50F);
+                if (this.removeIn <= 0 && !this.level.isClientSide) {
+                    this.removeIn = 0;
+                    spawnAtLocation(this.getItemStack().copy());
+                    this.discard();
+                }
             }
+
         }
         this.tickAnimation();
         if (this.lastBlockPos != this.blockPosition()) {
@@ -891,8 +906,8 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
 
     public void positionRider(Entity passenger) {
         prevPedalAmount = this.getPedalAmount();
-        if(slowMoFor > 0){
-            if(passenger instanceof SlowableEntity slowableEntity){
+        if (slowMoFor > 0) {
+            if (passenger instanceof SlowableEntity slowableEntity) {
                 slowableEntity.setTickRate(getSlowMoTickSpeed());
             }
             slowedDownEntities.add(passenger);
@@ -915,6 +930,15 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     }
 
     @Override
+    protected void removePassenger(Entity entity) {
+        super.removePassenger(entity);
+        if (entity instanceof Player player && this.hasEnchant(IWSEnchantmentRegistry.INSTANT_RETURN.get())) {
+            returnToPlayer = player;
+            this.entityData.set(REMOVE_SOON, true);
+        }
+    }
+
+    @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
         return super.isInvulnerableTo(damageSource) || this.hasEnchant(IWSEnchantmentRegistry.HARDWOOD.get()) && (damageSource != DamageSource.OUT_OF_WORLD && damageSource != DamageSource.GENERIC && !(damageSource.getDirectEntity() instanceof Player));
     }
@@ -925,6 +949,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             return false;
         } else if (amount > 0.0F) {
             this.entityData.set(REMOVE_SOON, true);
+            if (source.getEntity() instanceof Player player) {
+                returnToPlayer = player;
+            }
             return true;
         }
         return false;
@@ -933,12 +960,27 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     @Override
     public void push(Entity entity) {
         super.push(entity);
-        if (!this.isPassengerOfSameVehicle(entity) && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get()) && this.getDeltaMovement().length() > 0.1F && this.isVehicle() && entity instanceof LivingEntity living) {
+        if (!this.isPassengerOfSameVehicle(entity) && this.getDeltaMovement().length() > 0.1F && this.isVehicle() && entity instanceof LivingEntity living && getContactDamage() > 0) {
             Entity rider = this.getFirstPassenger();
-            if ((rider == null || !living.isAlliedTo(rider)) && living.hurt(DamageSource.indirectMagic(this, rider), this.getEnchantLevel(IWSEnchantmentRegistry.BASHING.get()) * 2)) {
+            if ((rider == null || !living.isAlliedTo(rider)) && shouldRiderHurtMob(living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
                 living.knockback(0.5D, living.getX() - this.getX(), living.getZ() - this.getZ());
             }
         }
+    }
+
+    private boolean shouldRiderHurtMob(LivingEntity living) {
+        if(this.getFirstPassenger() instanceof Monster){
+            return !(living instanceof Monster);
+        }
+        return true;
+    }
+
+    public int getContactDamage() {
+        int i = this.getEnchantLevel(IWSEnchantmentRegistry.BASHING.get()) * 2;
+        if(this.getFirstPassenger() instanceof LivingEntity living && living.getItemBySlot(EquipmentSlot.HEAD).is(IWSItemRegistry.SPIKED_SKATER_HELMET.get())){
+               i += 2;
+        }
+        return i;
     }
 
     public void checkDespawn() {
@@ -1024,7 +1066,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
 
     @Override
     public boolean canJump() {
-        return this.getOnGroundProgress(1.0F) >= 0.5F && this.getSkaterPose().allowJumping() && this.getSkaterPoseProgress(1.0F) >= 0.5F;
+        return this.getOnGroundProgress(1.0F) >= 0.1F && this.getSkaterPose().allowJumping() && this.getSkaterPoseProgress(1.0F) >= 0.5F;
     }
 
     @Override
@@ -1047,15 +1089,15 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         }
         this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_START.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
         sprintDown = this.jumpFor;
-        if(this.getSlowMotionLevel() > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
+        if (this.getSlowMotionLevel() > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
             IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SLOW_MOTION);
             slowMoFor = 100;
         }
     }
 
     private int getSlowMotionLevel() {
-        if(this.getFirstPassenger() instanceof Player player){
-            if(player.hasEffect(IWSEffectRegistry.HIGH_OCTANE.get())){
+        if (this.getFirstPassenger() instanceof Player player) {
+            if (player.hasEffect(IWSEffectRegistry.HIGH_OCTANE.get())) {
                 MobEffectInstance instance = player.getEffect(IWSEffectRegistry.HIGH_OCTANE.get());
                 return instance == null ? 1 : instance.getAmplifier() + 1;
             }
@@ -1117,10 +1159,10 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         return null;
     }
 
-    private void restoreSlowedEntities(){
-        if(!slowedDownEntities.isEmpty()){
-            for(Entity entity : slowedDownEntities){
-                if(entity instanceof SlowableEntity slowed){
+    private void restoreSlowedEntities() {
+        if (!slowedDownEntities.isEmpty()) {
+            for (Entity entity : slowedDownEntities) {
+                if (entity instanceof SlowableEntity slowed) {
                     slowed.setTickRate(20);
                 }
             }
@@ -1128,16 +1170,16 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         }
     }
 
-    public int getSlowMoTickSpeed(){
+    public int getSlowMoTickSpeed() {
         int i = this.getSlowMotionLevel();
-        if(i > 0){
+        if (i > 0) {
             return i > 2 ? 2 : 10 - 5 * (i - 1);
         }
         return 20;
     }
 
-    private boolean canSlowMoEntity(Entity entity){
-        if(IWannaSkateMod.COMMON_CONFIG.playersSlowMotion.get() && entity instanceof Player){
+    private boolean canSlowMoEntity(Entity entity) {
+        if (IWannaSkateMod.COMMON_CONFIG.playersSlowMotion.get() && entity instanceof Player) {
             return false;
         }
         return !slowedDownEntities.contains(entity);
@@ -1152,25 +1194,25 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     @Override
     public void onMasterServerTick() {
         double slowDistance = IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get();
-        if(slowMoFor > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()){
-            ((SlowableEntity)this).setTickRate(getSlowMoTickSpeed());
+        if (slowMoFor > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
+            ((SlowableEntity) this).setTickRate(getSlowMoTickSpeed());
             AABB slowBox = new AABB(this.getX() - slowDistance, this.getY() - slowDistance, this.getZ() - slowDistance, this.getX() + slowDistance, this.getY() + slowDistance, this.getZ() + slowDistance);
-            for(Entity needsSlowing : level.getEntities(this, slowBox, this::canSlowMoEntity)){
-                if(needsSlowing instanceof SlowableEntity slowed){
+            for (Entity needsSlowing : level.getEntities(this, slowBox, this::canSlowMoEntity)) {
+                if (needsSlowing instanceof SlowableEntity slowed) {
                     slowed.setTickRate(getSlowMoTickSpeed());
                 }
                 slowedDownEntities.add(needsSlowing);
             }
-            for(Entity slowedDown : slowedDownEntities){
-                if(!slowBox.contains(slowedDown.position())){
-                    if(slowedDown instanceof SlowableEntity slowed){
+            for (Entity slowedDown : slowedDownEntities) {
+                if (!slowBox.contains(slowedDown.position())) {
+                    if (slowedDown instanceof SlowableEntity slowed) {
                         slowed.setTickRate(20);
                     }
                 }
             }
             slowMoFor -= this.isOnGround() ? 3 : 1;
-        }else{
-            ((SlowableEntity)this).setTickRate(20);
+        } else {
+            ((SlowableEntity) this).setTickRate(20);
             restoreSlowedEntities();
         }
     }

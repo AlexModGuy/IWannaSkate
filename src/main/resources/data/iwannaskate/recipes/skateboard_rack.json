@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "WTW",
+    "W W"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "T": {
+      "item": "iwannaskate:skateboard_truck"
+    },
+    "W": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "iwannaskate:skateboard_rack",
+    "count": 1
+  }
+}

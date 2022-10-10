@@ -41,6 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
@@ -54,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class WanderingSkaterEntity extends WanderingTrader {
 
@@ -418,6 +420,8 @@ public class WanderingSkaterEntity extends WanderingTrader {
 
     protected void updateTrades() {
         MerchantOffers merchantoffers = this.getOffers();
+        List<Enchantment> enchantments = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(enchantment -> enchantment.category == IWSEnchantmentRegistry.SKATEBOARD).collect(Collectors.toList());
+        Enchantment randomEnchant = enchantments.size() > 1 ? enchantments.get(random.nextInt(enchantments.size() - 1)) : enchantments.get(0);
         VillagerTrades.ItemListing[] trades = new VillagerTrades.ItemListing[]{
                 new BuyingItemTrade(new ItemStack(SkateboardWheels.DEFAULT.getItemRegistryObject().get(), 2), 1, 7, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_TRUCK.get(), 2), 3, 2, 4),
@@ -427,7 +431,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.ENERGY_DRINK.get(), 6), 2, 5, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()), 2, 4, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD.get()), 11, 1, 3),
-                new SellingEnchantedBook(IWSEnchantmentRegistry.SURFING.get(), 30, 2, 3),
+                new SellingEnchantedBook(randomEnchant, 15, 2, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.SHIMMERING_WAX.get(), 1), 3, 4, 3),
         };
         this.addOffersFromItemListings(merchantoffers, trades, 4);

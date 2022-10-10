@@ -7,21 +7,22 @@ import com.github.alexthe668.iwannaskate.client.particle.BeeParticle;
 import com.github.alexthe668.iwannaskate.client.particle.HalloweenParticle;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.client.render.IWSRenderTypes;
+import com.github.alexthe668.iwannaskate.client.render.blockentity.SkateboardRackRenderer;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkateboardRenderer;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkaterSkeletonRenderer;
 import com.github.alexthe668.iwannaskate.client.render.entity.WanderingSkaterRenderer;
+import com.github.alexthe668.iwannaskate.client.render.item.IWSItemArmorProperties;
 import com.github.alexthe668.iwannaskate.client.render.item.IWSItemRenderProperties;
 import com.github.alexthe668.iwannaskate.client.render.item.IWSItemstackRenderer;
 import com.github.alexthe668.iwannaskate.client.sound.SkateSoundType;
 import com.github.alexthe668.iwannaskate.client.sound.SkateboardSound;
 import com.github.alexthe668.iwannaskate.server.CommonProxy;
+import com.github.alexthe668.iwannaskate.server.blockentity.IWSBlockEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
-import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -31,11 +32,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -108,10 +108,7 @@ public class ClientProxy extends CommonProxy {
         if(event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
             int screenWidth = event.getWindow().getGuiScaledWidth();
             int screenHeight = event.getWindow().getGuiScaledHeight();
-            RenderSystem.disableDepthTest();
-            RenderSystem.depthMask(false);
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            RenderSystem.setShaderColor(1.0F, 0F, 1.0F, 1.0F);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, OVERCAFFENIATED_OVERLAY);
             Tesselator tesselator = Tesselator.getInstance();
@@ -122,10 +119,7 @@ public class ClientProxy extends CommonProxy {
             bufferbuilder.vertex((double)screenWidth, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
             bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 0.0F).endVertex();
             tesselator.end();
-            RenderSystem.depthMask(true);
-            RenderSystem.enableDepthTest();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.defaultBlendFunc();
         }
     }
 
@@ -153,11 +147,17 @@ public class ClientProxy extends CommonProxy {
         EntityRenderers.register(IWSEntityRegistry.SKATEBOARD.get(), SkateboardRenderer::new);
         EntityRenderers.register(IWSEntityRegistry.SKATER_SKELETON.get(), SkaterSkeletonRenderer::new);
         EntityRenderers.register(IWSEntityRegistry.WANDERING_SKATER.get(), WanderingSkaterRenderer::new);
+        BlockEntityRenderers.register(IWSBlockEntityRegistry.SKATEBOARD_RACK.get(), SkateboardRackRenderer::new);
     }
 
     public Object getISTERProperties() {
         return new IWSItemRenderProperties();
     }
+
+    public Object getArmorRenderProperties() {
+        return new IWSItemArmorProperties();
+    }
+
 
     public Player getClientSidePlayer() {
         return Minecraft.getInstance().player;

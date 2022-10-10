@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "item": "citadel:fancy_item",
+            "nbt": "{DisplayItem:\"iwannaskate:skateboard\", DisplayBob:1, DisplayZoom:0, DisplayScale:1, DisplaySpin:0, DisplayShake:0, DisplayItemNBT:{Skateboard:{MadeOf:\"minecraft:mangrove_slab\", GripTape:14, WheelType:15}}}"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.skate_10k.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.skate_10k.desc"
+        },
+        "frame": "challenge"
+    },
+    "parent": "iwannaskate:iwannaskate/skateboard",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:skate_10k"
+        }
+    }
+}
