@@ -121,7 +121,11 @@ public class SkateModelMapping {
                 ResourceLocation readStr = new ResourceLocation(entityTypeString.substring(1));
                 tagkey = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, readStr);
             } else {
-                entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(entityTypeString));
+                ResourceLocation readsStr= new ResourceLocation(entityTypeString);
+                if(!ForgeRegistries.ENTITY_TYPES.containsKey(readsStr)){
+                    throw new JsonParseException("missing entity type");
+                }
+                entityType = ForgeRegistries.ENTITY_TYPES.getValue(readsStr);
             }
             List<String> body = deserializeParts(jsonobject, "body");
             List<String> head = deserializeParts(jsonobject, "head");

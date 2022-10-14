@@ -27,9 +27,13 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
         float mouseOver2 = entity.getHoverOver(false, partialTicks);
         float x1 = 45 - mouseOver1 * 15;
         float x2 = 45 - mouseOver2 * 15;
+        float topZ = 0.1F * mouseOver1;
+        float bottomZ = 0.1F + 0.05F * mouseOver2;
         if(direction.getAxis() == Direction.Axis.Z){
             x1 = 180 - x1;
             x2 = 180 - x2;
+            topZ = -topZ;
+            bottomZ = -bottomZ;
         }
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 0.5F, 0.5F);
@@ -37,7 +41,7 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
         matrixStackIn.pushPose();
         if (!topStack.isEmpty()) {
             matrixStackIn.pushPose();
-            matrixStackIn.translate(0, 0.4F,  0.1F * mouseOver1);
+            matrixStackIn.translate(0, 0.4F,  topZ);
             matrixStackIn.mulPose(new Quaternion(Vector3f.XN,  x1, true));
             matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);
@@ -46,7 +50,7 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
         }
         if (!bottomStack.isEmpty()) {
             matrixStackIn.pushPose();
-            matrixStackIn.translate(0, -0.1F + 0.05F * mouseOver2, 0.1F + 0.05F * mouseOver2);
+            matrixStackIn.translate(0, -0.1F + 0.05F * mouseOver2, bottomZ);
             matrixStackIn.mulPose(new Quaternion(Vector3f.XN,  x2, true));
             matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);

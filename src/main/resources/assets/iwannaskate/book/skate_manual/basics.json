@@ -1,0 +1,102 @@
+{
+  "parent": "root.json",
+  "text": "basics.txt",
+  "title": "Basics of Skating",
+  "linked_page_buttons": [
+  ],
+  "images": [
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 240,
+      "y": 135,
+      "page" : 0,
+      "scale": 0.6,
+      "u": 0,
+      "v": 0,
+      "width": 169,
+      "height": 22
+    },
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 25,
+      "y": 134,
+      "page" : 0,
+      "scale": 1,
+      "u": 0,
+      "v": 30,
+      "width": 21,
+      "height": 21
+    },
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 63,
+      "y": 134,
+      "page" : 0,
+      "scale": 1,
+      "u": 22,
+      "v": 30,
+      "width": 21,
+      "height": 21
+    },
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 105,
+      "y": 134,
+      "page" : 0,
+      "scale": 1,
+      "u": 44,
+      "v": 30,
+      "width": 21,
+      "height": 21
+    },
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 143,
+      "y": 134,
+      "page" : 0,
+      "scale": 1,
+      "u": 66,
+      "v": 30,
+      "width": 21,
+      "height": 21
+    }
+  ],
+  "item_renders": [
+    {
+      "item" : "minecraft:smooth_stone",
+      "x": 20,
+      "y": 127,
+      "page" : 0,
+      "scale": 1.2
+    },
+    {
+      "item" : "minecraft:stone",
+      "x": 52,
+      "y": 127,
+      "page" : 0,
+      "scale": 1.2
+    },
+    {
+      "item" : "minecraft:deepslate",
+      "x": 88,
+      "y": 127,
+      "page" : 0,
+      "scale": 1.2
+    },
+    {
+      "item" : "minecraft:dirt",
+      "x": 120,
+      "y": 127,
+      "page" : 0,
+      "scale": 1.2
+    }
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+  ],
+  "entity_buttons": [
+  ]
+}

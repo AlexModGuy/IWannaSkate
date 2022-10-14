@@ -1,0 +1,19 @@
+{
+  "parent": "root.json",
+  "text": "customization.txt",
+  "title": "Skateboard Customization",
+  "linked_page_buttons": [
+  ],
+  "images": [
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+  ],
+  "entity_buttons": [
+  ]
+}

@@ -1,0 +1,15 @@
+To place a skateboard down, simply use the item on any block surface. Interacting with the Skateboard will put you on top of it.
+Skateboards only function properly when on smooth, solid ground - definitely not dirt, cobblestone, sand, etc.
+<NEWLINE>
+<NEWLINE>
+Unlike other mounts, controlling a Skateboard is quite different.
+<NEWLINE>
+First, skateboards build up momentum by moving forwards. The amount of momentum a board has is indicated by Skateboard-shaped symbol next to the hotbar.
+<NEWLINE>
+You can build inertia by pedalling, which is done by holding the forwards key. Note that whilst pedalling, boards cannot preform tricks or go their maximum speed, so it should only be done when the board slows down, not to simply move forwards.
+<NEWLINE>
+Once the board is in motion, its direction can be controlled by tilting the board left or right using the left or right keys, respectively. If a board is moving quickly and the skater is not pedalling, the sprint key can be pressed to bend down a little. This maneuver will slow down the loss of inertia and move the board forwards even faster than standing up straight.
+<NEWLINE>
+Finally, to slow a board down quickly the backwards key can be pressed. This will attempt to slow the speed, and if held while the board is still, will allow its front wheels to be lifted off the ground. In this state, the board's direction can simply be changed by looking around.
+<NEWLINE>
+Caution should be taken when skating at high speeds - colliding into a wall or falling a distance can knock a skater off their board, which can deal significant damage. This damage can be safely ignored if wearing any kind of helmet.

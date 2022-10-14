@@ -1,0 +1,31 @@
+{
+  "parent": "root.json",
+  "text": "wandering_skater.txt",
+  "title": "Wandering Skaters",
+  "linked_page_buttons": [
+  ],
+  "images": [
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+    {
+      "entity": "iwannaskate:wandering_skater",
+      "entity_data": "{HandItems:[{},{Count:1b,id:\"iwannaskate:skateboard\",tag:{Damage:0,Skateboard:{Banner:{Base:5,Patterns:[{Color:13,Pattern:\"gru\"},{Color:12,Pattern:\"flo\"},{Color:1,Pattern:\"flo\"}]},GripTape:7,MadeOf:\"minecraft:oak_slab\",WheelType:-1},display:{Name:'{\"color\":\"dark_aqua\",\"translate\":\"item.iwannaskate.skateboard.wandering_skater\"}'}}}]}",
+      "x": 98,
+      "y": 128,
+      "page" : 0,
+      "scale": 1.6,
+      "rot_x": 25,
+      "rot_y": 135,
+      "rot_z": 0,
+      "follow_cursor": false
+    }
+  ],
+  "entity_buttons": [
+  ]
+}

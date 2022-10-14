@@ -9,6 +9,8 @@ public class IWSClientConfig {
     public final ForgeConfigSpec.IntValue inertiaIndicatorX;
     public final ForgeConfigSpec.IntValue inertiaIndicatorY;
     public final ForgeConfigSpec.BooleanValue flipBoardItems;
+    public final ForgeConfigSpec.BooleanValue overcaffeniatedOverlay;
+
     public final ForgeConfigSpec.BooleanValue invertSide;
     public final ForgeConfigSpec.BooleanValue animateAllEntityModels;
     public final ForgeConfigSpec.BooleanValue skateboardLoopSounds;
@@ -20,6 +22,7 @@ public class IWSClientConfig {
         inertiaIndicatorX = builder.comment("determines how far to the left the inertia indicator renders on the screen. Negative numbers will render it on the right. ").translation("inertia_indicator_x").defineInRange("inertia_indicator_x", 123, -12000, 12000);
         inertiaIndicatorY = builder.comment("determines how far from bottom the inertia indicator renders on the screen.").translation("inertia_indicator_y").defineInRange("inertia_indicator_y", 12, -12000, 12000);
         flipBoardItems = builder.comment("when enabled, a skateboard with a banner pattern will flip over when the mouse is over it in the inventory.").translation("flip_board_items").define("flip_board_items", true);
+        overcaffeniatedOverlay = builder.comment("when enabled, a green overlay and zoom effect is applied when the overcaffeniated effect is active.").translation("overcaffeniated_overlay").define("overcaffeniated_overlay", true);
         builder.pop();
         builder.push("animation");
         invertSide = builder.comment("when enabled, flips the foot used to pedal to the other side, which is also inverted by default if the player's skin is left handed.").translation("invert_side").define("invert_side", false);

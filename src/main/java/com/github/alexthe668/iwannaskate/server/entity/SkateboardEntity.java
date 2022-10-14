@@ -466,6 +466,14 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         } else {
             this.skaterPoseProgress = 5.0F;
         }
+        float wheelRot = this.getWheelRot();
+        float wheelSpeed = (float) Math.min(this.getDeltaMovement().horizontalDistance(), 1);
+        if (wheelRot > 360F) {
+            prevWheelRot = prevWheelRot - 360F;
+            wheelRot = wheelRot - 360F;
+        }
+        this.setWheelRot(wheelRot + wheelSpeed * 100);
+        this.prevWheelRot = wheelRot;
         if (level.isClientSide) {
             ParticleOptions particleType = this.skateboardData.getWheelType().getWheelParticles();
             if (particleType != null && this.random.nextFloat() < 0.5F) {
@@ -523,6 +531,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         boolean onWater = this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
         if (onWater) {
             this.setOnGround(true);
+            if(this.tickCount % 50 == 0){
+                IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_SURFING);
+            }
         }
         float gravity = this.isInWaterOrBubble() ? -0.2F : -0.6F;
         if (this.hasEnchant(IWSEnchantmentRegistry.SURFING.get())) {
@@ -547,7 +558,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             }
             float f1 = -Mth.sin(yRot * ((float) Math.PI / 180F));
             float f2 = Mth.cos(yRot * ((float) Math.PI / 180F));
-            float jumpAdd = jumpFor > 0 ? 0.5F : gravity;
+            float jumpAdd = jumpFor > 0 ? 0.5F + getSlowMotionLevel() * 0.2F : gravity;
             Vec3 moveVec = new Vec3(f1, 0, f2).scale(speed);
             Vec3 vec31 = prev.scale(0.975F).add(moveVec);
             this.setDeltaMovement(new Vec3(vec31.x, 0.975F * jumpAdd, vec31.z));
@@ -631,16 +642,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     }
 
     private void tickRotation() {
-        float wheelRot = this.getWheelRot();
         if (jiggleXTime > 0) {
             jiggleXTime--;
         }
-        float wheelSpeed = (float) Math.min(this.getDeltaMovement().horizontalDistance(), 1);
-        if (wheelRot > 360F) {
-            prevWheelRot = prevWheelRot - 360F;
-            wheelRot = wheelRot - 360F;
-        }
-        this.setWheelRot(wheelRot + wheelSpeed * 100);
         if (this.isOnGround()) {
             float forwards = 0.25F * Math.abs((float) Math.sin(Math.toRadians(this.getXRot()))) * getOnGroundProgress(1);
             Vec3 frontPos = rotateVec(new Vec3(0, 0, forwards + 0.55F), false, 1.0F).add(0, frontHeight, 0);
@@ -964,6 +968,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             Entity rider = this.getFirstPassenger();
             if ((rider == null || !living.isAlliedTo(rider)) && shouldRiderHurtMob(living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
                 living.knockback(0.5D, living.getX() - this.getX(), living.getZ() - this.getZ());
+                if(living.getHealth() <= 0.0D && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get())){
+                    IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_BASHING);
+                }
             }
         }
     }

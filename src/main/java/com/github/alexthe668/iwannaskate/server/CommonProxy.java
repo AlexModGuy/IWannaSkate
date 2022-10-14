@@ -111,4 +111,7 @@ public class CommonProxy {
 
     public void reloadConfig() {
     }
+
+    public void openBookGUI(ItemStack itemStackIn) {
+    }
 }

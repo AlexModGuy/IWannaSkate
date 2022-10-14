@@ -1,0 +1,25 @@
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+Occasionally, some young nitwit villagers decide to leave their homes and travel the Overworld on their Skateboards.
+These Wandering Skaters will appear only once every few days, and can be seen preforming tricks and generally skating around.
+<NEWLINE>
+Wandering Skaters can carry a variety of items, such as...
+<NEWLINE>
+-Skateboard Trucks and Decks
+<NEWLINE>
+-Complete Skateboards
+<NEWLINE>
+-Pizza Slices, a placeable food item, like a cake. Wandering Skaters will eat some if injured.
+<NEWLINE>
+-Skateboard Enchantment books
+<NEWLINE>
+-Various Skating Equipment
+<NEWLINE>
+-Energy Drinks
+<NEWLINE>
+And much more. But above all else, Wandering Skaters are the only source of rare novelty Skateboard Wheels, each of which has a unique visual effect on a Skateboard.
+<NEWLINE>
+Unlike other types of villager, Wandering Skaters are not defenseless and will attempt to protect themselves from harm. If attacked, they can pick up their Skateboards and swing them around in a circle to damage multiple nearby assailants.

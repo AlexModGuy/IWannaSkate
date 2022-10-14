@@ -1,4 +1,4 @@
-package com.github.alexthe668.iwannaskate.mixin.client;
+package com.github.alexthe668.iwannaskate.mixin;
 
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;

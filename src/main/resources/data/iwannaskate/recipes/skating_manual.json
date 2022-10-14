@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:orange_dye"
+    },
+    {
+      "item": "iwannaskate:skateboard_truck"
+    },
+    {
+      "tag": "iwannaskate:skateboard_wheels"
+    }
+  ],
+  "result": {
+    "item": "iwannaskate:skating_manual"
+  }
+}

@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -66,7 +67,7 @@ public class SkateboardRackBlock extends BaseEntityBlock {
     }
 
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        if(level.getBlockEntity(pos) instanceof SkateboardRackBlockEntity rack && context instanceof EntityCollisionContext entityCollisionContext && entityCollisionContext.getEntity() != null){
+        if (level.getBlockEntity(pos) instanceof SkateboardRackBlockEntity rack && context instanceof EntityCollisionContext entityCollisionContext && entityCollisionContext.getEntity() != null) {
             rack.onHoverOver(entityCollisionContext.getEntity());
         }
         switch (state.getValue(FACING)) {
@@ -82,7 +83,7 @@ public class SkateboardRackBlock extends BaseEntityBlock {
     }
 
     public BlockState updateShape(BlockState state, Direction direction, BlockState pos, LevelAccessor p_51216_, BlockPos p_51217_, BlockPos p_51218_) {
-        return!state.canSurvive(p_51216_, p_51217_) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, pos, p_51216_, p_51217_, p_51218_);
+        return !state.canSurvive(p_51216_, p_51217_) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, pos, p_51216_, p_51217_, p_51218_);
     }
 
     public boolean canSurvive(BlockState blockState, LevelReader level, BlockPos pos) {
@@ -94,19 +95,32 @@ public class SkateboardRackBlock extends BaseEntityBlock {
         ItemStack heldItem = player.getItemInHand(handIn);
         if (worldIn.getBlockEntity(pos) instanceof SkateboardRackBlockEntity rack && !player.isShiftKeyDown()) {
             int lookingAtSlot = hit.getLocation().subtract(Vec3.atLowerCornerOf(pos)).y > 0.5F ? 0 : 1;
-            if(heldItem.getItem() instanceof BaseSkateboardItem && rack.getItem(lookingAtSlot).isEmpty()){
+            if (heldItem.getItem() instanceof BaseSkateboardItem && rack.getItem(lookingAtSlot).isEmpty()) {
                 rack.setItem(lookingAtSlot, heldItem.copy());
-                if(!player.isCreative()){
+                if (!player.isCreative()) {
                     heldItem.shrink(1);
                 }
                 return InteractionResult.SUCCESS;
-            }else if(!rack.getItem(lookingAtSlot).isEmpty()){
-                popResource(worldIn, pos, rack.getItem(lookingAtSlot).copy());
+            } else if (!rack.getItem(lookingAtSlot).isEmpty()) {
+                ItemStack copy = rack.getItem(lookingAtSlot).copy();
+                if (!player.addItem(copy)) {
+                    popResource(worldIn, pos, rack.getItem(lookingAtSlot).copy());
+                }
                 rack.setItem(lookingAtSlot, ItemStack.EMPTY);
                 return InteractionResult.SUCCESS;
             }
         }
         return InteractionResult.CONSUME;
+    }
+
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        if (level.getBlockEntity(pos) instanceof SkateboardRackBlockEntity rack) {
+            int lookingAtSlot = target.getLocation().subtract(Vec3.atLowerCornerOf(pos)).y > 0.5F ? 0 : 1;
+            if(!rack.getItem(lookingAtSlot).isEmpty()){
+                return rack.getItem(lookingAtSlot).copy();
+            }
+        }
+        return super.getCloneItemStack(state, target, level, pos, player);
     }
 
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {

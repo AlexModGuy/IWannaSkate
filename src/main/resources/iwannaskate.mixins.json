@@ -9,10 +9,11 @@
     "EntityMixin",
     "LivingEntityMixin",
     "ServerLevelMixin",
-    "client.WallBlockMixin"
+    "WallBlockMixin"
   ],
   "client": [
     "client.AgeableListModelMixin",
+    "client.CapeLayerMixin",
     "client.ClientPacketListenerMixin",
     "client.EntityRendererProviderMixin",
     "client.LivingEntityRendererMixin"

@@ -7,6 +7,7 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.EntityModel;
@@ -56,6 +57,7 @@ public class ModelRootRegistry implements ResourceManagerReloadListener {
     private void reload(ResourceManager manager){
         ALL_MAPPINGS.clear();
         MODEL_TO_ANIMATING_PARTS.clear();
+        int emptyMappingsCount = 0;
         Collection<ResourceLocation> collection = manager.listResources("skate_model_mappings", (resourceLocation) -> {
             return resourceLocation.getPath().endsWith(".json");
         }).keySet();
@@ -64,9 +66,11 @@ public class ModelRootRegistry implements ResourceManagerReloadListener {
                 Optional<Resource> resource = manager.getResource(res);
                 if (resource.isPresent()) {
                     BufferedReader inputstream = ((Resource)resource.get()).openAsReader();
-                    SkateModelMapping mapping = GsonHelper.fromJson(GSON, inputstream, SkateModelMapping.class);
-                    if(mapping != null){
+                    try {
+                        SkateModelMapping mapping = GsonHelper.fromJson(GSON, inputstream, SkateModelMapping.class);
                         ALL_MAPPINGS.add(mapping);
+                    }catch (JsonParseException parseException){
+                        emptyMappingsCount++;
                     }
                 }
             } catch (Exception e) {
@@ -75,6 +79,10 @@ public class ModelRootRegistry implements ResourceManagerReloadListener {
             }
         }
         IWannaSkateMod.LOGGER.info("Loaded {} model mappings for skating animations", ALL_MAPPINGS.size());
+        if(emptyMappingsCount > 0 ){
+            IWannaSkateMod.LOGGER.info("Skipping {} model mappings because their entity type does not exist, likely because a compatible mod is not installed", emptyMappingsCount);
+
+        }
     }
 
     @Override

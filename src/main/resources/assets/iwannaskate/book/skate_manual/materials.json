@@ -1,0 +1,43 @@
+{
+  "parent": "root.json",
+  "text": "materials.txt",
+  "title": "Parts & Assembly",
+  "linked_page_buttons": [
+  ],
+  "images": [
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+    {
+      "recipe": "iwannaskate:skateboard_deck",
+      "shapeless": false,
+      "x": 20,
+      "y": 100,
+      "page": 0,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:skateboard_truck",
+      "shapeless": false,
+      "x": 220,
+      "y": 120,
+      "page": 0,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:skateboard",
+      "shapeless": false,
+      "x": 20,
+      "y": 100,
+      "page": 1,
+      "scale": 1.1
+    }
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+  ],
+  "entity_buttons": [
+  ]
+}

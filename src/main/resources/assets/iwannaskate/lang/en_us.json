@@ -65,6 +65,8 @@
   "item.iwannaskate.skateboard.skater_skeleton": "Undead's Skateboard",
   "item.iwannaskate.skateboard.wandering_skater": "Wanderer's Skateboard",
   "item.iwannaskate.skateboard_truck": "Skateboard Truck",
+  "item.iwannaskate.skating_manual": "Skating Made Simple",
+  "item.iwannaskate.skating_manual.desc": "By \"Radical\" Alex",
   "item.iwannaskate.skateboard_deck": "Skateboard Deck",
   "item.iwannaskate.shimmering_wax": "Shimmering Wax",
   "item.iwannaskate.spawn_egg_skater_skeleton": "Skater Skeleton Spawn Egg",
@@ -183,5 +185,9 @@
   "advancements.iwannaskate.slow_motion.title": "360 No-Scope",
   "advancements.iwannaskate.slow_motion.desc": "Preform a skateboard trick in slow-motion with by having the High-Octane effect active",
   "advancements.iwannaskate.skate_10k.title": "Going the Distance",
-  "advancements.iwannaskate.skate_10k.desc": "Skate for over 10,000 blocks without stopping"
+  "advancements.iwannaskate.skate_10k.desc": "Skate for over 10,000 blocks without stopping",
+  "advancements.iwannaskate.skate_surfing.title": "Hurricane Waves",
+  "advancements.iwannaskate.skate_surfing.desc": "Skate on water with the Surfing enchantment",
+  "advancements.iwannaskate.skate_bashing.title": "Vehicular Manslaughter",
+  "advancements.iwannaskate.skate_bashing.desc": "Slay a mob by ramming into it with a Skateboard with the Bashing enchantment"
 }

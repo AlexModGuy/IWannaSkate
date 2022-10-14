@@ -12,10 +12,15 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +37,9 @@ public class SkatingModelPositioner {
         float priorPoseProgress = 1F - poseProgress;
         rotateForPose(livingEntity, model, poseStack, partialTick, skateboard, skateboard.getPrevSkaterPose(), priorPoseProgress);
         rotateForPose(livingEntity, model, poseStack, partialTick, skateboard, skateboard.getSkaterPose(), poseProgress);
-
     }
+
+
 
 
     public static boolean doesChangeModel(LivingEntity entity) {
@@ -195,6 +201,31 @@ public class SkatingModelPositioner {
         return IWannaSkateMod.CLIENT_CONFIG.invertSide.get() == (skater.getMainArm() != HumanoidArm.LEFT);
     }
 
+    public static void rotateCapeForPose(AbstractClientPlayer player, PoseStack poseStack, float partialTicks, SkateboardEntity skateboard, SkaterPose pose, float progress) {
+        boolean pedalFootLeft = isPedalFootLeft(player);
+        Vec3 trail = skateboard.getDeltaMovement();
+        float f = (float)Math.pow(trail.length(), 0.5F);
+        float f1 = pedalFootLeft ? -1 : 1;
+        float maxUp = 70;
+        if(pose == SkaterPose.NONE){
+            poseStack.translate(0, 0F, -0.125F * progress);
+            poseStack.mulPose(Vector3f.XP.rotationDegrees( 15 * progress));
+        }
+        if(pose == SkaterPose.PEDAL){
+            poseStack.mulPose(Vector3f.XP.rotationDegrees( 25 * progress));
+        }
+        if(pose.isSideways()){
+            float swing = (float)(Math.sin((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
+            poseStack.translate(0, f * 0.05F * progress, 0F);
+            poseStack.mulPose(Vector3f.YN.rotationDegrees((60 + 20 * swing) * progress));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(f1 * (f * 30 + 30) * progress));
+            maxUp = 105;
+        }
+        float flap = (float)(Math.cos((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
+        poseStack.mulPose(Vector3f.XP.rotationDegrees(Mth.clamp(f, 0 ,1) * (maxUp + 20 * flap) * progress));
+
+    }
+
     private static void rotateForPose(LivingEntity skater, EntityModel model, PoseStack stack, float partialTicks, SkateboardEntity skateboard, SkaterPose pose, float progress) {
         ModelRootRegistry.SkateModelParts animationData = ModelRootRegistry.INSTANCE.getAnimationData(model, skater.getType());
         boolean pedalFootLeft = isPedalFootLeft(skater);
@@ -262,4 +293,6 @@ public class SkatingModelPositioner {
             }
         }
     }
+
+
 }

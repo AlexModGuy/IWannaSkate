@@ -1,7 +1,9 @@
 package com.github.alexthe668.iwannaskate.client;
 
+import com.github.alexthe666.citadel.client.gui.GuiCitadelBook;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.color.BoardColorSampler;
+import com.github.alexthe668.iwannaskate.client.gui.SkateManualScreen;
 import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
 import com.github.alexthe668.iwannaskate.client.particle.BeeParticle;
 import com.github.alexthe668.iwannaskate.client.particle.HalloweenParticle;
@@ -23,6 +25,7 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -105,11 +108,14 @@ public class ClientProxy extends CommonProxy {
             GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
             event.getPoseStack().popPose();
         }
-        if(event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+        if(event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get()) && IWannaSkateMod.CLIENT_CONFIG.overcaffeniatedOverlay.get()){
             int screenWidth = event.getWindow().getGuiScaledWidth();
             int screenHeight = event.getWindow().getGuiScaledHeight();
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.disableDepthTest();
+            RenderSystem.depthMask(false);
+            RenderSystem.defaultBlendFunc();
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1F);
             RenderSystem.setShaderTexture(0, OVERCAFFENIATED_OVERLAY);
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferbuilder = tesselator.getBuilder();
@@ -119,13 +125,15 @@ public class ClientProxy extends CommonProxy {
             bufferbuilder.vertex((double)screenWidth, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
             bufferbuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 0.0F).endVertex();
             tesselator.end();
+            RenderSystem.depthMask(true);
+            RenderSystem.enableDepthTest();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
     @SubscribeEvent
     public void onComputeFOV(ComputeFovModifierEvent event) {
-        if(Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get())){
+        if(Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get()) && IWannaSkateMod.CLIENT_CONFIG.overcaffeniatedOverlay.get()){
             event.setNewFovModifier(event.getFovModifier() + 1);
         }
     }
@@ -197,5 +205,10 @@ public class ClientProxy extends CommonProxy {
         IWannaSkateMod.LOGGER.debug("Registered particle factories");
         registry.register(IWSParticleRegistry.HALLOWEEN.get(), HalloweenParticle.Factory::new);
         registry.register(IWSParticleRegistry.BEE.get(), BeeParticle.Factory::new);
+    }
+
+    public void openBookGUI(ItemStack book) {
+        Minecraft.getInstance().setScreen(new SkateManualScreen(book));
+
     }
 }

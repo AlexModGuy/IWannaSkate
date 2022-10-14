@@ -1,0 +1,17 @@
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+The Skater Skeleton is a rare skeleton that can be encountered wielding a skateboard rather than the usual bow.
+These hostile monsters can only spawn on smooth, solid blocks, such as stone, which are fitting for them to skate on.
+<NEWLINE>
+When attacking, the Skater Skeleton will attempt to use its skateboard to chase after its target, bashing into them if possible.
+It will also pick up its skateboard and use it as a melee weapon, dealing significant damage.
+<NEWLINE>
+If slain, the Skater Skeleton will drop bones, Skateboard Wheels, and possibly its Skateboard or helmet.
+<NEWLINE>
+Skater Skeletons are one of the few ways to naturally obtain Skateboard Wheels, which are a necessary component of a Skateboard.
+The helmet that these skeletons wear also enables them to deal slight melee damage when colliding with other creatures when skating - an ability that anyone who wears it can also use.
+<NEWLINE>
+Although naturally rare, Skater Skeletons can be found plaguing any manually built skate park.

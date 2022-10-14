@@ -6,5 +6,5 @@ animation_strength_modifier is similar, except it determines how far the parts w
 "Humanoid" (ex. player, zombie, enderman, skeleton etc) mobs are already hard coded by default.
 
 Note that this system does respect the parenting of parts, to get a part to move only use its parent.
-All of the tags refrenced in this by default should not include "fancy" entity models like those in Ice and Fire, Mowzie's Mobs and Alex's Mobs.
-Create seperate mappings for those instead, since they use separate modelling/animation techniques than vanilla.
+All the tags referenced in this by default should not include "fancy" entity models like those in Ice and Fire, Mowzie's Mobs and Alex's Mobs.
+Create separate mappings for those instead, since they use separate modelling/animation techniques than vanilla.

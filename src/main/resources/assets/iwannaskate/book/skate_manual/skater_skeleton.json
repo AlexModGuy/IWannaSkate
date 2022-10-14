@@ -1,0 +1,31 @@
+{
+  "parent": "root.json",
+  "text": "skater_skeleton.txt",
+  "title": "Skater Skeletons",
+  "linked_page_buttons": [
+  ],
+  "images": [
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+    {
+      "entity": "iwannaskate:skater_skeleton",
+      "entity_data": "{ArmorItems:[{},{},{},{Count:1b,id:\"iwannaskate:spiked_skater_helmet\",tag:{Damage:0}}], HandItems:[{Count:1b,id:\"iwannaskate:skateboard\",tag:{Damage:0,Skateboard:{Banner:{Base:14,Patterns:[{Color:15,Pattern:\"sku\"},{Color:15,Pattern:\"tts\"},{Color:15,Pattern:\"bts\"}]},GripTape:15,MadeOf:\"minecraft:dark_oak_slab\",WheelType:-1},display:{Name:'{\"color\":\"dark_red\",\"translate\":\"item.iwannaskate.skateboard.skater_skeleton\"}'}}},{}]}",
+      "x": 98,
+      "y": 128,
+      "page" : 0,
+      "scale": 1.6,
+      "rot_x": 25,
+      "rot_y": 135,
+      "rot_z": 0,
+      "follow_cursor": false
+    }
+  ],
+  "entity_buttons": [
+  ]
+}

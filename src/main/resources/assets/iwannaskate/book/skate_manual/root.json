@@ -1,0 +1,89 @@
+{
+  "parent": "",
+  "text": "root.txt",
+  "title": "Skating Made Simple",
+  "title_locale": "item.iwannaskate.skating_manual",
+  "linked_page_buttons": [
+    {
+      "linked_page": "skater_skeleton.json",
+      "text": "Skater Skeletons",
+      "x": 290,
+      "y": 20,
+      "page": 0,
+      "item" : "citadel:icon_item",
+      "item_tag": "{IconLocation:\"iwannaskate:textures/gui/book_icon_0.png\"}"
+    },
+    {
+      "linked_page": "wandering_skater.json",
+      "text": "Wandering Skaters",
+      "x": 290,
+      "y": 42,
+      "page": 0,
+      "item" : "citadel:icon_item",
+      "item_tag": "{IconLocation:\"iwannaskate:textures/gui/book_icon_1.png\"}"
+    },
+    {
+      "linked_page": "materials.json",
+      "text": "Parts & Assembly",
+      "x": 290,
+      "y": 64,
+      "page": 0,
+      "item" : "iwannaskate:skateboard_wheels"
+    },
+    {
+      "linked_page": "basics.json",
+      "text": "Basics of Skating",
+      "x": 290,
+      "y": 86,
+      "page": 0,
+      "item" : "iwannaskate:skateboard"
+    },
+    {
+      "linked_page": "tricks.json",
+      "text": "Tricks and More",
+      "x": 290,
+      "y": 108,
+      "page": 0,
+      "item" : "iwannaskate:energy_drink"
+    },
+    {
+      "linked_page": "customization.json",
+      "text": "Skateboard Customization",
+      "x": 290,
+      "y": 130,
+      "page": 0,
+      "item" : "iwannaskate:skateboard_wheels_rainbow"
+    },
+    {
+      "linked_page": "enchantments.json",
+      "text": "Skateboard Enchantments",
+      "x": 290,
+      "y": 152,
+      "page": 0,
+      "item" : "minecraft:enchanted_book"
+    }
+  ],
+  "images": [
+    {
+      "texture": "iwannaskate:textures/gui/book_image_0.png",
+      "x": 55,
+      "y": 30,
+      "page" : 0,
+      "scale": 0.6,
+      "u": 0,
+      "v": 0,
+      "width": 144,
+      "height": 186
+    }
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+  ],
+  "entity_buttons": [
+  ]
+}

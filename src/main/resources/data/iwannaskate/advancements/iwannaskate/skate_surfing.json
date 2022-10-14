@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "citadel:fancy_item",
+            "nbt": "{DisplayItem:\"iwannaskate:skateboard\", DisplayBob:1, DisplayZoom:0, DisplayScale:1, DisplaySpin:0, DisplayShake:0, DisplayItemNBT:{Skateboard:{MadeOf:\"minecraft:mangrove_slab\", GripTape:10, WheelType:11}}}"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.skate_surfing.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.skate_surfing.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/enchant_skateboard",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:skate_surfing"
+        }
+    }
+}

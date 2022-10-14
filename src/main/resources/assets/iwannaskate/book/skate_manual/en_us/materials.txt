@@ -1,0 +1,11 @@
+Skateboards are made of three basic components: the trucks, deck and wheels.
+A Skateboard Deck can be crafted from 3 slabs of any wood type, like so:
+<NEWLINE>
+Skateboard Decks, just like the Skateboards they can be made into, can be used as a melee weapon in a pinch.
+<NEWLINE>
+Two Skateboard Trucks are required to assemble one Skateboard, and can be made like so:
+<NEWLINE>
+Skateboard Wheels can be obtained from a Skater Skeleton or a Wandering Skater. They can be dyed any of the 16 possible colors.
+Once all components have been collected, the board can finally be assembled.
+<NEWLINE>
+If at any given time one would like to swap out the wheels of a Skateboard, they can simply place two new wheels of the same kind in the crafting grid with the Skateboard.

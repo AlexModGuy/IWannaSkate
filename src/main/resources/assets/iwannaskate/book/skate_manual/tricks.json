@@ -1,0 +1,19 @@
+{
+  "parent": "root.json",
+  "text": "tricks.txt",
+  "title": "Tricks and More",
+  "linked_page_buttons": [
+  ],
+  "images": [
+  ],
+  "item_renders": [
+  ],
+  "recipes": [
+  ],
+  "tabula_renders": [
+  ],
+  "entity_renders": [
+  ],
+  "entity_buttons": [
+  ]
+}
