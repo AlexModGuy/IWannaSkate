@@ -423,10 +423,12 @@ public class WanderingSkaterEntity extends WanderingTrader {
         List<Enchantment> enchantments = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(enchantment -> enchantment.category == IWSEnchantmentRegistry.SKATEBOARD).collect(Collectors.toList());
         Enchantment randomEnchant = enchantments.size() > 1 ? enchantments.get(random.nextInt(enchantments.size() - 1)) : enchantments.get(0);
         VillagerTrades.ItemListing[] trades = new VillagerTrades.ItemListing[]{
+                new SellingItemTrade(new ItemStack(IWSItemRegistry.SKATING_MANUAL.get(), 1), 2, 2, 4),
                 new BuyingItemTrade(new ItemStack(SkateboardWheels.DEFAULT.getItemRegistryObject().get(), 2), 1, 7, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_TRUCK.get(), 2), 3, 2, 4),
                 new SellingItemTrade(new ItemStack(Items.IRON_NUGGET, 18), 4, 3, 5),
                 new SellingItemTrade(new ItemStack(Items.IRON_HELMET, 1), 7, 2, 5),
+                new SellingRandomDyedTrade(new ItemStack(IWSItemRegistry.BEANIE.get(), 1), 6, 5, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.PIZZA_SLICE.get(), 5), 2, 5, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.ENERGY_DRINK.get(), 6), 2, 5, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()), 2, 4, 3),
@@ -434,7 +436,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
                 new SellingEnchantedBook(randomEnchant, 15, 2, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.SHIMMERING_WAX.get(), 1), 3, 4, 3),
         };
-        this.addOffersFromItemListings(merchantoffers, trades, 4);
+        this.addOffersFromItemListings(merchantoffers, trades, 5);
         int randomAttempts = 0;
         List<SkateboardWheels> wheelsList = new ArrayList<>();
         for (SkateboardWheels wheels : SkateboardWheels.values()) {

@@ -24,6 +24,7 @@ public class IWSTags {
     public static final TagKey<EntityType<?>> SKILLED_SKATERS = registerEntityType("skilled_skaters");
     public static final TagKey<EntityType<?>> MAINTAINS_SKATEBOARD_DURABILITY = registerEntityType("maintains_skateboard_durability");
     public static final TagKey<EntityType<?>> HAS_ZOMBIE_ARMS = registerEntityType("has_zombie_arms");
+    public static final TagKey<EntityType<?>> OVERRIDES_SKATEBOARD_POSITIONING = registerEntityType("overrides_skateboard_positioning");
     public static final TagKey<Biome> NO_MONSTERS = registerBiome("no_monsters");
 
     private static TagKey<Item> registerItemTag(String name) {

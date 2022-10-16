@@ -1,2 +1,29 @@
+For the cost of experience, Skateboards can be enchanted using an enchanting table or anvil. While they take some generic enchantments like Unbreaking, there are many unique enchantments exclusively for Skateboards, including...
 <NEWLINE>
-text
+-Aerial I-IV: Increases ollie and kickflip airtime.
+<NEWLINE>
+-Bashing I-IV: Increases melee damage of held Skateboards, and adds contact damage whilst skating.
+<NEWLINE>
+-Benthic: Allows the Skateboard to be used underwater, incompatible with Surfing.
+<NEWLINE>
+-Clambering: Allows the Skateboard to automatically climb up one-block heights.
+<NEWLINE>
+-Earthcrosser: Allows the Skateboard to travel over dirt, grass, etc. unimpeded.
+<NEWLINE>
+-Hardwood: Skateboard no longer takes damage from natural damage sources like fire and cactus.
+<NEWLINE>
+-Inertial I-III: Decreases how quickly inertia is lost whilst skating.
+<NEWLINE>
+-Instant Return: Dismounting the board delivers it straight to the skater's inventory.
+<NEWLINE>
+-Onboarding: Mobs that walk over the board will begin to skate with it.
+<NEWLINE>
+-Pedalling I-II: Decreases how much time is required to pedal the board.
+<NEWLINE>
+-Secured: Reduces fall damage and stops falling off of the board from happening.
+<NEWLINE>
+-Sidewinder I-II: Skateboard can pivot left and right faster.
+<NEWLINE>
+-Surfing: Allows the Skateboard to glide over water as if it was a solid surface, incompatible with Benthic.
+<NEWLINE>
+All Skateboard enchantments are generally cheaper than enchantments for other items.

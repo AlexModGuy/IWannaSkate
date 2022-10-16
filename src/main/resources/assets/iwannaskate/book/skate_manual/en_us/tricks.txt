@@ -1,2 +1,10 @@
+Many skating tricks are purely situational, and can only be preformed under certain conditions.
+For example, grinding can only be preformed if a Skateboard lands on a wall, fence, rail or iron bars.
 <NEWLINE>
-text
+While skating and not pedalling, you may notice the jump bar above the hotbar.
+If the jump key is held down, this bar will fill up, and when released an ollie or a kickflip is preformed.
+A kickflip will grant larger airtime than an ollie, but it can only be preformed if the jump bar is filled to the orange section.
+<NEWLINE>
+If an energy drink is purchased from a Wandering Skater and drunk, one can be granted with the High Octane effect.
+This effect slows down time temporarily while preforming a trick, with a slower motion effect if drank multiple times.
+But if over-consumed, this item will inflict the Overcaffeniated effect, which can give jitters to the inflicted skater, along with making them take random damage.

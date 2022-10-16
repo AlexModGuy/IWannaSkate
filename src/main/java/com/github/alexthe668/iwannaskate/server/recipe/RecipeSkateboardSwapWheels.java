@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.server.recipe;
 
+import com.github.alexthe666.citadel.recipe.SpecialRecipeInGuideBook;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
@@ -9,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +19,7 @@ import net.minecraft.world.level.block.WoolCarpetBlock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeSkateboardSwapWheels extends CustomRecipe {
+public class RecipeSkateboardSwapWheels extends CustomRecipe implements SpecialRecipeInGuideBook {
 
     public RecipeSkateboardSwapWheels(ResourceLocation name) {
         super(name);
@@ -110,5 +112,43 @@ public class RecipeSkateboardSwapWheels extends CustomRecipe {
 
     public RecipeSerializer<?> getSerializer() {
         return IWSRecipeRegistry.SKATEBOARD_SWAP_WHEELS.get();
+    }
+
+    @Override
+    public NonNullList<Ingredient> getDisplayIngredients() {
+        ItemStack skateboard = new ItemStack(IWSItemRegistry.SKATEBOARD.get());
+        SkateboardData data = SkateboardData.fromStack(skateboard);
+        data.removeGripTape();
+        data.removeBanner();
+        data.setWheelType(SkateboardWheels.DEFAULT);
+        SkateboardData.setStackData(skateboard, data);
+
+        return NonNullList.of(Ingredient.EMPTY, Ingredient.of(skateboard), Ingredient.of(IWSTags.SKATEBOARD_WHEELS), Ingredient.of(IWSTags.SKATEBOARD_WHEELS));
+    }
+
+    @Override
+    public ItemStack getDisplayResultFor(NonNullList<ItemStack> nonNullList) {
+        ItemStack wheels = ItemStack.EMPTY;
+        ItemStack skateboard = ItemStack.EMPTY;
+
+        for(int i = 0; i < nonNullList.size(); ++i) {
+            ItemStack itemstack2 = nonNullList.get(i);
+            if (!itemstack2.isEmpty()) {
+                if (itemstack2.is(IWSTags.SKATEBOARD_WHEELS)) {
+                    wheels = itemstack2;
+                } else if (itemstack2.is(IWSItemRegistry.SKATEBOARD.get())) {
+                    skateboard = itemstack2.copy();
+                }
+            }
+        }
+
+        if (skateboard.isEmpty()) {
+            return skateboard;
+        } else {
+            SkateboardData data = SkateboardData.fromStack(skateboard);
+            data.setWheelType(SkateboardWheels.fromItem(wheels.getItem()));
+            SkateboardData.setStackData(skateboard, data);
+            return skateboard;
+        }
     }
 }

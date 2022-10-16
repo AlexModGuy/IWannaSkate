@@ -1,2 +1,18 @@
+Skateboards can be extremely customized using a variety of different items.
+The wheels of a Skateboard can be dyed any of the 16 valid colors.
+To swap the wheels of a Skateboard out with another pair, simply place two Skateboard Wheels in the crafting grid with the Skateboard. The previous wheels will also be returned.
 <NEWLINE>
-text
+<NEWLINE>
+The surface of a Skateboard can also be changed. By placing a Skateboard in the crafting grid with a carpet, the board can be given a grip tape of that color on top.
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+The underside of a Skateboard can have a banner pattern applied to it.
+<NEWLINE>
+<NEWLINE>
+If a Skateboard is enchanted, its shimmer can be removed by applying Shimmering Wax to the board.
+<NEWLINE>
+<NEWLINE>
+<NEWLINE>
+With all these customization options, you may want a way to display all of your unique designs.
+Luckily the Skateboard Rack can be crafted and placed on a wall, which can hold two Skateboards for display purposes.

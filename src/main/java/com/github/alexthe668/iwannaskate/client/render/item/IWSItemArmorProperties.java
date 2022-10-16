@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.client.render.item;
 
+import com.github.alexthe668.iwannaskate.client.model.BeanieModel;
 import com.github.alexthe668.iwannaskate.client.model.IWSModelLayers;
 import com.github.alexthe668.iwannaskate.client.model.SpikedSkaterHelmetModel;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
@@ -14,11 +15,13 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 public class IWSItemArmorProperties implements IClientItemExtensions {
 
     public static SpikedSkaterHelmetModel SPIKED_SKATER_HELMET;
+    public static BeanieModel BEANIE;
     private static boolean init;
 
     public static void initializeModels() {
         init = true;
         SPIKED_SKATER_HELMET = new SpikedSkaterHelmetModel(Minecraft.getInstance().getEntityModels().bakeLayer(IWSModelLayers.SPIKED_SKATER_HELMET));
+        BEANIE = new BeanieModel(Minecraft.getInstance().getEntityModels().bakeLayer(IWSModelLayers.BEANIE));
     }
 
     @Override
@@ -28,6 +31,9 @@ public class IWSItemArmorProperties implements IClientItemExtensions {
         }
         if(itemStack.is(IWSItemRegistry.SPIKED_SKATER_HELMET.get())){
             return SPIKED_SKATER_HELMET;
+        }
+        if(itemStack.is(IWSItemRegistry.BEANIE.get())){
+            return BEANIE;
         }
         return _default;
     }

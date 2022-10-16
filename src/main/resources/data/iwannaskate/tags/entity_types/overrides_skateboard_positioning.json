@@ -1,0 +1,5 @@
+{
+  "#comment": "All entities that override the positioning of a skateboard, usually for modded mobs that fly or hover.",
+  "replace": false,
+  "values": []
+}

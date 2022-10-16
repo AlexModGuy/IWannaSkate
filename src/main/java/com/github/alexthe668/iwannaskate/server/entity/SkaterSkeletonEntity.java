@@ -145,11 +145,6 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         }
     }
 
-    protected void registerGoals() {
-        super.registerGoals();
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
-    }
-
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData groupData, @Nullable CompoundTag tag) {
         SpawnGroupData spawngroupdata = super.finalizeSpawn(level, difficulty, spawnType, groupData, tag);

@@ -349,7 +349,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             prevDelta = this.getDeltaMovement();
             this.checkInsideBlocks();
             if (this.hasEnchant(IWSEnchantmentRegistry.ONBOARDING.get())) {
-                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, 0.01F, 0.2F), EntitySelector.pushableBy(this));
+                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, 0.5F, 0.2F), EntitySelector.pushableBy(this));
                 if (!list.isEmpty()) {
                     for (int j = 0; j < list.size(); ++j) {
                         Entity entity = list.get(j);
@@ -927,6 +927,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
                 living.animationSpeed = 0;
             }
             double d0 = this.getY() + this.getPassengersRidingOffset();
+            if(living.getType().is(IWSTags.OVERRIDES_SKATEBOARD_POSITIONING)){
+                d0 += living.getMyRidingOffset();
+            }
             living.setPos(this.getX(), d0, this.getZ());
         } else {
             super.positionRider(passenger);

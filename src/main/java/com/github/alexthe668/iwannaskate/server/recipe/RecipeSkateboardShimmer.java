@@ -1,7 +1,10 @@
 package com.github.alexthe668.iwannaskate.server.recipe;
 
+import com.github.alexthe666.citadel.recipe.SpecialRecipeInGuideBook;
+import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
+import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -10,12 +13,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.WoolCarpetBlock;
 
-public class RecipeSkateboardShimmer extends CustomRecipe {
+import java.util.Map;
+
+public class RecipeSkateboardShimmer extends CustomRecipe implements SpecialRecipeInGuideBook {
+
 
     public RecipeSkateboardShimmer(ResourceLocation name) {
         super(name);
@@ -77,5 +82,24 @@ public class RecipeSkateboardShimmer extends CustomRecipe {
 
     public RecipeSerializer<?> getSerializer() {
         return IWSRecipeRegistry.SKATEBOARD_SHIMMER.get();
+    }
+
+    @Override
+    public NonNullList<Ingredient> getDisplayIngredients() {
+        ItemStack   skateboard = new ItemStack(IWSItemRegistry.SKATEBOARD.get());
+        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(skateboard);
+        map.putIfAbsent(IWSEnchantmentRegistry.AERIAL.get(), 1);
+        EnchantmentHelper.setEnchantments(map, skateboard);
+        SkateboardData data = SkateboardData.fromStack(skateboard);
+        data.removeGripTape();
+        data.removeBanner();
+        data.setWheelType(SkateboardWheels.DEFAULT);
+        SkateboardData.setStackData(skateboard, data);
+        return NonNullList.of(Ingredient.EMPTY, Ingredient.of(skateboard), Ingredient.of(IWSItemRegistry.SHIMMERING_WAX.get()));
+    }
+
+    @Override
+    public ItemStack getDisplayResultFor(NonNullList<ItemStack> nonNullList) {
+        return new ItemStack(IWSItemRegistry.SKATEBOARD.get());
     }
 }

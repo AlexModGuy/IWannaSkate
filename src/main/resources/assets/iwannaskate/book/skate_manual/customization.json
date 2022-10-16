@@ -9,6 +9,55 @@
   "item_renders": [
   ],
   "recipes": [
+    {
+      "recipe": "iwannaskate:skateboard_swap_wheels",
+      "shapeless": true,
+      "x": 220,
+      "y": 10,
+      "page": 0,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:skateboard_grip_tape",
+      "shapeless": true,
+      "x": 20,
+      "y": 10,
+      "page": 1,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:skateboard_banner",
+      "shapeless": true,
+      "x": 20,
+      "y": 120,
+      "page": 1,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:skateboard_shimmer",
+      "shapeless": true,
+      "x": 220,
+      "y": 60,
+      "page": 1,
+      "scale": 1.1
+    },
+    {
+      "recipe": "iwannaskate:shimmering_wax",
+      "shapeless": true,
+      "x": 220,
+      "y": 130,
+      "page": 1,
+      "scale": 1.1
+    },
+
+    {
+      "recipe": "iwannaskate:skateboard_rack",
+      "shapeless": true,
+      "x": 20,
+      "y": 100,
+      "page": 2,
+      "scale": 1.1
+    }
   ],
   "tabula_renders": [
   ],

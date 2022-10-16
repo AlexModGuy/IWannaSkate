@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.client.render.item;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.ClientProxy;
+import com.github.alexthe668.iwannaskate.client.gui.SkateManualScreen;
 import com.github.alexthe668.iwannaskate.client.model.SkateboardModel;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkateboardTexturer;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
@@ -68,7 +69,7 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
     @Override
     public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if(itemStack.getItem() instanceof BaseSkateboardItem){
+        if(itemStack.getItem() instanceof BaseSkateboardItem skateboardItem){
             float f = 0.0F;
             boolean isCreativeTab = false;
             if(itemStack.is(IWSItemRegistry.SKATEBOARD.get()) && transformType == ItemTransforms.TransformType.GUI){
@@ -76,6 +77,9 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
                 float current = flipProgresses.getOrDefault(itemStack, 0F);
                 float lerped = prev + (current - prev) * Minecraft.getInstance().getFrameTime();
                 f =  lerped / FLIP_TIME;
+                if(Minecraft.getInstance().screen instanceof SkateManualScreen && skateboardItem.canFlipInInventory(itemStack)){
+                    f = 1.0F;
+                }
             }
             SkateboardData data = SkateboardData.fromStack(itemStack);
             if(itemStack.getTag() != null && itemStack.getTag().getBoolean("IsCreativeTab") && randomSkateData != null){

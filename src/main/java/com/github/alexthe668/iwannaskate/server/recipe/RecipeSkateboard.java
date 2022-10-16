@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.server.recipe;
 
+import com.github.alexthe666.citadel.recipe.SpecialRecipeInGuideBook;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
@@ -14,7 +15,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
-public class RecipeSkateboard extends ShapedRecipe {
+public class RecipeSkateboard extends ShapedRecipe implements SpecialRecipeInGuideBook {
     public RecipeSkateboard(ResourceLocation name) {
         super(name, "", 3, 2, NonNullList.of(Ingredient.EMPTY, Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_DECK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSTags.SKATEBOARD_WHEELS), Ingredient.EMPTY, Ingredient.of(IWSTags.SKATEBOARD_WHEELS)), new ItemStack(IWSItemRegistry.SKATEBOARD.get()));
     }
@@ -70,5 +71,33 @@ public class RecipeSkateboard extends ShapedRecipe {
         return true;
     }
 
+    @Override
+    public NonNullList<Ingredient> getDisplayIngredients() {
+        return getIngredients();
+    }
+
+    @Override
+    public ItemStack getDisplayResultFor(NonNullList<ItemStack> nonNullList) {
+        ItemStack deck = ItemStack.EMPTY;
+        ItemStack wheels = ItemStack.EMPTY;
+        for (int i = 0; i < nonNullList.size(); i++) {
+            if (nonNullList.get(i).is(IWSItemRegistry.SKATEBOARD_DECK.get())) {
+                deck = nonNullList.get(i);
+            }
+            if (nonNullList.get(i).is(IWSTags.SKATEBOARD_WHEELS)) {
+                wheels = nonNullList.get(i);
+            }
+        }
+        ItemStack board = new ItemStack(IWSItemRegistry.SKATEBOARD.get());
+        CompoundTag skateDataTag = deck.hasTag() && deck.getTag().contains("Skateboard") ? deck.getTag().getCompound("Skateboard") : new CompoundTag();
+        SkateboardData data = SkateboardData.fromTag(skateDataTag);
+        data.setWheelType(SkateboardWheels.fromItem(wheels.getItem()));
+        data.removeBanner();
+        data.removeGripTape();
+        CompoundTag deckTag = new CompoundTag();
+        deckTag.put("Skateboard", data.toTag());
+        board.setTag(deckTag);
+        return board;
+    }
 }
 

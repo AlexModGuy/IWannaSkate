@@ -5,6 +5,17 @@
   "linked_page_buttons": [
   ],
   "images": [
+    {
+      "texture": "iwannaskate:textures/gui/book_image_1.png",
+      "x": 16,
+      "y": 123,
+      "page" : 0,
+      "scale": 0.9,
+      "u": 0,
+      "v": 52,
+      "width": 182,
+      "height": 5
+    }
   ],
   "item_renders": [
   ],
