@@ -21,6 +21,9 @@
     "minecraft:mud",
     "minecraft:packed_mud",
     "minecraft:sculk",
-    "minecraft:sculk_catalyst"
+    "minecraft:sculk_catalyst",
+    "minecraft:ancient_debris",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
   ]
 }

@@ -4,8 +4,8 @@
   "head": ["head"],
   "right_arm": [],
   "left_arm": [],
-  "right_leg": ["legR"],
-  "left_leg": ["legL"],
+  "right_leg": ["legL"],
+  "left_leg": ["legR"],
   "animation_speed_modifier": 1.0,
   "animation_strength_modifier": 0.7,
   "face_forwards": false

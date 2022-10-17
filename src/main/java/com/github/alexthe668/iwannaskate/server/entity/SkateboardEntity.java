@@ -354,7 +354,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
                     for (int j = 0; j < list.size(); ++j) {
                         Entity entity = list.get(j);
                         if (!entity.hasPassenger(this)) {
-                            if (!this.isVehicle() && !entity.isPassenger() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
+                            if (!this.isVehicle() && !entity.isPassenger() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player) && !entity.getType().is(IWSTags.CANNOT_SKATE)) {
                                 entity.startRiding(this);
                             } else {
                                 this.push(entity);

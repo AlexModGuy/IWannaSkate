@@ -1,0 +1,12 @@
+{
+  "#comment": "All entities that will not mount a skateboard with onboarding.",
+  "replace": false,
+  "values": [
+    "minecraft:slime",
+    "minecraft:magma_cube",
+    "minecraft:squid",
+    "minecraft:glow_squid",
+    "minecraft:shulker",
+    "minecraft:ender_dragon"
+  ]
+}

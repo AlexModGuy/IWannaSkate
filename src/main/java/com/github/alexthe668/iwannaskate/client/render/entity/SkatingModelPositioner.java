@@ -39,9 +39,6 @@ public class SkatingModelPositioner {
         rotateForPose(livingEntity, model, poseStack, partialTick, skateboard, skateboard.getSkaterPose(), poseProgress);
     }
 
-
-
-
     public static boolean doesChangeModel(LivingEntity entity) {
         return entity.getVehicle() instanceof SkateboardEntity;
     }
@@ -208,21 +205,22 @@ public class SkatingModelPositioner {
         float f1 = pedalFootLeft ? -1 : 1;
         float maxUp = 70;
         if(pose == SkaterPose.NONE){
-            poseStack.translate(0, 0F, -0.125F * progress);
-            poseStack.mulPose(Vector3f.XP.rotationDegrees( 15 * progress));
+            poseStack.translate(0, 0F, 0.125F * progress);
+            poseStack.mulPose(Vector3f.XN.rotationDegrees( 15 * progress));
         }
         if(pose == SkaterPose.PEDAL){
-            poseStack.mulPose(Vector3f.XP.rotationDegrees( 25 * progress));
+            poseStack.translate(0, 0F, 0.125F * progress);
+            poseStack.mulPose(Vector3f.XN.rotationDegrees( 25 * progress));
         }
         if(pose.isSideways()){
             float swing = (float)(Math.sin((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
-            poseStack.translate(0, f * 0.05F * progress, 0F);
+            poseStack.translate(0, f * 0.1F * progress, 0);
             poseStack.mulPose(Vector3f.YN.rotationDegrees((60 + 20 * swing) * progress));
-            poseStack.mulPose(Vector3f.ZP.rotationDegrees(f1 * (f * 30 + 30) * progress));
+            poseStack.mulPose(Vector3f.ZN.rotationDegrees(f1 * (f * 30 + 35) * progress));
             maxUp = 105;
         }
         float flap = (float)(Math.cos((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(Mth.clamp(f, 0 ,1) * (maxUp + 20 * flap) * progress));
+        poseStack.mulPose(Vector3f.XN.rotationDegrees(Mth.clamp(f, 0 ,1) * (maxUp + 20 * flap) * progress));
 
     }
 

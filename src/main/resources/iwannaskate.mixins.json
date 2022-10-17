@@ -16,7 +16,8 @@
     "client.CapeLayerMixin",
     "client.ClientPacketListenerMixin",
     "client.EntityRendererProviderMixin",
-    "client.LivingEntityRendererMixin"
+    "client.LivingEntityRendererMixin",
+    "client.PlayerInfoMixin"
   ],
   "injectors": {
     "defaultRequire": 1

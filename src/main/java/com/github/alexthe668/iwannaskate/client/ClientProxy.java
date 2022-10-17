@@ -25,7 +25,9 @@ import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.github.alexthe668.iwannaskate.server.item.DyeableHatItem;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
+import com.github.alexthe668.iwannaskate.server.misc.PlayerCapes;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -34,6 +36,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -45,6 +48,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,6 +64,7 @@ public class ClientProxy extends CommonProxy {
     public static final Map<Integer, SkateboardSound> SKATEBOARD_SOUND_MAP = new HashMap<>();
     protected static final ResourceLocation OVERCAFFENIATED_OVERLAY = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/overcaffeniated_overlay.png");
     private static final ResourceLocation SKATEBOARD_INDICATOR_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/skateboard_peddle_indicator.png");
+
     public ItemStack lastHoveredItem = null;
 
     public static void onTexturesLoaded(TextureStitchEvent.Post event) {
@@ -67,7 +73,9 @@ public class ClientProxy extends CommonProxy {
 
     public static void setupItemColors(RegisterColorHandlersEvent.Item event) {
         IWannaSkateMod.LOGGER.info("loaded in item colorizer");
-        event.register((stack, colorIn) -> colorIn != 0 ? -1 : ((DyeableHatItem) stack.getItem()).getColor(stack), IWSItemRegistry.BEANIE.get());
+        if(IWSItemRegistry.BEANIE.isPresent()){
+            event.register((stack, colorIn) -> colorIn != 0 ? -1 : ((DyeableHatItem) stack.getItem()).getColor(stack), IWSItemRegistry.BEANIE.get());
+        }
     }
 
     public static void setupParticles(RegisterParticleProvidersEvent registry) {

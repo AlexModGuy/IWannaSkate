@@ -50,6 +50,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AbstractClientPlayer, P
                 if (!itemstack.is(Items.ELYTRA)) {
                     poseStack.pushPose();
                     poseStack.translate(0.0D, 0.0D, 0.25D);
+                    poseStack.mulPose(Vector3f.YN.rotationDegrees(180));
                     float poseProgress = skateboard.getSkaterPoseProgress(partialTicks);
                     float priorPoseProgress = 1F - poseProgress;
                     SkatingModelPositioner.rotateCapeForPose(player, poseStack, partialTicks, skateboard, skateboard.getPrevSkaterPose(), priorPoseProgress);

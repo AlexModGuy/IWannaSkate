@@ -6,8 +6,10 @@
     "#minecraft:wooden_slabs",
     "#minecraft:planks",
     "#minecraft:stone_bricks",
-    "#minecraft:terracotta",
     "#minecraft:ice",
-    "minecraft:stone"
+    "minecraft:stone",
+    "minecraft:blackstone",
+    "minecraft:blackstone_slab",
+    "minecraft:blackstone_stairs"
   ]
 }

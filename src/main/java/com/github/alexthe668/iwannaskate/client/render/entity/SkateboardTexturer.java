@@ -60,6 +60,19 @@ public class SkateboardTexturer {
 
     public static void renderBoard(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
         renderDeck(model, data, stack, source, packedLight, glint);
+        model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        if (data.hasGripTape()) {
+            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(GRIP_TAPE_TEXTURES.get(data.getGripTapeColor())), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        SkateboardWheels wheelType = data.getWheelType();
+        if(wheelType.isEmissive()){
+            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityTranslucentEmissive(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }else{
+            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if(wheelType == SkateboardWheels.SPOOKY){
+            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
         if (data.hasBanner()) {
             List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(getBannerColor(data), getItemPatterns(data));
             for (int i = 0; i < 17 && i < list.size(); ++i) {
@@ -75,19 +88,6 @@ public class SkateboardTexturer {
                 }
                 model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityNoOutline(patternTexture), false), packedLight, OverlayTexture.NO_OVERLAY, rgb[0], rgb[1], rgb[2], 1.0F);
             }
-        }
-        model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        SkateboardWheels wheelType = data.getWheelType();
-        if(wheelType.isEmissive()){
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityTranslucentEmissive(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }else{
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
-        if(wheelType == SkateboardWheels.SPOOKY){
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
-        if (data.hasGripTape()) {
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(GRIP_TAPE_TEXTURES.get(data.getGripTapeColor())), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
