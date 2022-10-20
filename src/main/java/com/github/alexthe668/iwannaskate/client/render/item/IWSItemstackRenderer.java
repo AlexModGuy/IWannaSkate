@@ -34,9 +34,9 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
         super(null, null);
     }
 
-    public static void tick(){
+    public static void tick() {
         prevFlipProgresses.putAll(flipProgresses);
-        if(IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
+        if (IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
             ItemStack currentMouseOver = ((ClientProxy) (IWannaSkateMod.PROXY)).lastHoveredItem;
             if (currentMouseOver != null) {
                 float prev = flipProgresses.getOrDefault(currentMouseOver, 0F);
@@ -64,25 +64,29 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
         if (ticks % 40 == 0) {
             randomSkateData = SkateboardMaterials.generateRandomData(Minecraft.getInstance().level.random, false);
         }
-        ticks++;
+        if (Minecraft.getInstance().isPaused()) {
+            ticks++;
+        } else if (Minecraft.getInstance().player != null) {
+            ticks = Minecraft.getInstance().player.tickCount;
+        }
     }
 
     @Override
     public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if(itemStack.getItem() instanceof BaseSkateboardItem skateboardItem){
+        if (itemStack.getItem() instanceof BaseSkateboardItem skateboardItem) {
             float f = 0.0F;
             boolean isCreativeTab = false;
-            if(itemStack.is(IWSItemRegistry.SKATEBOARD.get()) && transformType == ItemTransforms.TransformType.GUI){
+            if (itemStack.is(IWSItemRegistry.SKATEBOARD.get()) && transformType == ItemTransforms.TransformType.GUI) {
                 float prev = prevFlipProgresses.getOrDefault(itemStack, 0F);
                 float current = flipProgresses.getOrDefault(itemStack, 0F);
                 float lerped = prev + (current - prev) * Minecraft.getInstance().getFrameTime();
-                f =  lerped / FLIP_TIME;
-                if(Minecraft.getInstance().screen instanceof SkateManualScreen && skateboardItem.canFlipInInventory(itemStack)){
+                f = lerped / FLIP_TIME;
+                if (Minecraft.getInstance().screen instanceof SkateManualScreen && skateboardItem.canFlipInInventory(itemStack)) {
                     f = 1.0F;
                 }
             }
             SkateboardData data = SkateboardData.fromStack(itemStack);
-            if(itemStack.getTag() != null && itemStack.getTag().getBoolean("IsCreativeTab") && randomSkateData != null){
+            if (itemStack.getTag() != null && itemStack.getTag().getBoolean("IsCreativeTab") && randomSkateData != null) {
                 data = randomSkateData;
                 isCreativeTab = true;
             }
@@ -90,16 +94,16 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
             poseStack.translate(0, 0.45F, 0);
             poseStack.mulPose(Vector3f.YP.rotationDegrees(-180));
             poseStack.mulPose(Vector3f.ZP.rotationDegrees(180));
-            if(isCreativeTab){
+            if (isCreativeTab) {
                 poseStack.translate(0, -1F, 0);
                 poseStack.mulPose(Vector3f.YP.rotationDegrees(360 * ticks / 40));
                 poseStack.mulPose(Vector3f.XP.rotationDegrees(65));
                 poseStack.translate(0, 0, -2F);
             }
             SKATEBOARD_MODEL.animateItem(data, f);
-            if(itemStack.is(IWSItemRegistry.SKATEBOARD_DECK.get())){
+            if (itemStack.is(IWSItemRegistry.SKATEBOARD_DECK.get())) {
                 SkateboardTexturer.renderDeck(SKATEBOARD_MODEL, data, poseStack, bufferIn, combinedLightIn, itemStack.hasFoil());
-            }else{
+            } else {
                 SkateboardTexturer.renderBoard(SKATEBOARD_MODEL, data, poseStack, bufferIn, combinedLightIn, itemStack.hasFoil());
             }
             poseStack.popPose();

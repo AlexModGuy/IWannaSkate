@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.client.render.entity;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.color.BoardColorSampler;
+import com.github.alexthe668.iwannaskate.client.color.DeckTexture;
 import com.github.alexthe668.iwannaskate.client.model.SkateboardModel;
 import com.github.alexthe668.iwannaskate.client.render.IWSRenderTypes;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 public class SkateboardTexturer {
 
-    private static final ResourceLocation[] COLORIZED_DECK_TEXTURES = new ResourceLocation[]{
+    private static final ResourceLocation[] RAW_DECK_TEXTURES = new ResourceLocation[]{
             new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/deck/deck_0.png"),
             new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/deck/deck_1.png"),
             new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/deck/deck_2.png"),
@@ -46,34 +47,35 @@ public class SkateboardTexturer {
     private static final ResourceLocation BASE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/base.png");
     private static final Map<Holder<BannerPattern>, ResourceLocation> BANNER_PATTERN_RESOURCE_LOCATION_HASH_MAP = new HashMap<>();
     private static final ResourceLocation SPOOKY_GLOW_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_spooky_glow.png");
+    private static final Map<ResourceLocation, ResourceLocation> DECK_TEXTURES_FOR_BLOCK = new HashMap<>();
+
+    private static final SkateboardModel GRIPTAPE_MODEL = new SkateboardModel();
+
+    private static final SkateboardModel TRUCKS_MODEL = new SkateboardModel();
+    private static final SkateboardModel BANNER_MODEL = new SkateboardModel();
+    private static final SkateboardModel WHEELS_MODEL = new SkateboardModel();
 
     public static void renderDeck(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
-        int[] colors = BoardColorSampler.getColor(data.getWoodBlock());
-        for (int i = 0; i < Math.min(colors.length, COLORIZED_DECK_TEXTURES.length); i++) {
-            int color = colors[i];
-            float r = (color >> 0 & 0xFF) / 255F;
-            float g = (color >> 8 & 0xFF) / 255F;
-            float b = (color >> 16 & 0xFF) / 255F;
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(COLORIZED_DECK_TEXTURES[i]), glint), packedLight, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+        ResourceLocation deckTexture;
+        if(DECK_TEXTURES_FOR_BLOCK.containsKey(data.getWoodBlock())){
+            deckTexture = DECK_TEXTURES_FOR_BLOCK.get(data.getWoodBlock());
+        }else{
+            ResourceLocation res = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/generated/deck_" + data.getWoodBlock().getNamespace() + "_" + data.getWoodBlock().getPath());
+            int[] colors = BoardColorSampler.getColor(data.getWoodBlock());
+            deckTexture = DeckTexture.getOrCreateDeckTexture(res, RAW_DECK_TEXTURES, colors);
+            DECK_TEXTURES_FOR_BLOCK.put(data.getWoodBlock(), deckTexture);
         }
+        model.hideWheels();
+        model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entitySolid(deckTexture), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        model.showWheels();
     }
 
     public static void renderBoard(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
+        TRUCKS_MODEL.copyFrom(model);
+        TRUCKS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutoutNoCull(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         renderDeck(model, data, stack, source, packedLight, glint);
-        model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        if (data.hasGripTape()) {
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(GRIP_TAPE_TEXTURES.get(data.getGripTapeColor())), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
-        SkateboardWheels wheelType = data.getWheelType();
-        if(wheelType.isEmissive()){
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityTranslucentEmissive(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }else{
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutout(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
-        if(wheelType == SkateboardWheels.SPOOKY){
-            model.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
         if (data.hasBanner()) {
+            BANNER_MODEL.copyFrom(model);
             List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(getBannerColor(data), getItemPatterns(data));
             for (int i = 0; i < 17 && i < list.size(); ++i) {
                 Pair<Holder<BannerPattern>, DyeColor> pair = list.get(i);
@@ -86,8 +88,23 @@ public class SkateboardTexturer {
                     patternTexture = generatePatternTexture(pattern);
                     BANNER_PATTERN_RESOURCE_LOCATION_HASH_MAP.put(pattern, patternTexture);
                 }
-                model.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityNoOutline(patternTexture), false), packedLight, OverlayTexture.NO_OVERLAY, rgb[0], rgb[1], rgb[2], 1.0F);
+                BANNER_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityNoOutline(patternTexture), false), packedLight, OverlayTexture.NO_OVERLAY, rgb[0], rgb[1], rgb[2], 1.0F);
             }
+        }
+
+        if (data.hasGripTape()) {
+            GRIPTAPE_MODEL.copyFrom(model);
+            GRIPTAPE_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityTranslucent(GRIP_TAPE_TEXTURES.get(data.getGripTapeColor())), glint), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        SkateboardWheels wheelType = data.getWheelType();
+        WHEELS_MODEL.copyFrom(model);
+        if(wheelType.isEmissive()){
+            WHEELS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityTranslucentEmissive(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }else{
+            WHEELS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutoutNoCull(data.getWheelType().getTexture()), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if(wheelType == SkateboardWheels.SPOOKY){
+            WHEELS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 

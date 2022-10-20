@@ -115,4 +115,33 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
         this.resetToDefaultPose();
         this.root.rotateAngleZ = (float) (f * Math.PI);
     }
+
+    public void copyFrom(SkateboardModel other){
+        this.root.copyModelAngles(other.root);
+        this.board.copyModelAngles(other.board);
+        this.frontAxel.copyModelAngles(other.frontAxel);
+        this.backAxel.copyModelAngles(other.backAxel);
+        this.leftFrontWheel.copyModelAngles(other.leftFrontWheel);
+        this.rightFrontWheel.copyModelAngles(other.rightFrontWheel);
+        this.leftBackWheel.copyModelAngles(other.leftBackWheel);
+        this.rightBackWheel.copyModelAngles(other.rightBackWheel);
+    }
+
+    public void hideWheels() {
+        this.frontAxel.showModel = false;
+        this.backAxel.showModel = false;
+        this.leftFrontWheel.showModel = false;
+        this.rightFrontWheel.showModel = false;
+        this.leftBackWheel.showModel = false;
+        this.rightBackWheel.showModel = false;
+    }
+
+    public void showWheels() {
+        this.frontAxel.showModel = true;
+        this.backAxel.showModel = true;
+        this.leftFrontWheel.showModel = true;
+        this.rightFrontWheel.showModel = true;
+        this.leftBackWheel.showModel = true;
+        this.rightBackWheel.showModel = true;
+    }
 }
