@@ -15,6 +15,8 @@ public class IWSClientConfig {
     public final ForgeConfigSpec.BooleanValue animateAllEntityModels;
     public final ForgeConfigSpec.BooleanValue skateboardLoopSounds;
 
+    public final ForgeConfigSpec.BooleanValue rotateCameraOnBoard;
+
     public IWSClientConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("display");
         showInertiaIndicator = builder.comment("when enabled, shows a skateboard icon on the user HUD that indicates their current inertia.").translation("show_inertia_indicator").define("show_inertia_indicator", true);
@@ -27,6 +29,7 @@ public class IWSClientConfig {
         builder.push("animation");
         invertSide = builder.comment("when enabled, flips the foot used to pedal to the other side, which is also inverted by default if the player's skin is left handed.").translation("invert_side").define("invert_side", false);
         animateAllEntityModels = builder.comment("when enabled, dynamically identifies the parts of each entity model to animate when skating. Mappings of entities are read from the skate_model_mappings folder in the resource pack. If disabled, only humanoid entities will have animations while skating.").translation("animate_all_entity_models").define("animate_all_entity_models", true);
+        rotateCameraOnBoard = builder.comment("when enabled, the camera will twist and turn when on a board to follow its motion.").translation("rotate_camera_on_board").define("rotate_camera_on_board", true);
         builder.pop();
         builder.push("sound");
         skateboardLoopSounds = builder.comment("when enabled, skateboards will play a looping sound whilst moving.").translation("skateboard_loop_sounds").define("skateboard_loop_sounds", true);

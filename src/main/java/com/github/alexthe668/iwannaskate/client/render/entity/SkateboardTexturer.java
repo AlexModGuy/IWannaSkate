@@ -71,9 +71,9 @@ public class SkateboardTexturer {
     }
 
     public static void renderBoard(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
+        renderDeck(model, data, stack, source, packedLight, glint);
         TRUCKS_MODEL.copyFrom(model);
         TRUCKS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutoutNoCull(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        renderDeck(model, data, stack, source, packedLight, glint);
         if (data.hasBanner()) {
             BANNER_MODEL.copyFrom(model);
             List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(getBannerColor(data), getItemPatterns(data));

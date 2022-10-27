@@ -21,13 +21,9 @@ import com.github.alexthe668.iwannaskate.server.CommonProxy;
 import com.github.alexthe668.iwannaskate.server.blockentity.IWSBlockEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
-import com.github.alexthe668.iwannaskate.server.entity.SlowableEntity;
-import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.github.alexthe668.iwannaskate.server.item.DyeableHatItem;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
-import com.github.alexthe668.iwannaskate.server.misc.PlayerCapes;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -36,7 +32,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -45,11 +40,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -65,7 +58,7 @@ public class ClientProxy extends CommonProxy {
     protected static final ResourceLocation OVERCAFFENIATED_OVERLAY = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/overcaffeniated_overlay.png");
     private static final ResourceLocation SKATEBOARD_INDICATOR_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/skateboard_peddle_indicator.png");
 
-    public ItemStack lastHoveredItem = null;
+    private float prevCameraRoll = 0;
 
     public static void onTexturesLoaded(TextureStitchEvent.Post event) {
         BoardColorSampler.sampleColorsOnLoad();
@@ -85,22 +78,19 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public void onRenderLevel(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
-            if (IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
-                int ticksPerSecond = Minecraft.getInstance().player == null ? 20 : ((SlowableEntity) Minecraft.getInstance().player).getTickRate();
-                Minecraft.getInstance().timer.msPerTick = 1000.0F / ticksPerSecond;
-            }
+    public void onClientTick(TickEvent.ClientTickEvent event){
+        if(event.phase == TickEvent.Phase.END){
             IWSItemstackRenderer.tick();
         }
     }
 
     @SubscribeEvent
-    public void onRenderTooltipColor(RenderTooltipEvent.Color event) {
-        if (event.getItemStack().getItem() instanceof BaseSkateboardItem skateboardItem && skateboardItem.canFlipInInventory(event.getItemStack()) && IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
-            lastHoveredItem = event.getItemStack();
-        } else {
-            lastHoveredItem = null;
+    public void onComputeCameraAngles(ViewportEvent.ComputeCameraAngles event){
+        if(Minecraft.getInstance().player.getVehicle() instanceof SkateboardEntity skateboard && IWannaSkateMod.CLIENT_CONFIG.rotateCameraOnBoard.get()){
+            float targetRot = skateboard.getZRot(Minecraft.getInstance().getPartialTick());
+            float f = skateboard.approachRotation(prevCameraRoll, targetRot, 1F);
+            prevCameraRoll = f;
+            event.setRoll(f * 0.25F);
         }
     }
 

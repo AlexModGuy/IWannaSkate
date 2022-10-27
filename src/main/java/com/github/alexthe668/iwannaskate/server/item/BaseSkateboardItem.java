@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
+import com.github.alexthe666.citadel.item.ItemWithHoverAnimation;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -21,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BaseSkateboardItem extends Item {
+public class BaseSkateboardItem extends Item implements ItemWithHoverAnimation {
 
     private final ImmutableMultimap<Attribute, AttributeModifier> weaponModifiers;
 
@@ -71,4 +72,16 @@ public class BaseSkateboardItem extends Item {
     public boolean isFoil(ItemStack stack) {
         return super.isFoil(stack) && (stack.getTag() == null || !stack.getTag().getBoolean("RemovedShimmer"));
     }
+
+    @Override
+    public float getMaxHoverOverTime(ItemStack itemStack) {
+        return 5F;
+    }
+
+    @Override
+    public boolean canHoverOver(ItemStack itemStack) {
+        return false;
+    }
+
+
 }

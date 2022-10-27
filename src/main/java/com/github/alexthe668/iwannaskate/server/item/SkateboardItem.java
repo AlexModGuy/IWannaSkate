@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
+import com.github.alexthe666.citadel.item.ItemWithHoverAnimation;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import net.minecraft.stats.Stats;
@@ -25,10 +26,6 @@ public class SkateboardItem extends BaseSkateboardItem {
 
     public SkateboardItem(Properties properties) {
         super(properties);
-    }
-
-    public boolean canFlipInInventory(ItemStack stack) {
-        return SkateboardData.fromStack(stack).hasBanner();
     }
 
     public boolean isEnchantable(ItemStack stack) {
@@ -89,5 +86,10 @@ public class SkateboardItem extends BaseSkateboardItem {
                 return InteractionResultHolder.pass(itemstack);
             }
         }
+    }
+
+    @Override
+    public boolean canHoverOver(ItemStack itemStack) {
+        return SkateboardData.fromStack(itemStack).hasBanner();
     }
 }

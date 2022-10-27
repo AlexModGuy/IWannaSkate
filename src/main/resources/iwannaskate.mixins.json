@@ -6,9 +6,7 @@
   "refmap": "iwannaskate.refmap.json",
   "mixins": [
     "CrossCollisionBlockMixin",
-    "EntityMixin",
     "LivingEntityMixin",
-    "ServerLevelMixin",
     "WallBlockMixin"
   ],
   "client": [

@@ -116,6 +116,14 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
         this.root.rotateAngleZ = (float) (f * Math.PI);
     }
 
+    public void animateCreativeTab(float f) {
+        float f1 = f * 0.1f;
+        this.root.rotateAngleX = (float) (-Math.sin(f1 * 1F) * Math.PI);
+        this.root.rotateAngleY = (float) (Math.cos(f1 * 0.6F + Math.PI * 0.5F) * Math.PI);
+        this.root.rotateAngleZ = (float) (Math.sin(f1 * 0.3F - Math.PI * 1.5F) * Math.PI);
+
+    }
+
     public void copyFrom(SkateboardModel other){
         this.root.copyModelAngles(other.root);
         this.board.copyModelAngles(other.board);
@@ -144,4 +152,5 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
         this.leftBackWheel.showModel = true;
         this.rightBackWheel.showModel = true;
     }
+
 }

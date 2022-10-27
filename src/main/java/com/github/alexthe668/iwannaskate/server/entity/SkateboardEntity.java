@@ -1,5 +1,10 @@
 package com.github.alexthe668.iwannaskate.server.entity;
 
+import com.github.alexthe666.citadel.server.entity.IModifiesTime;
+import com.github.alexthe666.citadel.server.tick.ServerTickRateTracker;
+import com.github.alexthe666.citadel.server.tick.TickRateTracker;
+import com.github.alexthe666.citadel.server.tick.modifier.LocalEntityTickRateModifier;
+import com.github.alexthe666.citadel.server.tick.modifier.TickRateModifier;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
@@ -20,6 +25,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -49,7 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SkateboardEntity extends Entity implements PlayerRideableJumping, SpecialSlowMotion {
+public class SkateboardEntity extends Entity implements PlayerRideableJumping, IModifiesTime {
 
     private static final EntityDataAccessor<ItemStack> ITEMSTACK = SynchedEntityData.defineId(SkateboardEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Float> X_ROT = SynchedEntityData.defineId(SkateboardEntity.class, EntityDataSerializers.FLOAT);
@@ -103,7 +109,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     private double lastDamagedDistance = 0;
     private int soundTimer = 0;
     private final List<Entity> slowedDownEntities = new ArrayList<>();
-    private int slowMoFor = 0;
+    private int slowMotionCooldown = 100;
     private Player returnToPlayer = null;
 
     public SkateboardEntity(EntityType<?> entityType, Level level) {
@@ -410,6 +416,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             skateQuality = SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW);
             this.lastBlockPos = this.blockPosition();
         }
+        if(slowMotionCooldown > 0){
+            slowMotionCooldown--;
+        }
         this.lastBlockPos = blockPosition();
     }
 
@@ -535,7 +544,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
                 IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_SURFING);
             }
         }
-        float gravity = this.isInWaterOrBubble() ? -0.2F : -0.6F;
+        float gravity = this.isInWaterOrBubble() ? -0.2F : -0.6F + this.getSlowMotionLevel() * 0.25F;
         if (this.hasEnchant(IWSEnchantmentRegistry.SURFING.get())) {
             if (onWater) {
                 gravity = 0.0F;
@@ -558,7 +567,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
             }
             float f1 = -Mth.sin(yRot * ((float) Math.PI / 180F));
             float f2 = Mth.cos(yRot * ((float) Math.PI / 180F));
-            float jumpAdd = jumpFor > 0 ? 0.5F + getSlowMotionLevel() * 0.2F : gravity;
+            float jumpAdd = jumpFor > 0 ? 0.5F + this.getSlowMotionLevel() * 0.2F : gravity;
             Vec3 moveVec = new Vec3(f1, 0, f2).scale(speed);
             Vec3 vec31 = prev.scale(0.975F).add(moveVec);
             this.setDeltaMovement(new Vec3(vec31.x, 0.975F * jumpAdd, vec31.z));
@@ -757,7 +766,6 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         for (PartEntity part : this.allParts) {
             part.remove(removalReason);
         }
-        restoreSlowedEntities();
         super.remove(removalReason);
     }
 
@@ -910,12 +918,6 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
 
     public void positionRider(Entity passenger) {
         prevPedalAmount = this.getPedalAmount();
-        if (slowMoFor > 0) {
-            if (passenger instanceof SlowableEntity slowableEntity) {
-                slowableEntity.setTickRate(getSlowMoTickSpeed());
-            }
-            slowedDownEntities.add(passenger);
-        }
         if (this.isPassengerOfSameVehicle(passenger) && passenger instanceof LivingEntity living && !this.touchingUnloadedChunk()) {
             if (passenger instanceof Player) {
                 tickPlayerRider((Player) passenger);
@@ -1088,6 +1090,11 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
     public void handleStartJump(int barAmount) {
         trickFlag = true;
         int aerial = this.getEnchantLevel(IWSEnchantmentRegistry.AERIAL.get());
+        if (this.getSlowMotionLevel() > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
+            IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SLOW_MOTION);
+            enterSlowMotion();
+        }
+
         if (barAmount >= 80) {
             this.setSkaterPose(SkaterPose.KICKFLIP);
             IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.TRICK_KICKFLIP);
@@ -1099,9 +1106,18 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         }
         this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_START.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
         sprintDown = this.jumpFor;
-        if (this.getSlowMotionLevel() > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
-            IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SLOW_MOTION);
-            slowMoFor = 100;
+    }
+
+    private void enterSlowMotion() {
+        if(!level.isClientSide && level instanceof ServerLevel){
+            float speed = this.getSlowMotionLevel() + 1;
+            ServerTickRateTracker tracker = ServerTickRateTracker.getForServer(level.getServer());
+            for(TickRateModifier modifier : tracker.tickRateModifierList){
+                if(modifier instanceof LocalEntityTickRateModifier entityTick && entityTick.getEntityId() == this.getId()){
+                    return;
+                }
+            }
+            tracker.addTickRateModifier(new LocalEntityTickRateModifier(this.getId(), this.getType(), IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get(), this.level.dimension(), 200, speed));
         }
     }
 
@@ -1169,67 +1185,21 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, S
         return null;
     }
 
-    private void restoreSlowedEntities() {
-        if (!slowedDownEntities.isEmpty()) {
-            for (Entity entity : slowedDownEntities) {
-                if (entity instanceof SlowableEntity slowed) {
-                    slowed.setTickRate(20);
-                }
-            }
-            slowedDownEntities.clear();
-        }
-    }
-
-    public int getSlowMoTickSpeed() {
-        int i = this.getSlowMotionLevel();
-        if (i > 0) {
-            return i > 2 ? 2 : 10 - 5 * (i - 1);
-        }
-        return 20;
-    }
-
-    private boolean canSlowMoEntity(Entity entity) {
-        if (IWannaSkateMod.COMMON_CONFIG.playersSlowMotion.get() && entity instanceof Player) {
-            return false;
-        }
-        return !slowedDownEntities.contains(entity);
-    }
-
     @Nullable
     @Override
     public ItemStack getPickResult() {
         return this.getItemStack().copy();
     }
 
-    @Override
-    public void onMasterServerTick() {
-        double slowDistance = IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get();
-        if (slowMoFor > 0 && IWannaSkateMod.COMMON_CONFIG.enableSlowMotion.get()) {
-            ((SlowableEntity) this).setTickRate(getSlowMoTickSpeed());
-            AABB slowBox = new AABB(this.getX() - slowDistance, this.getY() - slowDistance, this.getZ() - slowDistance, this.getX() + slowDistance, this.getY() + slowDistance, this.getZ() + slowDistance);
-            for (Entity needsSlowing : level.getEntities(this, slowBox, this::canSlowMoEntity)) {
-                if (needsSlowing instanceof SlowableEntity slowed) {
-                    slowed.setTickRate(getSlowMoTickSpeed());
-                }
-                slowedDownEntities.add(needsSlowing);
-            }
-            for (Entity slowedDown : slowedDownEntities) {
-                if (!slowBox.contains(slowedDown.position())) {
-                    if (slowedDown instanceof SlowableEntity slowed) {
-                        slowed.setTickRate(20);
-                    }
-                }
-            }
-            slowMoFor -= this.isOnGround() ? 3 : 1;
-        } else {
-            ((SlowableEntity) this).setTickRate(20);
-            restoreSlowedEntities();
-        }
-    }
 
     @Override
     public boolean shouldRender(double x, double y, double z) {
         boolean prev = super.shouldRender(x, y, z);
         return prev || this.isVehicle() && this.getFirstPassenger() != null && this.getFirstPassenger().shouldRender(x, y, z);
+    }
+
+    @Override
+    public boolean isTimeModificationValid(TickRateModifier tickRateModifier) {
+        return this.getOnGroundProgress(0F) < 0.9F;
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -45,7 +46,12 @@ public class SkateboardMaterials {
 
     public static SkateboardData generateRandomData(RandomSource random, boolean onlyWood){
         List<Item> materials = getSkateboardMaterials().stream().toList();
-        Item material = materials.get(materials.size() > 1 ? random.nextInt(materials.size() - 1) : 0);
+        Item material;
+        if(materials.isEmpty()){
+            material = Items.OAK_SLAB;
+        }else{
+            material = materials.get(materials.size() > 1 ? random.nextInt(materials.size() - 1) : 0);
+        }
         SkateboardData data = new SkateboardData(ForgeRegistries.ITEMS.getKey(material));
         if(!onlyWood){
             if(random.nextInt(17) != 0){
@@ -54,10 +60,12 @@ public class SkateboardMaterials {
             data.setWheelType(SkateboardWheels.values()[random.nextInt(SkateboardWheels.values().length - 1)]);
             if(random.nextInt(5) != 0) {
                 List<Item> banners = getBanners().stream().toList();
-                Item banner = banners.get(banners.size() > 1 ? random.nextInt(banners.size() - 1) : 0);
-                CompoundTag bannerTag = new CompoundTag();
-                bannerTag.putInt("Base", ((BannerItem)banner).getColor().getId());
-                data.setBanner(bannerTag);
+                if(!banners.isEmpty()){
+                    Item banner = banners.get(banners.size() > 1 ? random.nextInt(banners.size() - 1) : 0);
+                    CompoundTag bannerTag = new CompoundTag();
+                    bannerTag.putInt("Base", ((BannerItem)banner).getColor().getId());
+                    data.setBanner(bannerTag);
+                }
             }
         }
         return data;
