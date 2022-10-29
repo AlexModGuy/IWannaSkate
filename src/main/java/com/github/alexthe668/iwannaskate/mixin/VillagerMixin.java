@@ -1,5 +1,6 @@
 package com.github.alexthe668.iwannaskate.mixin;
 
+import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.entity.HasAnimationFlags;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
@@ -93,9 +94,9 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
             cancellable = true
     )
     protected void iws_wantsToPickup(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (this.isBaby() && stack.is(IWSItemRegistry.ENERGY_DRINK.get()) && this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+        if (this.isBaby() && stack.is(IWSItemRegistry.ENERGY_DRINK.get()) && this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && IWannaSkateMod.COMMON_CONFIG.convertVillagersToNitwits.get()) {
             cir.setReturnValue(true);
-        } else if (!this.isBaby() && this.getVillagerData().getProfession() == VillagerProfession.NITWIT) {
+        } else if (!this.isBaby() && this.getVillagerData().getProfession() == VillagerProfession.NITWIT && IWannaSkateMod.COMMON_CONFIG.convertNitwitsToSkaters.get()) {
             if (stack.is(IWSItemRegistry.SKATEBOARD.get())) {
                 cir.setReturnValue(true);
             }
@@ -111,7 +112,7 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
         ItemStack stack = this.getMainHandItem();
         int currentAnimFlag = 0;
         if (stack != null) {
-            if (this.isBaby() && stack.is(IWSItemRegistry.ENERGY_DRINK.get())) {
+            if (this.isBaby() && stack.is(IWSItemRegistry.ENERGY_DRINK.get()) && IWannaSkateMod.COMMON_CONFIG.convertVillagersToNitwits.get()) {
                 if (useEnergyDrinkTime < 60) {
                     if (useEnergyDrinkTime % 5 == 0) {
                         this.playSound(stack.getDrinkingSound(), 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
@@ -127,7 +128,7 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
                     }
                 }
             }
-            if (!this.isBaby() && this.getVillagerData().getProfession() == VillagerProfession.NITWIT) {
+            if (!this.isBaby() && this.getVillagerData().getProfession() == VillagerProfession.NITWIT && IWannaSkateMod.COMMON_CONFIG.convertNitwitsToSkaters.get()) {
                 if (stack.is(IWSItemRegistry.SKATEBOARD.get())) {
                     SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level);
                     spawnedBoard.setItemStack(stack.copy());

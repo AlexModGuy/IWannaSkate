@@ -10,6 +10,8 @@ public class IWSServerConfig {
     public final ForgeConfigSpec.BooleanValue spawnWanderingSkaters;
     public final ForgeConfigSpec.IntValue wanderingSkaterSpawnDelay;
     public final ForgeConfigSpec.DoubleValue wanderingSkaterSpawnChance;
+    public final ForgeConfigSpec.BooleanValue convertVillagersToNitwits;
+    public final ForgeConfigSpec.BooleanValue convertNitwitsToSkaters;
 
     public final ForgeConfigSpec.BooleanValue enableSlowMotion;
     public final ForgeConfigSpec.BooleanValue playersSlowMotion;
@@ -25,6 +27,8 @@ public class IWSServerConfig {
         spawnWanderingSkaters = builder.comment("when enabled, wandering skaters will spawn where applicable.").translation("spawn_wandering_skaters").define("spawn_wandering_skaters", true);
         wanderingSkaterSpawnDelay = builder.comment("the time in game ticks between each attempt to spawn a wandering skater.").translation("wandering_skater_spawn_delay").defineInRange("wandering_skater_spawn_delay", 24000, 1200, Integer.MAX_VALUE);
         wanderingSkaterSpawnChance = builder.comment("the chance that each time the spawn delay passes, a wandering skater will spawn. If it does not, the next time the chance is increased by this number again.").translation("wandering_skater_spawn_chance").defineInRange("wandering_skater_spawn_chance", 0.05D, 0F, 1.0F);
+        convertVillagersToNitwits = builder.comment("whether players can give baby villagers energy drinks to turn them into nitwit villagers.").translation("convert_villagers_to_nitwits").define("convert_villagers_to_nitwits", true);
+        convertNitwitsToSkaters = builder.comment("whether players can give nitwit villagers a skateboard to turn them into wandering skaters.").translation("convert_nitwits_to_skaters").define("convert_nitwits_to_skaters", true);
         builder.pop();
         builder.push("slow-motion");
         enableSlowMotion = builder.comment("when enabled, certain skateboards can cause a slow-motion effect to the entities around them.").translation("slow_motion").define("slow_motion", true);
