@@ -32,6 +32,10 @@ public class SkateboardMaterials {
         return SKATEBOARD_MATERIALS;
     }
 
+    public static boolean isLoaded(){
+        return SKATEBOARD_MATERIALS != null && !SKATEBOARD_MATERIALS.isEmpty();
+    }
+
     public static Set<Item> getSkateboardWheels(){
         return ForgeRegistries.ITEMS.getValues().stream().filter(item -> item.builtInRegistryHolder().is(IWSTags.SKATEBOARD_WHEELS)).collect(ImmutableSet.toImmutableSet());
     }
@@ -44,8 +48,8 @@ public class SkateboardMaterials {
         return ForgeRegistries.ITEMS.getValues().stream().filter(item -> item.builtInRegistryHolder().is(ItemTags.BANNERS)).collect(ImmutableSet.toImmutableSet());
     }
 
-    public static SkateboardData generateRandomData(RandomSource random, boolean onlyWood){
-        List<Item> materials = getSkateboardMaterials().stream().toList();
+    public static SkateboardData generateRandomData(Set<Item> setOfMaterials, RandomSource random, boolean onlyWood){
+        List<Item> materials = setOfMaterials.stream().toList();
         Item material;
         if(materials.isEmpty()){
             material = Items.OAK_SLAB;

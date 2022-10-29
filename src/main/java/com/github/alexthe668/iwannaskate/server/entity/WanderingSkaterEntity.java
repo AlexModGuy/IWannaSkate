@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.server.entity.ai.WanderingSkaterApproac
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
+import com.github.alexthe668.iwannaskate.server.item.SkateboardWheelsItem;
 import com.github.alexthe668.iwannaskate.server.misc.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -24,10 +25,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.FollowTemptation;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -41,11 +44,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -59,9 +64,10 @@ import java.util.stream.Collectors;
 
 public class WanderingSkaterEntity extends WanderingTrader {
 
-    private static final EntityDataAccessor<Optional<UUID>> SKATEBOARD_UUID = SynchedEntityData.defineId(SkaterSkeletonEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Integer> SKATEBOARD_ID = SynchedEntityData.defineId(SkaterSkeletonEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ATTACK_TIME = SynchedEntityData.defineId(SkaterSkeletonEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Optional<UUID>> SKATEBOARD_UUID = SynchedEntityData.defineId(WanderingSkaterEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Integer> SKATEBOARD_ID = SynchedEntityData.defineId(WanderingSkaterEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ATTACK_TIME = SynchedEntityData.defineId(WanderingSkaterEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> NO_DESPAWN = SynchedEntityData.defineId(WanderingSkaterEntity.class, EntityDataSerializers.BOOLEAN);
     private int skateTimer = 0;
     private int attemptRecoveryTimer = 0;
     private int slowTimer = 0;
@@ -74,6 +80,8 @@ public class WanderingSkaterEntity extends WanderingTrader {
     @Nullable
     private BlockPos wanderingSkaterTarget;
     private int playerAggroTime;
+
+    private long lastTradesGenTime = 0;
 
     public WanderingSkaterEntity(EntityType<? extends WanderingTrader> type, Level level) {
         super(type, level);
@@ -100,8 +108,9 @@ public class WanderingSkaterEntity extends WanderingTrader {
         });
         this.goalSelector.addGoal(1, new TradeWithPlayerGoal(this));
         this.goalSelector.addGoal(1, new LookAtTradingPlayerGoal(this));
-        this.goalSelector.addGoal(2, new PanicGoal(this, 0.5D));
-        this.goalSelector.addGoal(2, new WanderingSkaterApproachPositionGoal(this, 2.0D, 0.35D));
+        this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(SkateboardWheels.EMERALD.getItemRegistryObject().get()), false));
+        this.goalSelector.addGoal(3, new PanicGoal(this, 0.5D));
+        this.goalSelector.addGoal(3, new WanderingSkaterApproachPositionGoal(this, 2.0D, 0.35D));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.35D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.35D));
         this.goalSelector.addGoal(9, new InteractGoal(this, Player.class, 3.0F, 1.0F));
@@ -173,6 +182,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
         this.entityData.define(SKATEBOARD_UUID, Optional.empty());
         this.entityData.define(SKATEBOARD_ID, -1);
         this.entityData.define(ATTACK_TIME, 0);
+        this.entityData.define(NO_DESPAWN, false);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -183,7 +193,10 @@ public class WanderingSkaterEntity extends WanderingTrader {
         if (compound.contains("WanderTarget")) {
             this.wanderingSkaterTarget = NbtUtils.readBlockPos(compound.getCompound("WanderTarget"));
         }
+        this.setNoDespawn(compound.getBoolean("NoTraderDespawn"));
+        this.lastTradesGenTime = compound.getLong("LastTradeGenTime");
     }
+
 
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -191,6 +204,17 @@ public class WanderingSkaterEntity extends WanderingTrader {
         if (this.getSkateboardUUID() != null) {
             compound.putUUID("SkateboardUUID", this.getSkateboardUUID());
         }
+        compound.putBoolean("NoTraderDespawn", this.isNoDespawn());
+        compound.putLong("LastTradeGenTime", this.lastTradesGenTime);
+    }
+
+
+    public void setNoDespawn(boolean noDespawn) {
+        this.entityData.set(NO_DESPAWN, noDespawn);
+    }
+
+    public boolean isNoDespawn() {
+        return this.entityData.get(NO_DESPAWN);
     }
 
     @Nullable
@@ -325,7 +349,14 @@ public class WanderingSkaterEntity extends WanderingTrader {
             this.setTarget(null);
             this.setLastHurtByMob(null);
         }
-
+        if(this.isNoDespawn()){
+            this.setDespawnDelay(48000);
+            if(Math.abs(this.level.getGameTime() - lastTradesGenTime) > 200){
+                this.level.broadcastEntityEvent(this, (byte)14);
+                this.offers = new MerchantOffers();
+                this.updateTrades();
+            }
+        }
     }
 
     @Override
@@ -338,6 +369,22 @@ public class WanderingSkaterEntity extends WanderingTrader {
             super.setLastHurtByMob(target);
         }
     }
+
+
+    @Override
+    public void handleEntityEvent(byte event) {
+        if (event == 14) {
+            this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+        } else if (event == 15) {
+            this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+            this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+            this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+        } else {
+            super.handleEntityEvent(event);
+        }
+
+    }
+
 
     private void hurtMobsAtYaw(float hurtYaw) {
         Vec3 offset = new Vec3(0, -0.3F, 1.15F).yRot(-hurtYaw * ((float) Math.PI / 180F));
@@ -419,6 +466,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
     }
 
     protected void updateTrades() {
+        this.lastTradesGenTime = level.getGameTime();
         MerchantOffers merchantoffers = this.getOffers();
         List<Enchantment> enchantments = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(enchantment -> enchantment.category == IWSEnchantmentRegistry.SKATEBOARD).collect(Collectors.toList());
         Enchantment randomEnchant = enchantments.size() > 1 ? enchantments.get(random.nextInt(enchantments.size() - 1)) : enchantments.get(0);
@@ -429,6 +477,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
                 new SellingItemTrade(new ItemStack(Items.IRON_NUGGET, 18), 4, 3, 5),
                 new SellingItemTrade(new ItemStack(Items.IRON_HELMET, 1), 7, 2, 5),
                 new SellingRandomDyedTrade(new ItemStack(IWSItemRegistry.BEANIE.get(), 1), 6, 5, 3),
+                new SellingRandomDyedTrade(new ItemStack(IWSItemRegistry.SKATER_CAP.get(), 1), 6, 5, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.PIZZA_SLICE.get(), 5), 2, 5, 3),
                 new SellingItemTrade(new ItemStack(IWSItemRegistry.ENERGY_DRINK.get(), 6), 2, 5, 3),
                 new SellingRandomSkateboardTrade(new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()), 2, 4, 3),
@@ -471,6 +520,40 @@ public class WanderingSkaterEntity extends WanderingTrader {
     @Nullable
     public BlockPos getWanderingSkaterTarget() {
         return this.wanderingSkaterTarget;
+    }
+
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if(!this.isNoDespawn() && stack.is(SkateboardWheels.EMERALD.getItemRegistryObject().get())){
+            if(!player.isCreative()){
+                stack.shrink(1);
+            }
+            this.emeraldSkateboard();
+            this.level.broadcastEntityEvent(this, (byte)15);
+            this.setNoDespawn(true);
+            player.swing(hand);
+            this.setWanderTarget(this.blockPosition());
+            this.restrictTo(this.blockPosition(), 16);
+            return InteractionResult.SUCCESS;
+        }
+        return super.mobInteract(player, hand);
+    }
+
+    private void emeraldSkateboard() {
+        ItemStack offhand = this.getItemInHand(InteractionHand.OFF_HAND);
+        Entity skateboardEntity = this.getVehicle() != null ? this.getVehicle() : this.getSkateboard();
+        ItemStack board = ItemStack.EMPTY;
+        if(offhand.is(IWSItemRegistry.SKATEBOARD.get())){
+            board = offhand;
+        }else if(skateboardEntity instanceof SkateboardEntity skateboard){
+            board = skateboard.getItemStack();
+        }
+        SkateboardData data = SkateboardData.fromStack(board);
+        data.setWheelType(SkateboardWheels.EMERALD);
+        SkateboardData.setStackData(board, data);
+        if(skateboardEntity instanceof SkateboardEntity skateboard){
+            skateboard.setItemStack(board);
+        }
     }
 
     class DefensiveTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {

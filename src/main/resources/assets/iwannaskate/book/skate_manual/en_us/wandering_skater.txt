@@ -23,3 +23,8 @@ Wandering Skaters can carry a variety of items, such as...
 And much more. But above all else, Wandering Skaters are the only source of rare novelty Skateboard Wheels, each of which has a unique visual effect on a Skateboard.
 <NEWLINE>
 Unlike other types of villager, Wandering Skaters are not defenseless and will attempt to protect themselves from harm. If attacked, they can pick up their Skateboards and swing them around in a circle to damage multiple nearby assailants.
+<NEWLINE>
+Emerald Skateboard Wheels can be crafted and given to a Wandering Skater in order to make them stay around permanently. This will also change the appearance of their Skateboard.
+<NEWLINE>
+The mysterious energy drinks sold by this merchant also seem to have a secondary use. When gifted to a young villager and consumed, there is a chance that the villager will become a Nitwit and refuse to take on a job in adulthood.
+If one of these Nitwits discovers a Skateboard item, they may develop an interest in skating and become a Wandering Skater.

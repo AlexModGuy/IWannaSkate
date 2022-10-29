@@ -17,12 +17,15 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -41,7 +44,13 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
     public static void tick() {
         if (ticks % 40 == 0) {
-            randomSkateData = SkateboardMaterials.generateRandomData(randomSource, false);
+            Set<Item> set;
+            if(SkateboardMaterials.isLoaded()){
+                set = SkateboardMaterials.getSkateboardMaterials();
+            }else{
+                set = Set.of(Items.OAK_SLAB);
+            }
+            randomSkateData = SkateboardMaterials.generateRandomData(set, randomSource, false);
         }
         ticks++;
     }

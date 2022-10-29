@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.server.item;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
+import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -37,7 +38,10 @@ public enum SkateboardWheels {
     SNOWY(false),
     SHOCKING(true),
     HONEY(true),
-    AESTHETIC(true);
+    AESTHETIC(true),
+    HOVER(true),
+
+    EMERALD(false);
 
     private final ResourceLocation texture;
     private final boolean isTrade;
@@ -47,20 +51,20 @@ public enum SkateboardWheels {
         this(false);
     }
 
-    SkateboardWheels(boolean isTrade){
+    SkateboardWheels(boolean isTrade) {
         this.texture = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_" + this.name().toLowerCase() + ".png");
         this.isTrade = isTrade;
     }
 
-    public static void init(){
-        for(SkateboardWheels wheelType : SkateboardWheels.values()){
+    public static void init() {
+        for (SkateboardWheels wheelType : SkateboardWheels.values()) {
             String id = wheelType == DEFAULT ? "skateboard_wheels" : "skateboard_wheels_" + wheelType.name().toLowerCase();
             wheelType.itemRegistryObject = IWSItemRegistry.DEF_REG.register(id, () -> new SkateboardWheelsItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE), wheelType));
         }
     }
 
-    public static SkateboardWheels fromItem(Item item){
-        if(item instanceof SkateboardWheelsItem wheelsItem){
+    public static SkateboardWheels fromItem(Item item) {
+        if (item instanceof SkateboardWheelsItem wheelsItem) {
             return wheelsItem.getWheelType();
         }
         return DEFAULT;
@@ -74,29 +78,35 @@ public enum SkateboardWheels {
         return itemRegistryObject;
     }
 
-    public boolean isTrade(){
+    public boolean isTrade() {
         return isTrade;
     }
 
     @Nullable
-    public ParticleOptions getWheelParticles(){
-        if(this == FLAME){
+    public ParticleOptions getWheelParticles() {
+        if (this == FLAME) {
             return ParticleTypes.FLAME;
         }
-        if(this == SOUL_FLAME){
+        if (this == SOUL_FLAME) {
             return ParticleTypes.SOUL_FIRE_FLAME;
         }
-        if(this == ENDERPEARL){
+        if (this == ENDERPEARL) {
             return ParticleTypes.PORTAL;
         }
-        if(this == SPOOKY){
+        if (this == SPOOKY) {
             return IWSParticleRegistry.HALLOWEEN.get();
         }
-        if(this == SNOWY){
+        if (this == SNOWY) {
             return ParticleTypes.SNOWFLAKE;
         }
-        if(this == HONEY){
+        if (this == HONEY) {
             return IWSParticleRegistry.BEE.get();
+        }
+        if (this == HOVER) {
+            return IWSParticleRegistry.HOVER.get();
+        }
+        if (this == EMERALD) {
+            return IWSParticleRegistry.SPARKLE.get();
         }
         return null;
     }
@@ -110,15 +120,32 @@ public enum SkateboardWheels {
     }
 
     public float getParticleChancePerTick() {
-        if(this == FLAME || this == SOUL_FLAME || this == ENDERPEARL){
+        if (this == FLAME || this == SOUL_FLAME || this == ENDERPEARL) {
             return 0.3F;
         }
-        if(this == SPOOKY || this == SNOWY){
+        if (this == SPOOKY || this == SNOWY) {
             return 0.1F;
         }
-        if(this == HONEY){
+        if (this == HONEY) {
             return 0.03F;
         }
+        if (this == HOVER) {
+            return 1;
+        }
+        if (this == EMERALD) {
+            return 0.1F;
+        }
         return 0;
+    }
+
+    public boolean particleSpawnOverride(SkateboardEntity skateboard) {
+        if(this == HOVER){
+            return skateboard.tickCount % 4 == 0;
+        }
+        return false;
+    }
+
+    public boolean hideTrucks() {
+        return this == HOVER;
     }
 }

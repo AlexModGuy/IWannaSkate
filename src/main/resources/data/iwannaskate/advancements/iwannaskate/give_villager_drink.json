@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "item": "citadel:icon_item",
+            "nbt": "{IconLocation:\"iwannaskate:textures/gui/advancement_icon_0.png\"}"
+        },
+        "title": {
+            "translate": "advancements.iwannaskate.give_villager_drink.title"
+        },
+        "description": {
+            "translate": "advancements.iwannaskate.give_villager_drink.desc"
+        }
+    },
+    "parent": "iwannaskate:iwannaskate/energy_drink",
+    "criteria": {
+        "item_criteria": {
+            "trigger": "iwannaskate:give_villager_drink"
+        }
+    }
+}

@@ -152,5 +152,4 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
         this.leftBackWheel.showModel = true;
         this.rightBackWheel.showModel = true;
     }
-
 }

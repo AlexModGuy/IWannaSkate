@@ -27,7 +27,7 @@ public class SellingRandomSkateboardTrade implements VillagerTrades.ItemListing 
 
     public MerchantOffer getOffer(Entity tradingWith, RandomSource randomSource) {
         ItemStack dataCopy = tradeItem.copy();
-        SkateboardData data = SkateboardMaterials.generateRandomData(randomSource, tradeItem.getItem() == IWSItemRegistry.SKATEBOARD_DECK.get());
+        SkateboardData data = SkateboardMaterials.generateRandomData(SkateboardMaterials.getSkateboardMaterials(), randomSource, tradeItem.getItem() == IWSItemRegistry.SKATEBOARD_DECK.get());
         SkateboardData.setStackData(dataCopy, data);
         return new MerchantOffer(new ItemStack(Items.EMERALD, this.price), dataCopy, this.maxUses, this.xpValue, this.priceMultiplier);
     }

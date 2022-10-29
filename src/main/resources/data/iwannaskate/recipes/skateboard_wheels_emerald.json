@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "EWE",
+    "EEE"
+  ],
+  "key": {
+    "W": {
+      "tag": "iwannaskate:skateboard_wheels"
+    },
+    "E": {
+      "tag": "forge:gems/emerald"
+    }
+  },
+  "result": {
+    "item": "iwannaskate:skateboard_wheels_emerald",
+    "count": 1
+  }
+}

@@ -17,6 +17,8 @@ public class IWSAdvancements {
     public static final IWSAdvancementTrigger SKATE_SURFING = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "skate_surfing"));
     public static final IWSAdvancementTrigger SKATE_BASHING = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "skate_bashing"));
 
+    public static final IWSAdvancementTrigger GIVE_VILLAGER_DRINK = new IWSAdvancementTrigger(new ResourceLocation(IWannaSkateMod.MODID, "give_villager_drink"));
+
     public static void init(){
         CriteriaTriggers.register(TAKE_SKATE_DAMAGE);
         CriteriaTriggers.register(TRICK_OLLIE);
@@ -26,6 +28,7 @@ public class IWSAdvancements {
         CriteriaTriggers.register(SKATE_10K);
         CriteriaTriggers.register(SKATE_SURFING);
         CriteriaTriggers.register(SKATE_BASHING);
+        CriteriaTriggers.register(GIVE_VILLAGER_DRINK);
     }
 
     public static void trigger(Entity entity, IWSAdvancementTrigger trigger){

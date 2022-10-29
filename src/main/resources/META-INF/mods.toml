@@ -4,8 +4,8 @@ license="GNU LESSER GENERAL PUBLIC LICENSE"
 issueTrackerURL="https://github.com/AlexModGuy/IWannaSkate/issues" #optional
 [[mods]] #mandatory
 modId="iwannaskate" #mandatory
-version="0.9.5" #mandatory
-displayName="I Wanna Skate ALPHA" #mandatory
+version="1.0.0" #mandatory
+displayName="I Wanna Skate" #mandatory
 displayURL="" #optional
 authors="Alexthe668, Crydigo" #optional
 description='''It's time to skate!'''

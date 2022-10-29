@@ -38,6 +38,9 @@ public class DyeableHatItem extends DyeableArmorItem {
     @Nullable
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         if(type != null && type.equals("overlay")){
+            if(this == IWSItemRegistry.SKATER_CAP.get()){
+                return IWannaSkateMod.MODID + ":textures/entity/armor/skater_cap_rim.png";
+            }
             return IWannaSkateMod.MODID + ":textures/entity/armor/color_layer.png";
         }
         return IWannaSkateMod.MODID + ":textures/entity/armor/" + this.type + ".png";

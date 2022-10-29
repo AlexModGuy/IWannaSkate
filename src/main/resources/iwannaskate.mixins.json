@@ -7,15 +7,17 @@
   "mixins": [
     "CrossCollisionBlockMixin",
     "LivingEntityMixin",
+    "VillagerMixin",
     "WallBlockMixin"
   ],
   "client": [
     "client.AgeableListModelMixin",
     "client.CapeLayerMixin",
     "client.ClientPacketListenerMixin",
+    "client.CrossedArmsItemLayerMixin",
     "client.EntityRendererProviderMixin",
     "client.LivingEntityRendererMixin",
-    "client.PlayerInfoMixin"
+    "client.VillagerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

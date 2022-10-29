@@ -111,6 +111,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     private final List<Entity> slowedDownEntities = new ArrayList<>();
     private int slowMotionCooldown = 100;
     private Player returnToPlayer = null;
+    public EntityDimensions size;
 
     public SkateboardEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -120,6 +121,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         this.allParts = new SkateboardPartEntity[]{front, back};
         this.onGroundProgress = 5.0F;
         this.prevOnGroundProgress = 5.0F;
+        size = this.getType().getDimensions();
     }
 
     public SkateboardEntity(PlayMessages.SpawnEntity spawnEntity, Level world) {
@@ -177,6 +179,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     public void setItemStack(ItemStack item) {
         this.entityData.set(ITEMSTACK, item);
+        this.skateboardData = SkateboardData.fromStack(item);
     }
 
 
@@ -185,6 +188,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (ITEMSTACK.equals(entityDataAccessor)) {
             this.skateboardData = SkateboardData.fromStack(getItemStack());
             this.enchantments = EnchantmentHelper.getEnchantments(getItemStack());
+            refreshDimensions();
+            front.refreshDimensions();
+            back.refreshDimensions();
         }
         if (REMOVE_SOON.equals(entityDataAccessor)) {
             this.removeIn = 5;
@@ -384,8 +390,8 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                     }
                 }
             }
-            if(this.totalDistanceTraveled % 100 < 1.0){
-                if(this.totalDistanceTraveled > 10000){
+            if (this.totalDistanceTraveled % 100 < 1.0) {
+                if (this.totalDistanceTraveled > 10000) {
                     IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_10K);
                 }
             }
@@ -416,7 +422,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             skateQuality = SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW);
             this.lastBlockPos = this.blockPosition();
         }
-        if(slowMotionCooldown > 0){
+        if (slowMotionCooldown > 0) {
             slowMotionCooldown--;
         }
         this.lastBlockPos = blockPosition();
@@ -485,12 +491,12 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         this.prevWheelRot = wheelRot;
         if (level.isClientSide) {
             ParticleOptions particleType = this.skateboardData.getWheelType().getWheelParticles();
-            if (particleType != null && this.random.nextFloat() < 0.5F) {
-                Vec3 center = this.position().add(0, 0.15, 0);
+            if (particleType != null && (this.skateboardData.getWheelType().particleSpawnOverride(this) || this.random.nextFloat() < 0.5F)) {
+                Vec3 center = this.position().add(0, 0.15 + getRenderOffGroundAmount(1.0F), 0);
                 float ground = getOnGroundProgress(1.0F);
                 float forwards = 0.8F * Math.abs((float) Math.sin(Math.toRadians(this.getXRot()))) * ground;
                 float up = -0.45F * (float) Math.sin(Math.toRadians(this.getXRot())) * ground;
-                float wheelSideways = 0.25F;
+                float wheelSideways = this.skateboardData.getWheelType() == SkateboardWheels.HOVER ? 0.175F : 0.25F;
                 Vec3 frontRightWheel = center.add(rotateVec(new Vec3(wheelSideways, up, forwards + 0.55F), true, 1.0F));
                 Vec3 frontLeftWheel = center.add(rotateVec(new Vec3(-wheelSideways, up, forwards + 0.55F), true, 1.0F));
                 Vec3 backRightWheel = center.add(rotateVec(new Vec3(wheelSideways, up, forwards - 0.55F), true, 1.0F));
@@ -525,6 +531,15 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             Vec3 randomOffset = new Vec3((this.random.nextDouble() - 0.5D) * 1, (this.random.nextDouble()) * 0.75F, (this.random.nextDouble() - 0.5D) * 1);
             Vec3 spawning = wheelVec.add(randomOffset);
             this.level.addParticle(partice, spawning.x, spawning.y, spawning.z, wheelVec.x, wheelVec.y, wheelVec.z);
+        } else if (partice == IWSParticleRegistry.HOVER.get()) {
+            double speed = this.getDeltaMovement().horizontalDistance();
+            double d = wheelVec.y;
+            if (speed < 0.04F) {
+                d += 0.1D;
+            }
+            this.level.addParticle(partice, wheelVec.x, d, wheelVec.z, this.getYRot(), -0.05F - 0.1F * getRenderOffGroundAmount(1.0F), speed);
+        } else if (partice == IWSParticleRegistry.SPARKLE.get()) {
+            this.level.addParticle(partice, wheelVec.x + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().x, wheelVec.y + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().y, wheelVec.z + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().z, 0, 0, 0);
         } else {
             Vec3 delta = this.getDeltaMovement();
             this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, delta.x, delta.y, delta.z);
@@ -540,7 +555,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         boolean onWater = this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
         if (onWater) {
             this.setOnGround(true);
-            if(this.tickCount % 50 == 0){
+            if (this.tickCount % 50 == 0) {
                 IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_SURFING);
             }
         }
@@ -792,7 +807,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     @Override
     public double getPassengersRidingOffset() {
-        double d = 0.315D;
+        double d = 0.315D + getRenderOffGroundAmount(1.0F);
         if (this.getSkaterPose() == SkaterPose.KICKFLIP) {
             d += 0.4D * getSkaterPoseProgress(1.0F);
         }
@@ -929,7 +944,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                 living.animationSpeed = 0;
             }
             double d0 = this.getY() + this.getPassengersRidingOffset();
-            if(living.getType().is(IWSTags.OVERRIDES_SKATEBOARD_POSITIONING)){
+            if (living.getType().is(IWSTags.OVERRIDES_SKATEBOARD_POSITIONING)) {
                 d0 += living.getMyRidingOffset();
             }
             living.setPos(this.getX(), d0, this.getZ());
@@ -973,7 +988,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             Entity rider = this.getFirstPassenger();
             if ((rider == null || !living.isAlliedTo(rider)) && shouldRiderHurtMob(living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
                 living.knockback(0.5D, living.getX() - this.getX(), living.getZ() - this.getZ());
-                if(living.getHealth() <= 0.0D && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get())){
+                if (living.getHealth() <= 0.0D && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get())) {
                     IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_BASHING);
                 }
             }
@@ -981,7 +996,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     }
 
     private boolean shouldRiderHurtMob(LivingEntity living) {
-        if(this.getFirstPassenger() instanceof Monster){
+        if (this.getFirstPassenger() instanceof Monster) {
             return !(living instanceof Monster);
         }
         return true;
@@ -989,10 +1004,17 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     public int getContactDamage() {
         int i = this.getEnchantLevel(IWSEnchantmentRegistry.BASHING.get()) * 2;
-        if(this.getFirstPassenger() instanceof LivingEntity living && living.getItemBySlot(EquipmentSlot.HEAD).is(IWSItemRegistry.SPIKED_SKATER_HELMET.get())){
-               i += 2;
+        if (this.getFirstPassenger() instanceof LivingEntity living && living.getItemBySlot(EquipmentSlot.HEAD).is(IWSItemRegistry.SPIKED_SKATER_HELMET.get())) {
+            i += 2;
         }
         return i;
+    }
+
+    public float getRenderOffGroundAmount(float partialTick) {
+        if (this.skateboardData.getWheelType() == SkateboardWheels.HOVER) {
+            return (0.8F + (float) Math.sin((tickCount + partialTick) * 0.1F) * 0.5F) * 0.6F;
+        }
+        return 0.0F;
     }
 
     public void checkDespawn() {
@@ -1109,11 +1131,11 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     }
 
     private void enterSlowMotion() {
-        if(!level.isClientSide && level instanceof ServerLevel){
+        if (!level.isClientSide && level instanceof ServerLevel) {
             float speed = this.getSlowMotionLevel() + 1;
             ServerTickRateTracker tracker = ServerTickRateTracker.getForServer(level.getServer());
-            for(TickRateModifier modifier : tracker.tickRateModifierList){
-                if(modifier instanceof LocalEntityTickRateModifier entityTick && entityTick.getEntityId() == this.getId()){
+            for (TickRateModifier modifier : tracker.tickRateModifierList) {
+                if (modifier instanceof LocalEntityTickRateModifier entityTick && entityTick.getEntityId() == this.getId()) {
                     return;
                 }
             }
@@ -1201,5 +1223,23 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     @Override
     public boolean isTimeModificationValid(TickRateModifier tickRateModifier) {
         return this.getOnGroundProgress(0F) < 0.9F;
+    }
+
+    public EntityDimensions getDimensions(Pose pose) {
+        if (size.height != getBoardHeight()) {
+            size = EntityDimensions.scalable(size.width, getBoardHeight());
+        }
+        return size;
+    }
+
+    public float getBoardHeight() {
+        if (skateboardData != null && skateboardData.getWheelType() == SkateboardWheels.HOVER) {
+            return 0.6F;
+        }
+        return 0.3125F;
+    }
+
+    public boolean canWheelsMakeSound() {
+        return skateboardData == null || !skateboardData.getWheelType().hideTrucks();
     }
 }

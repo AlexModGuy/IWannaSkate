@@ -4,9 +4,7 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.color.BoardColorSampler;
 import com.github.alexthe668.iwannaskate.client.gui.SkateManualScreen;
 import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
-import com.github.alexthe668.iwannaskate.client.particle.BeeParticle;
-import com.github.alexthe668.iwannaskate.client.particle.HalloweenParticle;
-import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
+import com.github.alexthe668.iwannaskate.client.particle.*;
 import com.github.alexthe668.iwannaskate.client.render.IWSRenderTypes;
 import com.github.alexthe668.iwannaskate.client.render.blockentity.SkateboardRackRenderer;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkateboardRenderer;
@@ -69,12 +67,17 @@ public class ClientProxy extends CommonProxy {
         if(IWSItemRegistry.BEANIE.isPresent()){
             event.register((stack, colorIn) -> colorIn != 0 ? -1 : ((DyeableHatItem) stack.getItem()).getColor(stack), IWSItemRegistry.BEANIE.get());
         }
+        if(IWSItemRegistry.SKATER_CAP.isPresent()){
+            event.register((stack, colorIn) -> colorIn != 0 ? -1 : ((DyeableHatItem) stack.getItem()).getColor(stack), IWSItemRegistry.SKATER_CAP.get());
+        }
     }
 
     public static void setupParticles(RegisterParticleProvidersEvent registry) {
         IWannaSkateMod.LOGGER.debug("Registered particle factories");
         registry.register(IWSParticleRegistry.HALLOWEEN.get(), HalloweenParticle.Factory::new);
         registry.register(IWSParticleRegistry.BEE.get(), BeeParticle.Factory::new);
+        registry.register(IWSParticleRegistry.HOVER.get(), new HoverParticle.Factory());
+        registry.register(IWSParticleRegistry.SPARKLE.get(), SparkleParticle.Factory::new);
     }
 
     @SubscribeEvent
@@ -87,8 +90,14 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onComputeCameraAngles(ViewportEvent.ComputeCameraAngles event){
         if(Minecraft.getInstance().player.getVehicle() instanceof SkateboardEntity skateboard && IWannaSkateMod.CLIENT_CONFIG.rotateCameraOnBoard.get()){
-            float targetRot = skateboard.getZRot(Minecraft.getInstance().getPartialTick());
+            float partialTick = Minecraft.getInstance().getPartialTick();
+            float targetRot = skateboard.getZRot(partialTick);
+            if(Math.abs(targetRot) <= 1.0F){
+                targetRot = 0;
+            }
             float f = skateboard.approachRotation(prevCameraRoll, targetRot, 1F);
+
+            float f1 = prevCameraRoll + (f - prevCameraRoll) * partialTick;
             prevCameraRoll = f;
             event.setRoll(f * 0.25F);
         }

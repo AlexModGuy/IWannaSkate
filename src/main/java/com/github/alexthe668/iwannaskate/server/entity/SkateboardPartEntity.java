@@ -1,6 +1,7 @@
 package com.github.alexthe668.iwannaskate.server.entity;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
+import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,14 +23,21 @@ import java.util.Optional;
 
 public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
 
-    private final EntityDimensions size;
+    private EntityDimensions size;
     public float scale = 1;
 
     public SkateboardPartEntity(SkateboardEntity parent) {
         super(parent);
         this.blocksBuilding = true;
         this.size = EntityDimensions.scalable(0.6F, 0.3125F);
-        this.refreshDimensions();
+    }
+
+    public EntityDimensions getDimensions(Pose pose) {
+        SkateboardEntity parent = this.getParent();
+        if (parent != null && size.height != parent.getBoardHeight()) {
+            size = EntityDimensions.scalable(size.width, parent.getBoardHeight());
+        }
+        return size;
     }
 
    @Override
@@ -89,11 +97,6 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
     @Override
     public Packet<?> getAddEntityPacket() {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose poseIn) {
-        return this.size.scale(scale);
     }
 
     @Override

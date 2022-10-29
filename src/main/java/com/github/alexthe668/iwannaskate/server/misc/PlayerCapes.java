@@ -1,12 +1,11 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
+import com.github.alexthe666.citadel.client.rewards.CitadelCapes;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.google.common.collect.Lists;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,16 +34,13 @@ public class PlayerCapes {
     );
 
 
-    public static void registerTexturesFor(PlayerInfo playerInfo) {
-        if(playerInfo.textureLocations.get(MinecraftProfileTexture.Type.CAPE) == null){
-            if(DEVS.contains(playerInfo.getProfile().getId())){
-                playerInfo.textureLocations.put(MinecraftProfileTexture.Type.CAPE, PlayerCapes.DEV_CAPE_TEXTURE);
-                playerInfo.textureLocations.put(MinecraftProfileTexture.Type.ELYTRA, PlayerCapes.DEV_CAPE_TEXTURE);
-            }else if(BETA_TESTERS.contains(playerInfo.getProfile().getId())){
-                playerInfo.textureLocations.put(MinecraftProfileTexture.Type.CAPE, PlayerCapes.BETA_TESTER_CAPE_TEXTURE);
-                playerInfo.textureLocations.put(MinecraftProfileTexture.Type.ELYTRA, PlayerCapes.BETA_TESTER_CAPE_TEXTURE);
-            }
-        }
+    public static void registerCapes() {
+        CitadelCapes.addCapeFor(DEVS, "iwannaskate_cape_dev", DEV_CAPE_TEXTURE);
+        List<UUID> betaTestCapes = new ArrayList<>();
+        betaTestCapes.addAll(DEVS);
+        betaTestCapes.addAll(BETA_TESTERS);
+        CitadelCapes.addCapeFor(betaTestCapes, "iwannaskate_cape_betatester", BETA_TESTER_CAPE_TEXTURE);
+
     }
 
 }

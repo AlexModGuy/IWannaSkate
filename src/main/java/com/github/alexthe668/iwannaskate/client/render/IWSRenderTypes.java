@@ -40,6 +40,21 @@ public class IWSRenderTypes extends RenderType {
     }
 
 
+    public static RenderType getHover(ResourceLocation texture) {
+        CompositeState renderState = CompositeState.builder()
+                .setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER)
+                .setCullState(NO_CULL)
+                .setTextureState(new TextureStateShard(texture, false, false))
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                .setLightmapState(LIGHTMAP)
+                .setOverlayState(OVERLAY)
+                .setWriteMaskState(COLOR_DEPTH_WRITE)
+                .setDepthTestState(LEQUAL_DEPTH_TEST)
+                .setLayeringState(NO_LAYERING)
+                .createCompositeState(false);
+        return create("hover", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, renderState);
+    }
+
     public static RenderType getEmissiveWheels(ResourceLocation texture) {
         RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER).setTextureState(new RenderStateShard.TextureStateShard(texture, false, false)).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(NO_CULL).setWriteMaskState(RenderStateShard.COLOR_WRITE).setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST).setOverlayState(OVERLAY).createCompositeState(true);
         return create("emissivewheels", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, rendertype$compositestate);

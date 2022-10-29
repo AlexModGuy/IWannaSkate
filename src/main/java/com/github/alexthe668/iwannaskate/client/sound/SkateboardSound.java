@@ -31,7 +31,7 @@ public class SkateboardSound extends AbstractTickableSoundInstance {
     }
 
     public boolean canPlaySound() {
-        return !this.skateboard.isSilent() && (ClientProxy.SKATEBOARD_SOUND_MAP.get(this.skateboard.getId()) == this || changeProgress < 1.0F);
+        return !this.skateboard.isSilent() && this.skateboard.canWheelsMakeSound() && (ClientProxy.SKATEBOARD_SOUND_MAP.get(this.skateboard.getId()) == this || changeProgress < 1.0F);
     }
 
     public boolean canStartSilent() {

@@ -49,6 +49,8 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F - skateYaw));
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        poseStack.translate(0, -entity.getRenderOffGroundAmount(partialTicks), 0);
+        poseStack.pushPose();
         SKATEBOARD_MODEL.setupAnim(entity, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F);
         if(entity.getSkateboardData().getWheelType().hasTrail()){
             Vec3 from = Vec3.ZERO;
@@ -67,6 +69,7 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
             renderLightningFromWheel(entity, 3, poseStack, buffer, partialTicks);
             lightningRender.render(partialTicks, poseStack, buffer);
         }
+        poseStack.popPose();
         poseStack.popPose();
         super.render(entity, yaw, partialTicks, poseStack, buffer, packedLight);
     }

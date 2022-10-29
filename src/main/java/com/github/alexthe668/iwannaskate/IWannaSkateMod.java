@@ -40,6 +40,8 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
+import static com.github.alexthe668.iwannaskate.server.misc.PlayerCapes.registerCapes;
+
 @Mod(IWannaSkateMod.MODID)
 public class IWannaSkateMod {
     public static final String MODID = "iwannaskate";
@@ -106,6 +108,7 @@ public class IWannaSkateMod {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardKeyMessage.class, SkateboardKeyMessage::write, SkateboardKeyMessage::read, SkateboardKeyMessage.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardRackMessage.class, SkateboardRackMessage::write, SkateboardRackMessage::read, SkateboardRackMessage.Handler::handle);
         IWSAdvancements.init();
+        registerCapes();
     }
 
     public static <MSG> void sendMSGToAll(MSG message) {

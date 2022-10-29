@@ -29,6 +29,7 @@ public class IWSItemRegistry {
     public static final RegistryObject<Item> SHIMMERING_WAX = DEF_REG.register("shimmering_wax", () -> new SimpleFoiledItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> SPIKED_SKATER_HELMET = DEF_REG.register("spiked_skater_helmet", () -> new SkaterHelmetItem(ArmorMaterials.IRON, new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> BEANIE = DEF_REG.register("beanie", () -> new DyeableHatItem(ArmorMaterials.LEATHER, "beanie", 0XCBA780, new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
+    public static final RegistryObject<Item> SKATER_CAP = DEF_REG.register("skater_cap", () -> new DyeableHatItem(ArmorMaterials.LEATHER, "skater_cap", 0XA65538, new Item.Properties().tab(IWSCreativeTab.INSTANCE)));
     public static final RegistryObject<Item> PIZZA_SLICE = DEF_REG.register("pizza_slice", () -> new PizzaItem(IWSBlockRegistry.PIZZA, new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.2F).build())));
     public static final RegistryObject<Item> ENERGY_DRINK = DEF_REG.register("energy_drink", () -> new EnergyDrinkItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.35F).build())));
     static {

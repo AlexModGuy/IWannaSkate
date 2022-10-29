@@ -12,4 +12,7 @@ public class IWSParticleRegistry {
 
     public static final RegistryObject<SimpleParticleType> HALLOWEEN = DEF_REG.register("halloween", ()-> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> BEE = DEF_REG.register("bee", ()-> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> HOVER = DEF_REG.register("hover", ()-> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> SPARKLE = DEF_REG.register("sparkle", ()-> new SimpleParticleType(false));
+
 }

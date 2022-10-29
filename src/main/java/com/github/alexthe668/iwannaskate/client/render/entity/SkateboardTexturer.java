@@ -47,6 +47,7 @@ public class SkateboardTexturer {
     private static final ResourceLocation BASE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/base.png");
     private static final Map<Holder<BannerPattern>, ResourceLocation> BANNER_PATTERN_RESOURCE_LOCATION_HASH_MAP = new HashMap<>();
     private static final ResourceLocation SPOOKY_GLOW_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_spooky_glow.png");
+    private static final ResourceLocation HOVER_GLOW_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/wheels/wheels_hover_glow.png");
     private static final Map<ResourceLocation, ResourceLocation> DECK_TEXTURES_FOR_BLOCK = new HashMap<>();
 
     private static final SkateboardModel GRIPTAPE_MODEL = new SkateboardModel();
@@ -72,8 +73,14 @@ public class SkateboardTexturer {
 
     public static void renderBoard(SkateboardModel model, SkateboardData data, PoseStack stack, MultiBufferSource source, int packedLight, boolean glint) {
         renderDeck(model, data, stack, source, packedLight, glint);
+        if(data.getWheelType().hideTrucks()){
+            TRUCKS_MODEL.hideWheels();
+        }
         TRUCKS_MODEL.copyFrom(model);
         TRUCKS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.entityCutoutNoCull(BASE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        if(data.getWheelType().hideTrucks()){
+            TRUCKS_MODEL.showWheels();
+        }
         if (data.hasBanner()) {
             BANNER_MODEL.copyFrom(model);
             List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(getBannerColor(data), getItemPatterns(data));
@@ -105,6 +112,9 @@ public class SkateboardTexturer {
         }
         if(wheelType == SkateboardWheels.SPOOKY){
             WHEELS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(SPOOKY_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if(wheelType == SkateboardWheels.HOVER){
+            WHEELS_MODEL.renderToBuffer(stack, getVertexConsumer(source, RenderType.eyes(HOVER_GLOW_TEXTURE), false), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
