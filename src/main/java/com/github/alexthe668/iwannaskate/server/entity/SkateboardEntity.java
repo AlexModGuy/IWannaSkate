@@ -77,7 +77,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     public SkateQuality skateQuality = SkateQuality.LOW;
     public boolean trickFlag = false;
     public int trailPosPointer = -1;
-    private SkateboardData skateboardData;
+    private SkateboardData skateboardData = SkateboardData.DEFAULT;
     private Map<Enchantment, Integer> enchantments;
     private float prevZRot;
     private float prevWheelRot;
@@ -489,7 +489,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         }
         this.setWheelRot(wheelRot + wheelSpeed * 100);
         this.prevWheelRot = wheelRot;
-        if (level.isClientSide) {
+        if (level.isClientSide && this.skateboardData != null) {
             ParticleOptions particleType = this.skateboardData.getWheelType().getWheelParticles();
             if (particleType != null && (this.skateboardData.getWheelType().particleSpawnOverride(this) || this.random.nextFloat() < 0.5F)) {
                 Vec3 center = this.position().add(0, 0.15 + getRenderOffGroundAmount(1.0F), 0);
