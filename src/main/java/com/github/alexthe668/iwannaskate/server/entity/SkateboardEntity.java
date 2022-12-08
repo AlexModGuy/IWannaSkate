@@ -987,7 +987,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         super.push(entity);
         if (!this.isPassengerOfSameVehicle(entity) && this.getDeltaMovement().length() > 0.1F && this.isVehicle() && entity instanceof LivingEntity living && getContactDamage() > 0) {
             Entity rider = this.getFirstPassenger();
-            if ((rider == null || !living.isAlliedTo(rider)) && shouldRiderHurtMob(living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
+            if (rider != null && shouldRiderHurtMob(rider, living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
                 living.knockback(0.5D, living.getX() - this.getX(), living.getZ() - this.getZ());
                 if (living.getHealth() <= 0.0D && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get())) {
                     IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_BASHING);
@@ -996,11 +996,11 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         }
     }
 
-    private boolean shouldRiderHurtMob(LivingEntity living) {
+    private boolean shouldRiderHurtMob(Entity rider, LivingEntity living) {
         if (this.getFirstPassenger() instanceof Monster) {
             return !(living instanceof Monster);
         }
-        return true;
+        return !living.isAlliedTo(rider) && !rider.isAlliedTo(living);
     }
 
     public int getContactDamage() {
