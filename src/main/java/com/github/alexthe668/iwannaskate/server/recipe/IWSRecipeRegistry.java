@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.horse.Llama;
@@ -14,7 +15,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarpetBlock;
@@ -25,14 +26,14 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Map;
 
 public class IWSRecipeRegistry {
-    public static final DeferredRegister<RecipeSerializer<?>> DEF_REG = DeferredRegister.create(Registry.RECIPE_SERIALIZER_REGISTRY, IWannaSkateMod.MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> DEF_REG = DeferredRegister.create(Registries.RECIPE_SERIALIZER, IWannaSkateMod.MODID);
 
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_DECK = DEF_REG.register("skateboard_deck", () -> new SimpleRecipeSerializer<>(RecipeSkateboardDeck::new));
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD = DEF_REG.register("skateboard", () -> new SimpleRecipeSerializer<>(RecipeSkateboard::new));
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_BANNER = DEF_REG.register("skateboard_banner", () -> new SimpleRecipeSerializer<>(RecipeSkateboardBanner::new));
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_GRIP_TAPE = DEF_REG.register("skateboard_grip_tape", () -> new SimpleRecipeSerializer<>(RecipeSkateboardGripTape::new));
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_SHIMMER = DEF_REG.register("skateboard_shimmer", () -> new SimpleRecipeSerializer<>(RecipeSkateboardShimmer::new));
-    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_SWAP_WHEELS = DEF_REG.register("skateboard_swap_wheels", () -> new SimpleRecipeSerializer<>(RecipeSkateboardSwapWheels::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_DECK = DEF_REG.register("skateboard_deck", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboardDeck::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD = DEF_REG.register("skateboard", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboard::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_BANNER = DEF_REG.register("skateboard_banner", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboardBanner::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_GRIP_TAPE = DEF_REG.register("skateboard_grip_tape", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboardGripTape::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_SHIMMER = DEF_REG.register("skateboard_shimmer", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboardShimmer::new));
+    public static final RegistryObject<RecipeSerializer<?>> SKATEBOARD_SWAP_WHEELS = DEF_REG.register("skateboard_swap_wheels", () -> new SimpleCraftingRecipeSerializer<>(RecipeSkateboardSwapWheels::new));
 
     public static void registerCauldronInteractions(){
         Map<DyeColor, ItemLike> dyeToCarpet = Util.make(Maps.newEnumMap(DyeColor.class), (map) -> {

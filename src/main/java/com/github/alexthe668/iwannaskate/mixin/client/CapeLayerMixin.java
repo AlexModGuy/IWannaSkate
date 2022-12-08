@@ -4,7 +4,7 @@ import com.github.alexthe668.iwannaskate.client.render.entity.SkatingModelPositi
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -50,7 +50,7 @@ public abstract class CapeLayerMixin extends RenderLayer<AbstractClientPlayer, P
                 if (!itemstack.is(Items.ELYTRA)) {
                     poseStack.pushPose();
                     poseStack.translate(0.0D, 0.0D, 0.25D);
-                    poseStack.mulPose(Vector3f.YN.rotationDegrees(180));
+                    poseStack.mulPose(Axis.YN.rotationDegrees(180));
                     float poseProgress = skateboard.getSkaterPoseProgress(partialTicks);
                     float priorPoseProgress = 1F - poseProgress;
                     SkatingModelPositioner.rotateCapeForPose(player, poseStack, partialTicks, skateboard, skateboard.getPrevSkaterPose(), priorPoseProgress);

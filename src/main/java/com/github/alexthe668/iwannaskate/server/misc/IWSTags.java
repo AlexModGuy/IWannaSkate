@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.server.misc;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
@@ -29,18 +30,18 @@ public class IWSTags {
     public static final TagKey<Biome> NO_MONSTERS = registerBiome("no_monsters");
 
     private static TagKey<Item> registerItemTag(String name) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(IWannaSkateMod.MODID, name));
+        return TagKey.create(Registries.ITEM, new ResourceLocation(IWannaSkateMod.MODID, name));
     }
 
     private static TagKey<Block> registerBlockTag(String name) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(IWannaSkateMod.MODID, name));
+        return TagKey.create(Registries.BLOCK, new ResourceLocation(IWannaSkateMod.MODID, name));
     }
 
     private static TagKey<EntityType<?>> registerEntityType(String name) {
-        return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(IWannaSkateMod.MODID, name));
+        return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(IWannaSkateMod.MODID, name));
     }
 
     private static TagKey<Biome> registerBiome(String name) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IWannaSkateMod.MODID, name));
+        return TagKey.create(Registries.BIOME, new ResourceLocation(IWannaSkateMod.MODID, name));
     }
 }

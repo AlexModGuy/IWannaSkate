@@ -3,7 +3,7 @@ package com.github.alexthe668.iwannaskate.mixin.client;
 import com.github.alexthe668.iwannaskate.server.entity.HasAnimationFlags;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.CrossedArmsItemLayer;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +34,7 @@ public class CrossedArmsItemLayerMixin {
             if (villager instanceof HasAnimationFlags animationFlags) {
                 if (stack != null && stack.is(IWSItemRegistry.ENERGY_DRINK.get()) && animationFlags.getIWSAnimationFlags() == 1) {
                     float bounce = (float) Math.abs(Math.sin(ageInTicks * 0.4F)) * 0.25F;
-                    poseStack.mulPose(Vector3f.XN.rotationDegrees(25F));
+                    poseStack.mulPose(Axis.XN.rotationDegrees(25F));
                     poseStack.translate(0, bounce - 0.1F, 0.075F);
                     if(villager.isBaby()){
                         poseStack.scale(1.5F, 1.5F, 1.5F);

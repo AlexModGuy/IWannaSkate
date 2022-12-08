@@ -4,13 +4,13 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
 
 public class IWSRenderTypes extends RenderType {
 
@@ -33,10 +33,10 @@ public class IWSRenderTypes extends RenderType {
         long i = Util.getMillis() * 10L;
         float f = (float)(i % 110000L) / 110000.0F;
         float f1 = (float)(i % 30000L) / 30000.0F;
-        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-f, f1, 0.0F);
-        matrix4f.multiply(Vector3f.ZP.rotationDegrees(10.0F));
-        matrix4f.multiply(Matrix4f.createScaleMatrix(scale, scale, scale));
+        Matrix4f matrix4f = (new Matrix4f()).translation(-f, f1, 0.0F);
+        matrix4f.rotateZ(0.17453292F).scale(scale);
         RenderSystem.setTextureMatrix(matrix4f);
+
     }
 
 

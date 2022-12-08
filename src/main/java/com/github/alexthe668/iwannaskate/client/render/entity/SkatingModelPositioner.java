@@ -10,16 +10,13 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SkaterPose;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -206,21 +203,21 @@ public class SkatingModelPositioner {
         float maxUp = 70;
         if(pose == SkaterPose.NONE){
             poseStack.translate(0, 0F, 0.125F * progress);
-            poseStack.mulPose(Vector3f.XN.rotationDegrees( 15 * progress));
+            poseStack.mulPose(Axis.XN.rotationDegrees( 15 * progress));
         }
         if(pose == SkaterPose.PEDAL){
             poseStack.translate(0, 0F, 0.125F * progress);
-            poseStack.mulPose(Vector3f.XN.rotationDegrees( 25 * progress));
+            poseStack.mulPose(Axis.XN.rotationDegrees( 25 * progress));
         }
         if(pose.isSideways()){
             float swing = (float)(Math.sin((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
             poseStack.translate(0, f * 0.1F * progress, 0);
-            poseStack.mulPose(Vector3f.YN.rotationDegrees((60 + 20 * swing) * progress));
-            poseStack.mulPose(Vector3f.ZN.rotationDegrees(f1 * (f * 30 + 35) * progress));
+            poseStack.mulPose(Axis.YN.rotationDegrees((60 + 20 * swing) * progress));
+            poseStack.mulPose(Axis.ZN.rotationDegrees(f1 * (f * 30 + 35) * progress));
             maxUp = 105;
         }
         float flap = (float)(Math.cos((player.tickCount + partialTicks) * 0.2F) + 1) * 0.5F;
-        poseStack.mulPose(Vector3f.XN.rotationDegrees(Mth.clamp(f, 0 ,1) * (maxUp + 20 * flap) * progress));
+        poseStack.mulPose(Axis.XN.rotationDegrees(Mth.clamp(f, 0 ,1) * (maxUp + 20 * flap) * progress));
 
     }
 
@@ -230,16 +227,16 @@ public class SkatingModelPositioner {
         int leftMulti = pedalFootLeft ? -1 : 1;
         if(pose.useBoardPitch()){
             float f = skateboard.getViewXRot(partialTicks) * progress;
-            stack.mulPose(Vector3f.XN.rotationDegrees(f));
+            stack.mulPose(Axis.XN.rotationDegrees(f));
             stack.translate(0, -0.33F * (float) Math.sin(Math.toRadians(f)), 0);
         }
         if(pose.useBoardRoll()) {
             float yDif = Mth.wrapDegrees(skateboard.getViewYRot(partialTicks) - skater.yBodyRot);
             float moving = Mth.clamp(1 - (Math.abs(yDif) / 90F), 1, 1F);
-            stack.mulPose(Vector3f.ZN.rotationDegrees(skateboard.getZRot(partialTicks) * progress * moving));
+            stack.mulPose(Axis.ZN.rotationDegrees(skateboard.getZRot(partialTicks) * progress * moving));
         }
         if(pose.isSideways() && (animationData == null || !animationData.faceForwards())){
-            stack.mulPose(Vector3f.YP.rotationDegrees(-90 * progress * leftMulti));
+            stack.mulPose(Axis.YP.rotationDegrees(-90 * progress * leftMulti));
         }
         if(pose == SkaterPose.PEDAL && progress > 0.0F){
             float up = (float) Math.sin(Math.toRadians(skateboard.getViewXRot(partialTicks))) * skateboard.getOnGroundProgress(partialTicks);
@@ -248,13 +245,13 @@ public class SkatingModelPositioner {
             stack.translate(0, -0.25F * progress, -0.15F * progress * leftMulti);
         }else if(pose == SkaterPose.OLLIE){
             stack.translate(-0.4F * progress, 0, -0.35F * progress * leftMulti);
-            stack.mulPose(Vector3f.ZN.rotationDegrees(20 * progress));
+            stack.mulPose(Axis.ZN.rotationDegrees(20 * progress));
         }else if(pose == SkaterPose.KICKFLIP){
             stack.translate(0.1F * progress, -0.4F * progress, -0.1F * progress * leftMulti);
-            stack.mulPose(Vector3f.XN.rotationDegrees(10 * progress));
+            stack.mulPose(Axis.XN.rotationDegrees(10 * progress));
         }else if(pose == SkaterPose.GRIND){
             stack.translate(0, -0.2F * progress, -0.2F * progress * leftMulti);
-            stack.mulPose(Vector3f.XN.rotationDegrees(-15 * progress));
+            stack.mulPose(Axis.XN.rotationDegrees(-15 * progress));
         }
     }
 

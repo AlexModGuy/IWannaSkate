@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -16,8 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class RecipeSkateboardDeck  extends ShapedRecipe implements SpecialRecipeInGuideBook {
-    public RecipeSkateboardDeck(ResourceLocation name) {
-        super(name, "", 3, 3, NonNullList.of(Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS), Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS), Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS)), new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()));
+    public RecipeSkateboardDeck(ResourceLocation name, CraftingBookCategory category) {
+        super(name, "", category, 3, 3, NonNullList.of(Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS), Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS), Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.of(IWSTags.DECK_MATERIALS)), new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get()));
     }
 
     public boolean matches(CraftingContainer container, Level level) {

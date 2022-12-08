@@ -18,12 +18,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -119,7 +121,7 @@ public class SkateboardTexturer {
     }
 
     private static ResourceLocation generatePatternTexture(Holder<BannerPattern> pattern) {
-        ResourceLocation res = Registry.BANNER_PATTERN.getKey(pattern.get());
+        ResourceLocation res = pattern.unwrapKey().get().location();
         return new ResourceLocation(IWannaSkateMod.MODID, "textures/entity/skateboard/banner/" + res.getNamespace() + "/" + res.getPath() + ".png");
     }
 

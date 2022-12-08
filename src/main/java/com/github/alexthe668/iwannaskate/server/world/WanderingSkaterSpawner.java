@@ -95,7 +95,7 @@ public class WanderingSkaterSpawner  {
                         return false;
                     }
 
-                    WanderingSkaterEntity skater = IWSEntityRegistry.WANDERING_SKATER.get().spawn(world, (CompoundTag)null, (Component)null, (Player)null, blockpos2, MobSpawnType.EVENT, false, false);
+                    WanderingSkaterEntity skater = IWSEntityRegistry.WANDERING_SKATER.get().spawn(world, blockpos2, MobSpawnType.EVENT);
                     if (skater != null) {
                         if(worldinfo != null){
                             worldinfo.setSkaterUUID(skater.getUUID());

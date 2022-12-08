@@ -22,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BaseSkateboardItem extends Item implements ItemWithHoverAnimation {
+public class BaseSkateboardItem extends Item implements ItemWithHoverAnimation, CustomTabBehavior {
 
     private final ImmutableMultimap<Attribute, AttributeModifier> weaponModifiers;
 
@@ -38,17 +38,15 @@ public class BaseSkateboardItem extends Item implements ItemWithHoverAnimation {
         return slot == EquipmentSlot.MAINHAND ? this.weaponModifiers : super.getDefaultAttributeModifiers(slot);
     }
 
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> itemStacks) {
-        if (this.allowedIn(tab)) {
-            SkateboardMaterials.getSkateboardMaterials().forEach(item -> addBoardToTab(itemStacks, BaseSkateboardItem.this, item));
-        }
+    public void fillItemCategory(CreativeModeTab.Output contents) {
+        SkateboardMaterials.getSkateboardMaterials().forEach(item -> addBoardToTab(contents, BaseSkateboardItem.this, item));
     }
 
-    public void addBoardToTab(NonNullList<ItemStack> itemStacks, Item board, Item material) {
+    public void addBoardToTab(CreativeModeTab.Output contents, Item board, Item material) {
         ItemStack stack = new ItemStack(board);
         SkateboardData data = new SkateboardData(ForgeRegistries.ITEMS.getKey(material));
         SkateboardData.setStackData(stack, data);
-        itemStacks.add(stack);
+        contents.accept(stack);
     }
 
     @Override

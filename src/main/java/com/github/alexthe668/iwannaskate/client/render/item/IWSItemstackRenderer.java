@@ -11,7 +11,7 @@ import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -73,8 +73,8 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
             }
             poseStack.pushPose();
             poseStack.translate(0, 0.45F, 0);
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(-180));
-            poseStack.mulPose(Vector3f.ZP.rotationDegrees(180));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-180));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
             SKATEBOARD_MODEL.animateItem(data, f);
             if (isCreativeTab) {
                 float lerpTicks = ticks;

@@ -59,7 +59,7 @@ public enum SkateboardWheels {
     public static void init() {
         for (SkateboardWheels wheelType : SkateboardWheels.values()) {
             String id = wheelType == DEFAULT ? "skateboard_wheels" : "skateboard_wheels_" + wheelType.name().toLowerCase();
-            wheelType.itemRegistryObject = IWSItemRegistry.DEF_REG.register(id, () -> new SkateboardWheelsItem(new Item.Properties().tab(IWSCreativeTab.INSTANCE), wheelType));
+            wheelType.itemRegistryObject = IWSItemRegistry.DEF_REG.register(id, () -> new SkateboardWheelsItem(new Item.Properties(), wheelType));
         }
     }
 

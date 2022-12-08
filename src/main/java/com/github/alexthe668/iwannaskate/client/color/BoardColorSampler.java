@@ -70,8 +70,8 @@ public class BoardColorSampler {
 
     private static List<Integer> gatherAllColors(TextureAtlasSprite image) {
         List<Integer> colors = new ArrayList<>();
-        int uMax = image.getWidth();
-        int vMax = image.getHeight();
+        int uMax = image.contents().width();
+        int vMax = image.contents().height();
         for (float i = 0; i < uMax; i++) {
             for (float j = 0; j < vMax; j++) {
                 int color = image.getPixelRGBA(0, (int) i, (int) j);

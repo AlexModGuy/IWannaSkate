@@ -7,7 +7,7 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SkaterPose;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.google.common.collect.ImmutableList;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.util.Mth;
 
 public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {

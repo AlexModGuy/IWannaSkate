@@ -2,8 +2,8 @@ package com.github.alexthe668.iwannaskate.client.render.blockentity;
 
 import com.github.alexthe668.iwannaskate.server.blockentity.SkateboardRackBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -37,13 +37,13 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
         }
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5F, 0.5F, 0.5F);
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, direction.toYRot(), true));
+        matrixStackIn.mulPose((new Quaternionf()).rotationY(direction.toYRot() * ((float)Math.PI / 180F)));
         matrixStackIn.pushPose();
         if (!topStack.isEmpty()) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0, 0.4F,  topZ);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XN,  x1, true));
-            matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
+            matrixStackIn.mulPose((new Quaternionf()).rotationX(-x1 * ((float)Math.PI / 180F)));
+            matrixStackIn.mulPose((new Quaternionf()).rotationZ(90 * ((float)Math.PI / 180F)));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);
             Minecraft.getInstance().getItemRenderer().renderStatic(topStack, ItemTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
             matrixStackIn.popPose();
@@ -51,8 +51,8 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
         if (!bottomStack.isEmpty()) {
             matrixStackIn.pushPose();
             matrixStackIn.translate(0, -0.1F + 0.05F * mouseOver2, bottomZ);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XN,  x2, true));
-            matrixStackIn.mulPose(new Quaternion(Vector3f.ZP, 90, true));
+            matrixStackIn.mulPose((new Quaternionf()).rotationX(-x2 * ((float)Math.PI / 180F)));
+            matrixStackIn.mulPose((new Quaternionf()).rotationZ(90 * ((float)Math.PI / 180F)));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);
             Minecraft.getInstance().getItemRenderer().renderStatic(bottomStack, ItemTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
             matrixStackIn.popPose();

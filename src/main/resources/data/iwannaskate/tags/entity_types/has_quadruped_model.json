@@ -16,6 +16,10 @@
     "minecraft:hoglin",
     "minecraft:zoglin",
     "minecraft:fox",
-    "minecraft:axolotl"
+    "minecraft:axolotl",
+    {
+      "id": "minecraft:camel",
+      "required": "false"
+    }
   ]
 }

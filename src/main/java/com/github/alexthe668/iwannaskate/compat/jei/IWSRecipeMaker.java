@@ -11,10 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WoolCarpetBlock;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -60,7 +57,7 @@ public class IWSRecipeMaker {
                 SkateboardData.setStackData(output, data);
                 ResourceLocation id = new ResourceLocation(IWannaSkateMod.MODID, "jei.skateboard_banner_" + ForgeRegistries.ITEMS.getKey(woodItem).getPath() + banner.getDescriptionId());
                 NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY, Ingredient.of(input), Ingredient.of(banner));
-                recipes.add(new ShapelessRecipe(id, group, output, inputs));
+                recipes.add(new ShapelessRecipe(id, group, CraftingBookCategory.MISC, output, inputs));
             }
         }
         return recipes;
@@ -78,7 +75,7 @@ public class IWSRecipeMaker {
                 SkateboardData.setStackData(output, data);
                 ResourceLocation id = new ResourceLocation(IWannaSkateMod.MODID, "jei.skateboard_grip_" + ForgeRegistries.ITEMS.getKey(woodItem).getPath() + carpet.getDescriptionId());
                 NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY, Ingredient.of(input), Ingredient.of(carpet));
-                recipes.add(new ShapelessRecipe(id, group, output, inputs));
+                recipes.add(new ShapelessRecipe(id, group, CraftingBookCategory.MISC, output, inputs));
             }
         }
         return recipes;
@@ -95,7 +92,7 @@ public class IWSRecipeMaker {
                 woodIngredient, Ingredient.EMPTY, Ingredient.EMPTY
         );
         ResourceLocation id = new ResourceLocation(IWannaSkateMod.MODID, "jei.skateboard_deck_" + ForgeRegistries.ITEMS.getKey(deckMaterial).getPath());
-        return new ShapedRecipe(id, group, 3, 3, inputs, output);
+        return new ShapedRecipe(id, group, CraftingBookCategory.MISC, 3, 3, inputs, output);
     }
 
     private static List<CraftingRecipe> createSkateboardRecipesForDeck(Item woodItem) {
@@ -115,7 +112,7 @@ public class IWSRecipeMaker {
                     wheelIngredient, Ingredient.EMPTY, wheelIngredient
             );
             ResourceLocation id = new ResourceLocation(IWannaSkateMod.MODID, "jei.skateboard_" + ForgeRegistries.ITEMS.getKey(woodItem).getPath());
-            recipes.add(new ShapedRecipe(id, group, 3, 3, inputs, output));
+            recipes.add(new ShapedRecipe(id, group, CraftingBookCategory.MISC, 3, 3, inputs, output));
         }
         return recipes;
     }

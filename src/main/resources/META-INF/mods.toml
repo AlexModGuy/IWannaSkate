@@ -1,10 +1,10 @@
 modLoader="javafml" #mandatory
-loaderVersion="[42,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[44,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="GNU LESSER GENERAL PUBLIC LICENSE"
 issueTrackerURL="https://github.com/AlexModGuy/IWannaSkate/issues" #optional
 [[mods]] #mandatory
 modId="iwannaskate" #mandatory
-version="1.0.0" #mandatory
+version="1.1.0" #mandatory
 displayName="I Wanna Skate" #mandatory
 displayURL="" #optional
 authors="Alexthe668, Crydigo" #optional
@@ -15,7 +15,7 @@ description='''It's time to skate!'''
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[2.0.0,)" #mandatory
+    versionRange="[2.2.0,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="AFTER"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -25,6 +25,6 @@ description='''It's time to skate!'''
 [[dependencies.iwannaskate]]
     modId="forge"
     mandatory=true
-    versionRange="[42.0.0,)"
+    versionRange="[44.0.1,)"
     ordering="NONE"
     side="BOTH"

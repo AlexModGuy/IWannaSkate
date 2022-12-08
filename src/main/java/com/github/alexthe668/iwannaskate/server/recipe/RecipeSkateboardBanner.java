@@ -11,14 +11,15 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class RecipeSkateboardBanner extends CustomRecipe implements SpecialRecipeInGuideBook {
-    public RecipeSkateboardBanner(ResourceLocation name) {
-        super(name);
+    public RecipeSkateboardBanner(ResourceLocation name, CraftingBookCategory category) {
+        super(name, category);
     }
 
     public boolean matches(CraftingContainer craftingContainer, Level level) {

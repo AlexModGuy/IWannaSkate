@@ -4,7 +4,7 @@ import com.github.alexthe668.iwannaskate.client.model.IWSModelLayers;
 import com.github.alexthe668.iwannaskate.server.entity.SkaterSkeletonEntity;
 import com.github.alexthe668.iwannaskate.server.item.BaseSkateboardItem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.SkeletonModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -38,8 +38,8 @@ public class SkaterSkeletonRenderer extends MobRenderer<SkaterSkeletonEntity, Sk
                 if (!stack.isEmpty()) {
                     poseStack.pushPose();
                     ((SkeletonModel)(this.getParentModel())).translateToHand(arm, poseStack);
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-                    poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
                     boolean flag = arm == HumanoidArm.LEFT;
                     float skateboardModifier = stack.getItem() instanceof BaseSkateboardItem ? 0.0625F : 0F;
                     poseStack.translate((float)(flag ? -1 : 1) * (0.0625F + skateboardModifier), 0.125D, -0.625D);

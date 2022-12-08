@@ -95,11 +95,6 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     protected void defineSynchedData() {
 
     }
@@ -144,7 +139,12 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
             return 1.0F;
         }
         Optional<Vec3> closest = shape.closestPointTo(position);
-        return closest.isEmpty() ? 1.0F : 1.0F - Math.min((float)closest.get().y, 1.0F);
+        if(closest.isEmpty()){
+            return 1.0F;
+        }else{
+            float closestY = Math.min((float)closest.get().y, 1.0F);
+            return position.y < 0.0 ? closestY : 1.0F - closestY;
+        }
     }
 
     protected float getFallSpeed() {

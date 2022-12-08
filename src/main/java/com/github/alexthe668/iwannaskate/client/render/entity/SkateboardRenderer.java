@@ -8,10 +8,10 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import com.mojang.math.Axis;
+import org.joml.Vector4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -46,9 +46,9 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         float skateYaw = entity.getViewYRot(partialTicks);
         poseStack.pushPose();
         poseStack.translate(0.0D, 1.5D, 0.0D);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F - skateYaw));
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F - skateYaw));
         poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         poseStack.translate(0, -entity.getRenderOffGroundAmount(partialTicks), 0);
         poseStack.pushPose();
         SKATEBOARD_MODEL.setupAnim(entity, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F);
@@ -114,7 +114,7 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
             up = -0.005F;
         }
         Vector4f bodyOffsetVec = new Vector4f(left ? -0.08F : 0.08F, 0F, 0F, 1.0F);
-        bodyOffsetVec.transform(modelTranslateStack.last().pose());
+        bodyOffsetVec.mul(modelTranslateStack.last().pose());
         Vec3 wheelOffset = new Vec3(bodyOffsetVec.x(), bodyOffsetVec.y(), bodyOffsetVec.z());
         modelTranslateStack.popPose();
         return wheelOffset.add(0, -up, 0);
@@ -130,9 +130,9 @@ public class SkateboardRenderer extends EntityRenderer<SkateboardEntity> {
         poseStack.pushPose();
         poseStack.translate(wheelOffset.x, wheelOffset.y, wheelOffset.z);
         poseStack.scale(-1.0F, 1.0F, 1.0F);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(skateYaw));
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(rotY));
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(rotX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(skateYaw));
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotY));
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotX));
         PoseStack.Pose posestack$pose = poseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();

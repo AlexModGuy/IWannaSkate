@@ -10,14 +10,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
 public class RecipeSkateboard extends ShapedRecipe implements SpecialRecipeInGuideBook {
-    public RecipeSkateboard(ResourceLocation name) {
-        super(name, "", 3, 2, NonNullList.of(Ingredient.EMPTY, Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_DECK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSTags.SKATEBOARD_WHEELS), Ingredient.EMPTY, Ingredient.of(IWSTags.SKATEBOARD_WHEELS)), new ItemStack(IWSItemRegistry.SKATEBOARD.get()));
+    public RecipeSkateboard(ResourceLocation name, CraftingBookCategory category) {
+        super(name, "", category, 3, 2, NonNullList.of(Ingredient.EMPTY, Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_DECK.get()), Ingredient.of(IWSItemRegistry.SKATEBOARD_TRUCK.get()), Ingredient.of(IWSTags.SKATEBOARD_WHEELS), Ingredient.EMPTY, Ingredient.of(IWSTags.SKATEBOARD_WHEELS)), new ItemStack(IWSItemRegistry.SKATEBOARD.get()));
     }
 
     public boolean matches(CraftingContainer container, Level level) {

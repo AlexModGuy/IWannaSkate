@@ -3,6 +3,7 @@ package com.github.alexthe668.iwannaskate.client.model;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -119,7 +120,7 @@ public class SkateModelMapping {
             TagKey<EntityType<?>> tagkey = null;
             if (entityTypeString.startsWith("#")) {
                 ResourceLocation readStr = new ResourceLocation(entityTypeString.substring(1));
-                tagkey = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, readStr);
+                tagkey = TagKey.create(Registries.ENTITY_TYPE, readStr);
             } else {
                 ResourceLocation readsStr= new ResourceLocation(entityTypeString);
                 if(!ForgeRegistries.ENTITY_TYPES.containsKey(readsStr)){

@@ -37,7 +37,7 @@ public class ClientPacketListenerMixin {
             Component componentBoard = skateboard.getOnMountMessage();
             if(componentBoard != null){
                 Minecraft.getInstance().gui.setOverlayMessage(componentBoard, false);
-                Minecraft.getInstance().m_240477_().sayNow(componentBoard);
+                Minecraft.getInstance().getNarrator().sayNow(componentBoard);
             }
 
         }

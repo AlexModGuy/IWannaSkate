@@ -4,6 +4,7 @@ import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -160,8 +161,8 @@ public class SkateboardData {
             for(int i = 0; i < enchantmentList.size(); ++i) {
                 if(i < maxPreview || IWannaSkateMod.PROXY.isKeyDown(1)){
                     CompoundTag compoundtag = enchantmentList.getCompound(i);
-                    Registry.ENCHANTMENT.getOptional(EnchantmentHelper.getEnchantmentId(compoundtag)).ifPresent((enchantment) -> {
-                        tooltip.add(Component.literal("  -").withStyle(chatColor).append(enchantment.getFullname(EnchantmentHelper.getEnchantmentLevel(compoundtag))));
+                    ForgeRegistries.ENCHANTMENTS.getDelegate(EnchantmentHelper.getEnchantmentId(compoundtag)).ifPresent((enchantment) -> {
+                        tooltip.add(Component.literal("  -").withStyle(chatColor).append(enchantment.value().getFullname(EnchantmentHelper.getEnchantmentLevel(compoundtag))));
                     });
                 }
             }

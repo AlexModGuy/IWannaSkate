@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -22,8 +23,8 @@ import java.util.Map;
 public class RecipeSkateboardShimmer extends CustomRecipe implements SpecialRecipeInGuideBook {
 
 
-    public RecipeSkateboardShimmer(ResourceLocation name) {
-        super(name);
+    public RecipeSkateboardShimmer(ResourceLocation name, CraftingBookCategory category) {
+        super(name, category);
     }
 
     public boolean matches(CraftingContainer craftingContainer, Level level) {
