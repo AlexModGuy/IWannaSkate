@@ -30,6 +30,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.model.SnifferModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -39,6 +40,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -112,19 +114,21 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onPostRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay().id().equals(VanillaGuiOverlay.JUMP_BAR.id()) && IWannaSkateMod.CLIENT_CONFIG.showInertiaIndicator.get() && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard) {
+        if (event.getOverlay().id().equals(VanillaGuiOverlay.JUMP_BAR.id()) && getClientSidePlayer().getVehicle() instanceof SkateboardEntity skateboard) {
             int screenWidth = event.getWindow().getGuiScaledWidth();
             int screenHeight = event.getWindow().getGuiScaledHeight();
-            int j = screenWidth / 2 - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorX.get();
-            int k = screenHeight - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorY.get();
-            float f = skateboard.getForwards() / skateboard.getMaxForwardsTicks();
-            event.getPoseStack().pushPose();
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, SKATEBOARD_INDICATOR_TEXTURE);
-            GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 0, 29, 9, 64, 64);
-            GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
-            event.getPoseStack().popPose();
+            if(IWannaSkateMod.CLIENT_CONFIG.showInertiaIndicator.get()){
+                int j = screenWidth / 2 - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorX.get();
+                int k = screenHeight - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorY.get();
+                float f = skateboard.getForwards() / skateboard.getMaxForwardsTicks();
+                event.getPoseStack().pushPose();
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderTexture(0, SKATEBOARD_INDICATOR_TEXTURE);
+                GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 0, 29, 9, 64, 64);
+                GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
+                event.getPoseStack().popPose();
+            }
         }
         if (event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get()) && IWannaSkateMod.CLIENT_CONFIG.overcaffeniatedOverlay.get()) {
             int screenWidth = event.getWindow().getGuiScaledWidth();

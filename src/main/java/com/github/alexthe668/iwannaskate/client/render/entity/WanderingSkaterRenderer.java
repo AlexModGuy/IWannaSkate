@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, WanderingSkaterModel> {
@@ -58,7 +59,7 @@ public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, 
             poseStack.mulPose(Axis.XP.rotationDegrees(170.0F + swing * 100.0F));
             poseStack.mulPose(Axis.YN.rotationDegrees(100.0F * (1 - swing)));
             ItemStack offhand = skater.getItemBySlot(EquipmentSlot.OFFHAND);
-            this.itemInHandRenderer.renderItem(skater, offhand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, bufferSource, i);
+            this.itemInHandRenderer.renderItem(skater, offhand, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, false, poseStack, bufferSource, i);
             poseStack.popPose();
 
             poseStack.pushPose();
@@ -66,7 +67,7 @@ public class WanderingSkaterRenderer extends MobRenderer<WanderingSkaterEntity, 
             poseStack.translate(0.0D, (double)0.3F, (double)-0.35F);
             poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             ItemStack itemstack = skater.getItemBySlot(EquipmentSlot.MAINHAND);
-            this.itemInHandRenderer.renderItem(skater, itemstack, ItemTransforms.TransformType.GROUND, false, poseStack, bufferSource, i);
+            this.itemInHandRenderer.renderItem(skater, itemstack, ItemDisplayContext.GROUND, false, poseStack, bufferSource, i);
             poseStack.popPose();
         }
     }

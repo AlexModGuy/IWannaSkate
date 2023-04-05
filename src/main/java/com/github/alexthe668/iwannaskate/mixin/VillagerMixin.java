@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -71,11 +72,9 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
         ItemStack stack = item.getItem();
         if (stack.is(IWSItemRegistry.ENERGY_DRINK.get()) || stack.is(IWSItemRegistry.SKATEBOARD.get())) {
             if (this.getMainHandItem().isEmpty()) {
-                if(item.getThrower() != null && !level.isClientSide){
-                    Player thrower = level.getPlayerByUUID(item.getThrower());
-                    if(thrower != null){
-                        IWSAdvancements.trigger(thrower, IWSAdvancements.GIVE_VILLAGER_DRINK);
-                    }
+                Entity itemThrower = item.getOwner();
+                if(itemThrower instanceof Player player && !level.isClientSide){
+                    IWSAdvancements.trigger(player, IWSAdvancements.GIVE_VILLAGER_DRINK);
                 }
                 ItemStack copy = stack.copy();
                 copy.setCount(1);

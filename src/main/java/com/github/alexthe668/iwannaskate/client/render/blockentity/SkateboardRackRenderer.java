@@ -2,6 +2,7 @@ package com.github.alexthe668.iwannaskate.client.render.blockentity;
 
 import com.github.alexthe668.iwannaskate.server.blockentity.SkateboardRackBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Quaternionf;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,7 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
             matrixStackIn.mulPose((new Quaternionf()).rotationX(-x1 * ((float)Math.PI / 180F)));
             matrixStackIn.mulPose((new Quaternionf()).rotationZ(90 * ((float)Math.PI / 180F)));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);
-            Minecraft.getInstance().getItemRenderer().renderStatic(topStack, ItemTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(topStack, ItemDisplayContext.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.getLevel(), 0);
             matrixStackIn.popPose();
         }
         if (!bottomStack.isEmpty()) {
@@ -54,7 +55,7 @@ public class SkateboardRackRenderer implements BlockEntityRenderer<SkateboardRac
             matrixStackIn.mulPose((new Quaternionf()).rotationX(-x2 * ((float)Math.PI / 180F)));
             matrixStackIn.mulPose((new Quaternionf()).rotationZ(90 * ((float)Math.PI / 180F)));
             matrixStackIn.scale(1.15F, 1.15F, 1.15F);
-            Minecraft.getInstance().getItemRenderer().renderStatic(bottomStack, ItemTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(bottomStack, ItemDisplayContext.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entity.getLevel(), 0);
             matrixStackIn.popPose();
         }
         matrixStackIn.popPose();

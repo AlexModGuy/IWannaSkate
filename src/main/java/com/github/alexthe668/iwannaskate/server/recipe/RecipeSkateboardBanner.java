@@ -4,6 +4,7 @@ import com.github.alexthe666.citadel.recipe.SpecialRecipeInGuideBook;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -56,7 +57,7 @@ public class RecipeSkateboardBanner extends CustomRecipe implements SpecialRecip
         return !skateboard.isEmpty() && !bannerStack.isEmpty();
     }
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack banner = ItemStack.EMPTY;
         ItemStack skateboard = ItemStack.EMPTY;
 

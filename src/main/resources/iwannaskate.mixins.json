@@ -17,6 +17,7 @@
     "client.CrossedArmsItemLayerMixin",
     "client.EntityRendererProviderMixin",
     "client.LivingEntityRendererMixin",
+    "client.LocalPlayerMixin",
     "client.VillagerModelMixin"
   ],
   "injectors": {

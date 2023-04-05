@@ -18,7 +18,7 @@ import java.util.List;
 public class SkaterHelmetItem extends ArmorItem {
 
     public SkaterHelmetItem(ArmorMaterial material, Properties props) {
-        super(material, EquipmentSlot.HEAD, props);
+        super(material, ArmorItem.Type.HELMET, props);
     }
 
     @Override

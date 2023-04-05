@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
@@ -56,11 +57,11 @@ public class IWSItemstackRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack itemStack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (itemStack.getItem() instanceof BaseSkateboardItem skateboardItem) {
             boolean isCreativeTab = false;
             float f = 0.0F;
-            if (itemStack.is(IWSItemRegistry.SKATEBOARD.get()) && transformType == ItemTransforms.TransformType.GUI && IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
+            if (itemStack.is(IWSItemRegistry.SKATEBOARD.get()) && transformType == ItemDisplayContext.GUI && IWannaSkateMod.CLIENT_CONFIG.flipBoardItems.get()) {
                 f = Citadel.PROXY.getMouseOverProgress(itemStack);
                 if (Minecraft.getInstance().screen instanceof SkateManualScreen && skateboardItem.canFlipInInventory(itemStack)) {
                     f = 1.0F;

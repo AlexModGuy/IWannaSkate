@@ -14,6 +14,7 @@ import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
 import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
+import com.github.alexthe668.iwannaskate.server.network.SkateboardJumpMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardRackMessage;
@@ -109,6 +110,7 @@ public class IWannaSkateMod {
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardPartMessage.class, SkateboardPartMessage::write, SkateboardPartMessage::read, SkateboardPartMessage.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardKeyMessage.class, SkateboardKeyMessage::write, SkateboardKeyMessage::read, SkateboardKeyMessage.Handler::handle);
         NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardRackMessage.class, SkateboardRackMessage::write, SkateboardRackMessage::read, SkateboardRackMessage.Handler::handle);
+        NETWORK_WRAPPER.registerMessage(packetsRegistered++, SkateboardJumpMessage.class, SkateboardJumpMessage::write, SkateboardJumpMessage::read, SkateboardJumpMessage.Handler::handle);
         IWSAdvancements.init();
         registerCapes();
     }

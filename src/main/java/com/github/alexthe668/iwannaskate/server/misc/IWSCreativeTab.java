@@ -31,7 +31,7 @@ public class IWSCreativeTab {
     }
 
     public static void registerTab(CreativeModeTabEvent.Register event){
-        event.registerCreativeModeTab(TAB, builder -> builder.title(Component.translatable("itemGroup.iwannaskate")).icon(IWSCreativeTab::makeIcon).displayItems((flags, output, isOp) -> {
+        event.registerCreativeModeTab(TAB, builder -> builder.title(Component.translatable("itemGroup.iwannaskate")).icon(IWSCreativeTab::makeIcon).displayItems((parameter, output) -> {
             for(RegistryObject<Item> item : IWSItemRegistry.DEF_REG.getEntries()){
                 if(item.get() instanceof CustomTabBehavior customTabBehavior){
                     customTabBehavior.fillItemCategory(output);

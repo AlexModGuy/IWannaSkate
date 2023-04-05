@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -54,7 +55,7 @@ public class RecipeSkateboardShimmer extends CustomRecipe implements SpecialReci
         return !skateboard.isEmpty() && !waxStack.isEmpty();
     }
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack skateboard = ItemStack.EMPTY;
 
         for(int i = 0; i < container.getContainerSize(); ++i) {

@@ -19,7 +19,7 @@ public class DyeableHatItem extends DyeableArmorItem {
     private int defaultColor;
 
     public DyeableHatItem(ArmorMaterial material, String type, int defaultColor, Properties props) {
-        super(material, EquipmentSlot.HEAD, props);
+        super(material, Type.HELMET, props);
         this.type = type;
         this.defaultColor = defaultColor;
     }

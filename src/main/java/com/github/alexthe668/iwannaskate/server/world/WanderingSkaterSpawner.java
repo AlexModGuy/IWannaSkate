@@ -80,7 +80,7 @@ public class WanderingSkaterSpawner  {
         } else if (this.random.nextInt(5) != 0) {
             return false;
         } else {
-            BlockPos blockpos = new BlockPos(playerentity.position());
+            BlockPos blockpos = BlockPos.containing(playerentity.position());
             PoiManager poimanager = this.world.getPoiManager();
             Optional<BlockPos> optional = poimanager.find((p_219713_) -> {
                 return p_219713_.is(PoiTypes.MEETING);

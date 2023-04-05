@@ -32,9 +32,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -368,7 +370,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                         Entity entity = list.get(j);
                         if (!entity.hasPassenger(this)) {
                             if (!this.isVehicle() && !entity.isPassenger() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player) && !entity.getType().is(IWSTags.CANNOT_SKATE)) {
-                                entity.startRiding(this);
+                                entity.startRiding(this, true);
                             } else {
                                 this.push(entity);
                             }
@@ -740,7 +742,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     }
 
     private boolean isOnWater() {
-        BlockPos ourPos = new BlockPos(this.getX(), this.getY() + 0.4F, this.getZ());
+        BlockPos ourPos = BlockPos.containing(this.getX(), this.getY() + 0.4F, this.getZ());
         BlockPos underPos = this.getOnPos();
         return level.getFluidState(underPos).is(FluidTags.WATER) && !level.getFluidState(ourPos).is(FluidTags.WATER);
     }
@@ -795,7 +797,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     }
 
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         return null;
     }
 
@@ -897,7 +899,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                 }
                 if (!damageBlocked) {
                     IWSAdvancements.trigger(passenger, IWSAdvancements.TAKE_SKATE_DAMAGE);
-                    passenger.hurt(IWSDamageTypes.SKATE_DAMAGE, 2 + 2 * f1);
+                    passenger.hurt(IWSDamageTypes.causeSkateDamage(this.level.registryAccess()), 2 + 2 * f1);
                 }
                 passenger.stopRiding();
             }
@@ -941,8 +943,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                 tickMobRider((Mob) passenger);
             }
             if (this.getSkaterPose() != SkaterPose.NONE) {
-                living.animationSpeedOld = 0;
-                living.animationSpeed = 0;
+                living.walkAnimation.setSpeed(0.0F);
             }
             double d0 = this.getY() + this.getPassengersRidingOffset();
             if (living.getType().is(IWSTags.OVERRIDES_SKATEBOARD_POSITIONING)) {
@@ -965,7 +966,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        return super.isInvulnerableTo(damageSource) || this.hasEnchant(IWSEnchantmentRegistry.HARDWOOD.get()) && (damageSource != DamageSource.OUT_OF_WORLD && damageSource != DamageSource.GENERIC && !(damageSource.getDirectEntity() instanceof Player));
+        return super.isInvulnerableTo(damageSource) || this.hasEnchant(IWSEnchantmentRegistry.HARDWOOD.get()) && (!damageSource.is(DamageTypes.OUT_OF_WORLD) && !damageSource.is(DamageTypes.GENERIC) && !(damageSource.getDirectEntity() instanceof Player));
     }
 
     @Override
@@ -987,7 +988,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         super.push(entity);
         if (!this.isPassengerOfSameVehicle(entity) && this.getDeltaMovement().length() > 0.1F && this.isVehicle() && entity instanceof LivingEntity living && getContactDamage() > 0) {
             Entity rider = this.getFirstPassenger();
-            if (rider != null && shouldRiderHurtMob(rider, living) && living.hurt(DamageSource.indirectMagic(this, rider), getContactDamage())) {
+            if (rider != null && shouldRiderHurtMob(rider, living) && living.hurt(damageSources().indirectMagic(this, rider), getContactDamage())) {
                 living.knockback(0.5D, living.getX() - this.getX(), living.getZ() - this.getZ());
                 if (living.getHealth() <= 0.0D && this.hasEnchant(IWSEnchantmentRegistry.BASHING.get())) {
                     IWSAdvancements.trigger(this.getFirstPassenger(), IWSAdvancements.SKATE_BASHING);
@@ -1099,14 +1100,12 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     public void onPlayerJump(int barAmount) {
     }
 
-    @Override
-    public boolean canJump(Player player) {
-        return this.canJump();
-    }
 
+    @Override
     public boolean canJump() {
         return this.getOnGroundProgress(1.0F) >= 0.1F && this.getSkaterPose().allowJumping() && this.getSkaterPoseProgress(1.0F) >= 0.5F;
     }
+
     @Override
     public float getStepHeight() {
         return this.hasEnchant(IWSEnchantmentRegistry.CLAMBERING.get()) ? 1.0F : 0.51F;
@@ -1167,7 +1166,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (this.isVehicle() && fallDistance > listenDistance && !this.hasEnchant(IWSEnchantmentRegistry.SECURED.get())) {
             for (Entity entity : this.getPassengers()) {
                 IWSAdvancements.trigger(entity, IWSAdvancements.TAKE_SKATE_DAMAGE);
-                entity.causeFallDamage(fallDistance, damageMod, IWSDamageTypes.SKATE_DAMAGE);
+                entity.causeFallDamage(fallDistance, damageMod, IWSDamageTypes.causeSkateDamage(this.level.registryAccess()));
             }
             if (fallDistance > listenDistance + 3) {
                 this.ejectPassengers();

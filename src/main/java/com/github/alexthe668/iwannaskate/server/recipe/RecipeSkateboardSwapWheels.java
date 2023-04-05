@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -82,7 +83,7 @@ public class RecipeSkateboardSwapWheels extends CustomRecipe implements SpecialR
     }
 
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack wheels = ItemStack.EMPTY;
         ItemStack skateboard = ItemStack.EMPTY;
 

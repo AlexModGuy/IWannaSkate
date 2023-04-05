@@ -5,6 +5,7 @@ import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -43,7 +44,7 @@ public class RecipeSkateboardDeck  extends ShapedRecipe implements SpecialRecipe
         return new ItemStack(IWSItemRegistry.SKATEBOARD_DECK.get());
     }
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack lastTagged = ItemStack.EMPTY;
         for(int i = 0; i < container.getContainerSize(); i++){
             if(container.getItem(i).is(IWSTags.DECK_MATERIALS)){

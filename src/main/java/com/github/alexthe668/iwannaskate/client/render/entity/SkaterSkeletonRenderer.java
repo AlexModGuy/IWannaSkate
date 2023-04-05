@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class SkaterSkeletonRenderer extends MobRenderer<SkaterSkeletonEntity, SkeletonModel<SkaterSkeletonEntity>> {
@@ -30,11 +31,11 @@ public class SkaterSkeletonRenderer extends MobRenderer<SkaterSkeletonEntity, Sk
 
     public SkaterSkeletonRenderer(EntityRendererProvider.Context context, ModelLayerLocation body, ModelLayerLocation armor1, ModelLayerLocation armor2) {
         super(context, new SkeletonModel<>(context.bakeLayer(body)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new SkeletonModel(context.bakeLayer(armor1)), new SkeletonModel(context.bakeLayer(armor2))));
+        this.addLayer(new HumanoidArmorLayer<>(this, new SkeletonModel(context.bakeLayer(armor1)), new SkeletonModel(context.bakeLayer(armor2)), context.getModelManager()));
         this.addLayer(new ItemInHandLayer(this, context.getItemInHandRenderer()){
 
             @Override
-            protected void renderArmWithItem(LivingEntity livingEntity, ItemStack stack, ItemTransforms.TransformType transformType, HumanoidArm arm, PoseStack poseStack, MultiBufferSource buffer, int i) {
+            protected void renderArmWithItem(LivingEntity livingEntity, ItemStack stack, ItemDisplayContext transformType, HumanoidArm arm, PoseStack poseStack, MultiBufferSource buffer, int i) {
                 if (!stack.isEmpty()) {
                     poseStack.pushPose();
                     ((SkeletonModel)(this.getParentModel())).translateToHand(arm, poseStack);

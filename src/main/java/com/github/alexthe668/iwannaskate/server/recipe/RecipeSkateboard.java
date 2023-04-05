@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -39,7 +40,7 @@ public class RecipeSkateboard extends ShapedRecipe implements SpecialRecipeInGui
         return false;
     }
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack deck = ItemStack.EMPTY;
         ItemStack wheels = ItemStack.EMPTY;
         for (int i = 0; i < container.getContainerSize(); i++) {

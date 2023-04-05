@@ -118,7 +118,7 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
         if(parent == null){
             return 0.0F;
         }
-        BlockPos pos = new BlockPos(boardPos.x, boardPos.y + 0.001D, boardPos.z);
+        BlockPos pos = BlockPos.containing(boardPos.x, boardPos.y + 0.001D, boardPos.z);
         float dist = this.getDistance(parent.level, pos, boardPos);
         if ((double)(1.0F - dist) < 0.001D) {
             dist = this.getDistance(parent.level, pos.below(), boardPos) + (float)boardPos.y % 1.0F;

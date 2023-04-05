@@ -18,7 +18,7 @@ public class OvercaffeinatedEffect extends MobEffect {
             player.causeFoodExhaustion(0.1F * (float)(tick + 1));
         }
         if(entity.getHealth() > entity.getMaxHealth() * 0.25F && entity.getRandom().nextInt(10) == 0){
-            entity.hurt(DamageSource.MAGIC, 1.0F);
+            entity.hurt(entity.damageSources().magic(), 1.0F);
         }
     }
 

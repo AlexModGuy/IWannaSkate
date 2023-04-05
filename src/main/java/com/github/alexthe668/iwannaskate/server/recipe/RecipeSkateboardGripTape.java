@@ -6,6 +6,7 @@ import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -58,7 +59,7 @@ public class RecipeSkateboardGripTape extends CustomRecipe implements SpecialRec
         return !skateboard.isEmpty() && !carpetStack.isEmpty();
     }
 
-    public ItemStack assemble(CraftingContainer container) {
+    public ItemStack assemble(CraftingContainer container, RegistryAccess registryAccess) {
         ItemStack carpet = ItemStack.EMPTY;
         ItemStack skateboard = ItemStack.EMPTY;
 

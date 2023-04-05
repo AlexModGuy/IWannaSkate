@@ -27,6 +27,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -392,7 +393,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
         AABB mobBox = new AABB(at.x - 1, at.y - 1.5F, at.z - 1, at.x + 1, at.y + 1.5, at.z + 1);
         for (Entity entity : this.level.getEntities(this, mobBox, EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
             if (entity instanceof LivingEntity living && canHurtWithAttack(living)) {
-                if (living.hurt(DamageSource.mobAttack(this), 4)) {
+                if (living.hurt(damageSources().mobAttack(this), 4)) {
 
                     living.knockback(1D, (double)Mth.sin(hurtYaw * ((float)Math.PI / 180F)), (double)(-Mth.cos(hurtYaw * ((float)Math.PI / 180F))));
                 }
@@ -438,7 +439,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        return super.isInvulnerableTo(damageSource) || damageSource == DamageSource.IN_WALL || damageSource == IWSDamageTypes.SKATE_DAMAGE;
+        return super.isInvulnerableTo(damageSource) || damageSource.is(DamageTypes.IN_WALL) || damageSource.is(IWSDamageTypes.SKATE_DAMAGE);
     }
 
     @Override
