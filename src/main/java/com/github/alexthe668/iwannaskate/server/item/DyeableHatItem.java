@@ -1,17 +1,15 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.DyeableArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class DyeableHatItem extends DyeableArmorItem {
 

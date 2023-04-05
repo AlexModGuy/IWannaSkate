@@ -1,22 +1,20 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
-import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegistry;
 import com.github.alexthe668.iwannaskate.server.item.CustomTabBehavior;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.lang.reflect.Field;
 
 public class IWSCreativeTab {
 

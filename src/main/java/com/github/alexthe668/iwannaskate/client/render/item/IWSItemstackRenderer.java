@@ -2,7 +2,6 @@ package com.github.alexthe668.iwannaskate.client.render.item;
 
 import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import com.github.alexthe668.iwannaskate.client.ClientProxy;
 import com.github.alexthe668.iwannaskate.client.gui.SkateManualScreen;
 import com.github.alexthe668.iwannaskate.client.model.SkateboardModel;
 import com.github.alexthe668.iwannaskate.client.render.entity.SkateboardTexturer;
@@ -15,16 +14,13 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 

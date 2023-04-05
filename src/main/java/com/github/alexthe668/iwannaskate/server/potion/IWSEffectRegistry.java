@@ -3,7 +3,6 @@ package com.github.alexthe668.iwannaskate.server.potion;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

@@ -2,7 +2,6 @@ package com.github.alexthe668.iwannaskate.client.gui;
 
 import com.github.alexthe666.citadel.client.gui.GuiBasicBook;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

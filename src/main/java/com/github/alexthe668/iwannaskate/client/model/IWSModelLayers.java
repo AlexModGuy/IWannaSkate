@@ -1,15 +1,10 @@
 package com.github.alexthe668.iwannaskate.client.model;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.SkeletonModel;
-import net.minecraft.client.model.VillagerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public class IWSModelLayers {

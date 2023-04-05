@@ -3,7 +3,6 @@ package com.github.alexthe668.iwannaskate.server.entity.ai;
 import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;

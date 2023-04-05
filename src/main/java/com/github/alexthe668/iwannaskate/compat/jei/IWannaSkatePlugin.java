@@ -1,22 +1,12 @@
 package com.github.alexthe668.iwannaskate.compat.jei;
 
-import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
-import com.github.alexthe668.iwannaskate.server.recipe.IWSRecipeRegistry;
-import com.github.alexthe668.iwannaskate.server.recipe.RecipeSkateboard;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.ShulkerBoxColoring;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @JeiPlugin
 public class IWannaSkatePlugin implements IModPlugin {

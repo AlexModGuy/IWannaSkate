@@ -1,12 +1,10 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.Tags;
 
 import java.util.List;
 

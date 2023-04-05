@@ -5,7 +5,6 @@ import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;

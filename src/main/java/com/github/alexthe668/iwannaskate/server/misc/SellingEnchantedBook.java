@@ -1,9 +1,5 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
-import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
-import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -14,9 +10,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.trading.MerchantOffer;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SellingEnchantedBook implements VillagerTrades.ItemListing {
     private final Enchantment enchantment;

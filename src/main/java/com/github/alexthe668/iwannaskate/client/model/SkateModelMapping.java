@@ -2,7 +2,6 @@ package com.github.alexthe668.iwannaskate.client.model;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;

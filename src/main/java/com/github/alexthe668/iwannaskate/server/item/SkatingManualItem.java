@@ -1,6 +1,5 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
-import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

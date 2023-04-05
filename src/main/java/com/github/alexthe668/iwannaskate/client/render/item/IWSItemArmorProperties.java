@@ -7,7 +7,6 @@ import com.github.alexthe668.iwannaskate.client.model.SpikedSkaterHelmetModel;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

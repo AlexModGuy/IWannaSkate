@@ -1,6 +1,5 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
-import com.github.alexthe666.citadel.item.ItemWithHoverAnimation;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import net.minecraft.stats.Stats;

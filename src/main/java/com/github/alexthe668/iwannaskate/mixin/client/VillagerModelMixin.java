@@ -3,7 +3,6 @@ package com.github.alexthe668.iwannaskate.mixin.client;
 import com.github.alexthe668.iwannaskate.server.entity.HasAnimationFlags;
 import net.minecraft.client.model.VillagerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

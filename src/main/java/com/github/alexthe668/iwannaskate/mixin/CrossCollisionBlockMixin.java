@@ -1,10 +1,7 @@
 package com.github.alexthe668.iwannaskate.mixin;
 
-import com.github.alexthe668.iwannaskate.client.model.ModelRootRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.CrossCollisionBlock;
@@ -17,7 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CrossCollisionBlock.class)

@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.world.entity.Entity;
 
 public class HoverParticleModel extends AdvancedEntityModel {

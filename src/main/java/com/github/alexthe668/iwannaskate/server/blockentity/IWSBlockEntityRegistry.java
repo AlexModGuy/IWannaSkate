@@ -3,7 +3,6 @@ package com.github.alexthe668.iwannaskate.server.blockentity;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

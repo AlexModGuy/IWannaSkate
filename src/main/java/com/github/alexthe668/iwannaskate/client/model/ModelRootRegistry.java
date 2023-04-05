@@ -2,14 +2,12 @@ package com.github.alexthe668.iwannaskate.client.model;
 
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
-import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

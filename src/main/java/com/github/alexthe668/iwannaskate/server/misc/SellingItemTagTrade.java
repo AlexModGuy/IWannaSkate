@@ -1,8 +1,6 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +12,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Set;
 
 public class SellingItemTagTrade implements VillagerTrades.ItemListing {
     private final TagKey<Item> tradeItem;

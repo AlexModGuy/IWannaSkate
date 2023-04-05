@@ -8,7 +8,6 @@ import com.github.alexthe668.iwannaskate.server.entity.WanderingSkaterEntity;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
 import com.github.alexthe668.iwannaskate.server.potion.IWSEffectRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

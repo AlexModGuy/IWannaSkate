@@ -4,7 +4,6 @@ import com.github.alexthe666.citadel.recipe.SpecialRecipeInGuideBook;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
-import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;

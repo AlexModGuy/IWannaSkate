@@ -3,8 +3,6 @@ package com.github.alexthe668.iwannaskate.server.item;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;

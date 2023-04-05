@@ -2,12 +2,8 @@ package com.github.alexthe668.iwannaskate.client.sound;
 
 import com.github.alexthe668.iwannaskate.client.ClientProxy;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
-import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
-import com.github.alexthe668.iwannaskate.server.misc.SkateQuality;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;

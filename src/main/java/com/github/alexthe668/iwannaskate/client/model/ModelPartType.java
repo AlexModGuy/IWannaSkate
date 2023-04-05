@@ -1,14 +1,10 @@
 package com.github.alexthe668.iwannaskate.client.model;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import com.google.common.collect.ImmutableList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.Map;

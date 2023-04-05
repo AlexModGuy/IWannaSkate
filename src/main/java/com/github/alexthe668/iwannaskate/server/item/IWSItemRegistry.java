@@ -1,14 +1,11 @@
 package com.github.alexthe668.iwannaskate.server.item;
 
-import com.github.alexthe666.citadel.item.ItemCitadelBook;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.server.block.IWSBlockRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
-import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;

@@ -4,7 +4,6 @@ import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;

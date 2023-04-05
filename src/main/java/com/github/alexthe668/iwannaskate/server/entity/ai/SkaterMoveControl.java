@@ -4,11 +4,9 @@ import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegist
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SkaterPose;
 import com.github.alexthe668.iwannaskate.server.misc.IWSTags;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public class SkaterMoveControl extends MoveControl {

@@ -1,11 +1,9 @@
 package com.github.alexthe668.iwannaskate.server.entity;
 
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardWheels;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardPartMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;

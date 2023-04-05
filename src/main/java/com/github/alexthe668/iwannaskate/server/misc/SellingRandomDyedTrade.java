@@ -1,12 +1,8 @@
 package com.github.alexthe668.iwannaskate.server.misc;
 
-import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
-import com.github.alexthe668.iwannaskate.server.item.SkateboardMaterials;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.DyeableArmorItem;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

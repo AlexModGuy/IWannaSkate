@@ -3,7 +3,6 @@ package com.github.alexthe668.iwannaskate.server.item;
 import com.github.alexthe668.iwannaskate.IWannaSkateMod;
 import com.github.alexthe668.iwannaskate.client.particle.IWSParticleRegistry;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
-import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
