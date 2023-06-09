@@ -55,7 +55,7 @@ public class RecipeSkateboardSwapWheels extends CustomRecipe implements SpecialR
             }
         }
 
-        return !skateboard.isEmpty() && !wheels1.isEmpty() && wheels1.sameItem(wheels2);
+        return !skateboard.isEmpty() && !wheels1.isEmpty() && ItemStack.isSameItem(wheels1, wheels2);
     }
 
     @Override

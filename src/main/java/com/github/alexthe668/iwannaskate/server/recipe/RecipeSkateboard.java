@@ -35,7 +35,7 @@ public class RecipeSkateboard extends ShapedRecipe implements SpecialRecipeInGui
                     }
                 }
             }
-            return wheels1.sameItem(wheels2);
+            return ItemStack.isSameItem(wheels1, wheels2);
         }
         return false;
     }

@@ -3,10 +3,12 @@ package com.github.alexthe668.iwannaskate.client.model;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
+import com.github.alexthe668.iwannaskate.client.ClientProxy;
 import com.github.alexthe668.iwannaskate.server.entity.SkateboardEntity;
 import com.github.alexthe668.iwannaskate.server.entity.SkaterPose;
 import com.github.alexthe668.iwannaskate.server.item.SkateboardData;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 
 public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
@@ -79,6 +81,7 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
     public void setupAnim(SkateboardEntity entity, float limbSwing, float limbSwingAmount, float age, float yaw, float pitch) {
         this.resetToDefaultPose();
         float partialTick = age - entity.tickCount;
+        float zRot = Minecraft.getInstance().player != null && Minecraft.getInstance().player.getVehicle() == entity ? ClientProxy.getSkateboardCameraRot(partialTick) : entity.getZRot(partialTick);
         float wheelRot = (float) Math.toRadians(entity.getWheelRot(partialTick));
         float axelUp = (float) (Math.abs(Math.sin(wheelRot)) * 0.5F);
         float maxRoll = (float) Math.toRadians(35);
@@ -99,7 +102,7 @@ public class SkateboardModel extends AdvancedEntityModel<SkateboardEntity> {
         this.rightBackWheel.rotateAngleX -= boardRot * 0.85F * ground;
         this.leftBackWheel.rotateAngleX -= boardRot * 0.85F * ground;
         this.backAxel.rotationPointZ += boardUp * 0.1F;
-        this.root.rotateAngleZ = (float) Math.toRadians(entity.getZRot(partialTick));
+        this.root.rotateAngleZ = (float) Math.toRadians(zRot);
         this.frontAxel.rotateAngleZ -= Mth.clamp(this.root.rotateAngleZ, -maxRoll, maxRoll);
         this.backAxel.rotateAngleZ -= Mth.clamp(this.root.rotateAngleZ, -maxRoll, maxRoll);
         if(entity.getSkaterPose() == SkaterPose.KICKFLIP){

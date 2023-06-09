@@ -12,7 +12,7 @@ import com.github.alexthe668.iwannaskate.server.enchantment.IWSEnchantmentRegist
 import com.github.alexthe668.iwannaskate.server.entity.IWSEntityRegistry;
 import com.github.alexthe668.iwannaskate.server.item.IWSItemRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSAdvancements;
-import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTab;
+import com.github.alexthe668.iwannaskate.server.misc.IWSCreativeTabRegistry;
 import com.github.alexthe668.iwannaskate.server.misc.IWSSoundRegistry;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardJumpMessage;
 import com.github.alexthe668.iwannaskate.server.network.SkateboardKeyMessage;
@@ -86,9 +86,9 @@ public class IWannaSkateMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupEntityModelLayers);
         modEventBus.addListener(this::onConfigReloaded);
-        modEventBus.addListener(IWSCreativeTab::registerTab);
         IWSItemRegistry.DEF_REG.register(modEventBus);
         IWSBlockRegistry.DEF_REG.register(modEventBus);
+        IWSCreativeTabRegistry.DEF_REG.register(modEventBus);
         IWSRecipeRegistry.DEF_REG.register(modEventBus);
         IWSEntityRegistry.DEF_REG.register(modEventBus);
         IWSEnchantmentRegistry.DEF_REG.register(modEventBus);

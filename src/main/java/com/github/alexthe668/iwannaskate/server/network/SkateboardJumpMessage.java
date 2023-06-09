@@ -47,8 +47,8 @@ public class SkateboardJumpMessage {
                 if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                     playerSided = IWannaSkateMod.PROXY.getClientSidePlayer();
                 }
-                Entity parent = playerSided.level.getEntity(message.skateboardId);
-                Entity jumpPlayer = playerSided.level.getEntity(message.playerId);
+                Entity parent = playerSided.level().getEntity(message.skateboardId);
+                Entity jumpPlayer = playerSided.level().getEntity(message.playerId);
                 if(jumpPlayer != null && parent instanceof SkateboardEntity skateboard && jumpPlayer instanceof Player && jumpPlayer.isPassengerOfSameVehicle(skateboard)){
                     skateboard.handleStartJump(Mth.clamp(message.jumpAmount, 0, 1000));
                 }

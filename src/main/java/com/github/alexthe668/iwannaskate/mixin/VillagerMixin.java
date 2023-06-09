@@ -72,7 +72,7 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
         if (stack.is(IWSItemRegistry.ENERGY_DRINK.get()) || stack.is(IWSItemRegistry.SKATEBOARD.get())) {
             if (this.getMainHandItem().isEmpty()) {
                 Entity itemThrower = item.getOwner();
-                if(itemThrower instanceof Player player && !level.isClientSide){
+                if(itemThrower instanceof Player player && !level().isClientSide){
                     IWSAdvancements.trigger(player, IWSAdvancements.GIVE_VILLAGER_DRINK);
                 }
                 ItemStack copy = stack.copy();
@@ -113,7 +113,7 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
             if (this.isBaby() && stack.is(IWSItemRegistry.ENERGY_DRINK.get()) && IWannaSkateMod.COMMON_CONFIG.convertVillagersToNitwits.get()) {
                 if (useEnergyDrinkTime < 60) {
                     if (useEnergyDrinkTime % 5 == 0) {
-                        this.playSound(stack.getDrinkingSound(), 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+                        this.playSound(stack.getDrinkingSound(), 0.5F, this.level().random.nextFloat() * 0.1F + 0.9F);
                     }
                     currentAnimFlag = 1;
                     useEnergyDrinkTime++;
@@ -128,13 +128,13 @@ public abstract class VillagerMixin extends AbstractVillager implements HasAnima
             }
             if (!this.isBaby() && this.getVillagerData().getProfession() == VillagerProfession.NITWIT && IWannaSkateMod.COMMON_CONFIG.convertNitwitsToSkaters.get()) {
                 if (stack.is(IWSItemRegistry.SKATEBOARD.get())) {
-                    SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level);
+                    SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level());
                     spawnedBoard.setItemStack(stack.copy());
                     spawnedBoard.setPos(this.position());
                     spawnedBoard.setYRot(this.getYRot());
                     spawnedBoard.setMobSpawned();
                     spawnedBoard.setXRot(-70);
-                    if (level.addFreshEntity(spawnedBoard)) {
+                    if (level().addFreshEntity(spawnedBoard)) {
                         this.swing(InteractionHand.OFF_HAND, true);
                         stack.shrink(1);
                     }

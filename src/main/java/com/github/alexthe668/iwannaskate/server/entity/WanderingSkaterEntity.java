@@ -239,12 +239,12 @@ public class WanderingSkaterEntity extends WanderingTrader {
     }
 
     public Entity getSkateboard() {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             UUID id = getSkateboardUUID();
-            return id == null ? null : ((ServerLevel) level).getEntity(id);
+            return id == null ? null : ((ServerLevel) level()).getEntity(id);
         } else {
             int id = this.entityData.get(SKATEBOARD_ID);
-            return id == -1 ? null : level.getEntity(id);
+            return id == -1 ? null : level().getEntity(id);
         }
     }
 
@@ -254,19 +254,19 @@ public class WanderingSkaterEntity extends WanderingTrader {
         prevAttackingProgress = attackingProgress;
         prevAttackAngle = attackAngle;
         Entity skateboard = getSkateboard();
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (skateboard != null) {
                 this.entityData.set(SKATEBOARD_ID, skateboard.getId());
             } else if ((skateTimer <= -300 || this.getTarget() != null) && this.canPlaceBoard()) {
                 skateTimer = 0;
-                SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level);
+                SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level());
                 ItemStack stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
                 spawnedBoard.setItemStack(stack.copy());
                 spawnedBoard.setPos(this.position());
                 spawnedBoard.setYRot(this.getYRot());
                 spawnedBoard.setMobSpawned();
                 spawnedBoard.setXRot(-70);
-                if (level.addFreshEntity(spawnedBoard)) {
+                if (level().addFreshEntity(spawnedBoard)) {
                     this.swing(InteractionHand.OFF_HAND, true);
                     stack.shrink(1);
                     this.setSkateboardUUID(spawnedBoard.getUUID());
@@ -294,7 +294,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
         if (!this.isPassenger() && skateboard != null) {
             if (this.isAlive() && attemptRecoveryTimer < 5) {
                 if (this.distanceToSqr(skateboard) > 1F) {
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         this.getNavigation().moveTo(skateboard.getX(), skateboard.getY(0.5F), skateboard.getZ(), 1F);
                     }
                 } else {
@@ -330,7 +330,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
             }
         }
         LivingEntity target = this.getTarget();
-        if(!level.isClientSide && this.getOffhandItem().is(IWSItemRegistry.SKATEBOARD.get()) && target != null && target.isAlive() && this.distanceToSqr(target) < 20F && this.hasLineOfSight(target) && this.getAttackTime() == 0){
+        if(!level().isClientSide && this.getOffhandItem().is(IWSItemRegistry.SKATEBOARD.get()) && target != null && target.isAlive() && this.distanceToSqr(target) < 20F && this.hasLineOfSight(target) && this.getAttackTime() == 0){
             this.setAttackTime(30 + this.getRandom().nextInt(20));
             lastAttackTimestamp = tickCount;
         }
@@ -346,8 +346,8 @@ public class WanderingSkaterEntity extends WanderingTrader {
         }
         if(this.isNoDespawn()){
             this.setDespawnDelay(48000);
-            if(Math.abs(this.level.getGameTime() - lastTradesGenTime) > 200){
-                this.level.broadcastEntityEvent(this, (byte)14);
+            if(Math.abs(this.level().getGameTime() - lastTradesGenTime) > 200){
+                this.level().broadcastEntityEvent(this, (byte)14);
                 this.offers = new MerchantOffers();
                 this.updateTrades();
             }
@@ -385,7 +385,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
         Vec3 offset = new Vec3(0, -0.3F, 1.15F).yRot(-hurtYaw * ((float) Math.PI / 180F));
         Vec3 at = this.getEyePosition().add(offset);
         AABB mobBox = new AABB(at.x - 1, at.y - 1.5F, at.z - 1, at.x + 1, at.y + 1.5, at.z + 1);
-        for (Entity entity : this.level.getEntities(this, mobBox, EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
+        for (Entity entity : this.level().getEntities(this, mobBox, EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
             if (entity instanceof LivingEntity living && canHurtWithAttack(living)) {
                 if (living.hurt(damageSources().mobAttack(this), 4)) {
 
@@ -401,7 +401,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
     }
 
     private boolean canPlaceBoard() {
-        return !this.isTrading() && this.isAlive() && this.isOnGround() && !this.shouldBeAttacking() && this.getItemBySlot(EquipmentSlot.OFFHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
+        return !this.isTrading() && this.isAlive() && this.onGround() && !this.shouldBeAttacking() && this.getItemBySlot(EquipmentSlot.OFFHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level().isUnobstructed(this);
     }
 
     private boolean shouldDismountBoard(SkateboardEntity board) {
@@ -461,7 +461,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
     }
 
     protected void updateTrades() {
-        this.lastTradesGenTime = level.getGameTime();
+        this.lastTradesGenTime = level().getGameTime();
         MerchantOffers merchantoffers = this.getOffers();
         List<Enchantment> enchantments = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(enchantment -> enchantment.category == IWSEnchantmentRegistry.SKATEBOARD).collect(Collectors.toList());
         Enchantment randomEnchant = enchantments.size() > 1 ? enchantments.get(random.nextInt(enchantments.size() - 1)) : enchantments.get(0);
@@ -524,7 +524,7 @@ public class WanderingSkaterEntity extends WanderingTrader {
                 stack.shrink(1);
             }
             this.emeraldSkateboard();
-            this.level.broadcastEntityEvent(this, (byte)15);
+            this.level().broadcastEntityEvent(this, (byte)15);
             this.setNoDespawn(true);
             player.swing(hand);
             this.setWanderTarget(this.blockPosition());

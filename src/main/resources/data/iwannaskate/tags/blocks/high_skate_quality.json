@@ -1,15 +1,18 @@
 {
-  "#comment": "All blocks that are pretty good to skate on. Untagged blocks will be assigned a rank based off their material.",
+  "#comment": "All blocks that are pretty good to skate on. Untagged blocks will be assigned a rank based off their sound type.",
   "replace": false,
   "values": [
     "#minecraft:wooden_stairs",
     "#minecraft:wooden_slabs",
     "#minecraft:planks",
     "#minecraft:stone_bricks",
+    "#minecraft:stone_stairs",
+    "#minecraft:stone_slab",
     "#minecraft:ice",
     "minecraft:stone",
     "minecraft:blackstone",
     "minecraft:blackstone_slab",
-    "minecraft:blackstone_stairs"
+    "minecraft:blackstone_stairs",
+    "minecraft:calcite"
   ]
 }

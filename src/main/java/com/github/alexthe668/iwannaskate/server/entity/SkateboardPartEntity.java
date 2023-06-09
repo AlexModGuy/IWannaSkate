@@ -49,7 +49,7 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
         if (parent == null) {
             return InteractionResult.PASS;
         } else {
-            if(player.level.isClientSide){
+            if(player.level().isClientSide){
                 IWannaSkateMod.sendMSGToServer(new SkateboardPartMessage(parent.getId(), player.getId(), 0));
             }
             return parent.interact(player, hand);
@@ -79,7 +79,7 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
         SkateboardEntity parent = this.getParent();
         if(!this.isInvulnerableTo(source) && parent != null){
             Entity player = source.getEntity();
-            if(player != null && player.level.isClientSide){
+            if(player != null && player.level().isClientSide){
                 IWannaSkateMod.sendMSGToServer(new SkateboardPartMessage(parent.getId(), player.getId(), 1));
             }
             parent.hurt(source, amount);
@@ -117,13 +117,13 @@ public class SkateboardPartEntity extends PartEntity<SkateboardEntity> {
             return 0.0F;
         }
         BlockPos pos = BlockPos.containing(boardPos.x, boardPos.y + 0.001D, boardPos.z);
-        float dist = this.getDistance(parent.level, pos, boardPos);
+        float dist = this.getDistance(parent.level(), pos, boardPos);
         if ((double)(1.0F - dist) < 0.001D) {
-            dist = this.getDistance(parent.level, pos.below(), boardPos) + (float)boardPos.y % 1.0F;
+            dist = this.getDistance(parent.level(), pos.below(), boardPos) + (float)boardPos.y % 1.0F;
         } else {
             dist = (float)((double)dist - (1.0D - boardPos.y % 1.0D));
         }
-        if (height <= dist && parent.isOnGround()) {
+        if (height <= dist && parent.onGround()) {
             return height == dist ? height : Math.min(height + this.getFallSpeed(), dist);
         } else {
             return height == dist ? height : Math.max(height - this.getRiseSpeed(), dist);

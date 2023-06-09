@@ -46,8 +46,8 @@ public class SkateboardKeyMessage {
                 if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                     playerSided = IWannaSkateMod.PROXY.getClientSidePlayer();
                 }
-                Entity parent = playerSided.level.getEntity(message.skateboardId);
-                Entity keyPresser = playerSided.level.getEntity(message.playerId);
+                Entity parent = playerSided.level().getEntity(message.skateboardId);
+                Entity keyPresser = playerSided.level().getEntity(message.playerId);
                 if(keyPresser != null && parent instanceof SkateboardEntity skateboard && keyPresser instanceof Player && keyPresser.isPassengerOfSameVehicle(skateboard)){
                     skateboard.onKeyPacket(keyPresser, message.type);
                 }

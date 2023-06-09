@@ -49,10 +49,10 @@ public class SkateboardRackMessage   {
                 player = IWannaSkateMod.PROXY.getClientSidePlayer();
             }
             if (player != null) {
-                if (player.level != null) {
+                if (player.level() != null) {
                     BlockPos pos = BlockPos.of(message.blockPos);
-                    if (player.level.getBlockEntity(pos) != null) {
-                        if (player.level.getBlockEntity(pos) instanceof SkateboardRackBlockEntity blockEntity) {
+                    if (player.level().getBlockEntity(pos) != null) {
+                        if (player.level().getBlockEntity(pos) instanceof SkateboardRackBlockEntity blockEntity) {
                             blockEntity.setItem(message.slot, message.heldStack);
                         }
                     }

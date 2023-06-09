@@ -49,7 +49,7 @@ public class SkateboardItem extends BaseSkateboardItem {
             return InteractionResultHolder.pass(itemstack);
         } else {
             Vec3 vector3d = player.getViewVector(1.0F);
-            List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(vector3d.scale(player.getReachDistance())).inflate(1.0D), PICKABLE_ENTITIES);
+            List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(vector3d.scale(player.getBlockReach())).inflate(1.0D), PICKABLE_ENTITIES);
             if (!list.isEmpty()) {
                 Vec3 vector3d1 = player.getEyePosition(1.0F);
 

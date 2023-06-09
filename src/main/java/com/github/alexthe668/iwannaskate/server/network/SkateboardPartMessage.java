@@ -46,8 +46,8 @@ public class SkateboardPartMessage {
                 if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                     playerSided = IWannaSkateMod.PROXY.getClientSidePlayer();
                 }
-                Entity parent = playerSided.level.getEntity(message.parentId);
-                Entity interacter = playerSided.level.getEntity(message.playerId);
+                Entity parent = playerSided.level().getEntity(message.parentId);
+                Entity interacter = playerSided.level().getEntity(message.playerId);
                 if(interacter != null && parent instanceof SkateboardEntity skateboard && interacter.distanceTo(skateboard) < 16){
                     skateboard.onInteractPacket(interacter, message.type);
                 }

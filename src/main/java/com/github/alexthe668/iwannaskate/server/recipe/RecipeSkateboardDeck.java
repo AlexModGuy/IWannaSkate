@@ -27,7 +27,7 @@ public class RecipeSkateboardDeck  extends ShapedRecipe implements SpecialRecipe
             ItemStack lastTagged = ItemStack.EMPTY;
             for(int i = 0; i < container.getContainerSize(); i++){
                 if(container.getItem(i).is(IWSTags.DECK_MATERIALS)){
-                    if(!lastTagged.isEmpty() && !lastTagged.sameItem(container.getItem(i))){
+                    if(!lastTagged.isEmpty() && !ItemStack.isSameItem(lastTagged, container.getItem(i))){
                         return false;
                     }else{
                         lastTagged = container.getItem(i);

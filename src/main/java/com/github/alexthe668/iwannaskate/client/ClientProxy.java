@@ -28,7 +28,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -56,7 +55,8 @@ public class ClientProxy extends CommonProxy {
     protected static final ResourceLocation OVERCAFFENIATED_OVERLAY = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/overcaffeniated_overlay.png");
     private static final ResourceLocation SKATEBOARD_INDICATOR_TEXTURE = new ResourceLocation(IWannaSkateMod.MODID, "textures/gui/skateboard_peddle_indicator.png");
 
-    private float prevCameraRoll = 0;
+    private static float prevCameraRoll = 0;
+    private static float cameraRoll = 0;
 
     public static void onTexturesLoaded(TextureStitchEvent.Post event) {
         BoardColorSampler.sampleColorsOnLoad();
@@ -74,10 +74,10 @@ public class ClientProxy extends CommonProxy {
 
     public static void setupParticles(RegisterParticleProvidersEvent registry) {
         IWannaSkateMod.LOGGER.debug("Registered particle factories");
-        registry.register(IWSParticleRegistry.HALLOWEEN.get(), HalloweenParticle.Factory::new);
-        registry.register(IWSParticleRegistry.BEE.get(), BeeParticle.Factory::new);
-        registry.register(IWSParticleRegistry.HOVER.get(), new HoverParticle.Factory());
-        registry.register(IWSParticleRegistry.SPARKLE.get(), SparkleParticle.Factory::new);
+        registry.registerSpriteSet(IWSParticleRegistry.HALLOWEEN.get(), HalloweenParticle.Factory::new);
+        registry.registerSpriteSet(IWSParticleRegistry.BEE.get(), BeeParticle.Factory::new);
+        registry.registerSpecial(IWSParticleRegistry.HOVER.get(), new HoverParticle.Factory());
+        registry.registerSpriteSet(IWSParticleRegistry.SPARKLE.get(), SparkleParticle.Factory::new);
     }
 
     @SubscribeEvent
@@ -90,16 +90,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onComputeCameraAngles(ViewportEvent.ComputeCameraAngles event){
         if(Minecraft.getInstance().player.getVehicle() instanceof SkateboardEntity skateboard && IWannaSkateMod.CLIENT_CONFIG.rotateCameraOnBoard.get()){
-            float partialTick = Minecraft.getInstance().getPartialTick();
-            float targetRot = skateboard.getZRot(partialTick);
-            if(Math.abs(targetRot) <= 1.0F){
-                targetRot = 0;
-            }
-            float f = skateboard.approachRotation(prevCameraRoll, targetRot, 1F);
-
-            float f1 = prevCameraRoll + (f - prevCameraRoll) * partialTick;
-            prevCameraRoll = f;
-            event.setRoll(f * 0.25F);
+            event.setRoll(getSkateboardCameraRot((float) event.getPartialTick()) * 0.25F);
         }
     }
 
@@ -119,13 +110,10 @@ public class ClientProxy extends CommonProxy {
                 int j = screenWidth / 2 - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorX.get();
                 int k = screenHeight - IWannaSkateMod.CLIENT_CONFIG.inertiaIndicatorY.get();
                 float f = skateboard.getForwards() / skateboard.getMaxForwardsTicks();
-                event.getPoseStack().pushPose();
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                RenderSystem.setShaderTexture(0, SKATEBOARD_INDICATOR_TEXTURE);
-                GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 0, 29, 9, 64, 64);
-                GuiComponent.blit(event.getPoseStack(), j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
-                event.getPoseStack().popPose();
+                event.getGuiGraphics().pose().pushPose();
+                event.getGuiGraphics().blit(SKATEBOARD_INDICATOR_TEXTURE, j, k, 50, 0, 0, 29, 9, 64, 64);
+                event.getGuiGraphics().blit(SKATEBOARD_INDICATOR_TEXTURE, j, k, 50, 0, 9, Math.round(29 * f), 9, 64, 64);
+                event.getGuiGraphics().pose().popPose();
             }
         }
         if (event.getOverlay().id().equals(VanillaGuiOverlay.VIGNETTE.id()) && Minecraft.getInstance().player.hasEffect(IWSEffectRegistry.OVERCAFFEINATED.get()) && IWannaSkateMod.CLIENT_CONFIG.overcaffeniatedOverlay.get()) {
@@ -225,4 +213,26 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().setScreen(new SkateManualScreen(book));
 
     }
+
+    @SubscribeEvent
+    public void clientTick(TickEvent.ClientTickEvent event) {
+        if(event.phase == TickEvent.Phase.START) {
+            float targetRot = 0;
+            if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.getVehicle() instanceof SkateboardEntity skateboard && IWannaSkateMod.CLIENT_CONFIG.rotateCameraOnBoard.get()) {
+                float partialTick = Minecraft.getInstance().getPartialTick();
+                targetRot = skateboard.getZRot(partialTick);
+                if (Math.abs(targetRot) <= 1.0F) {
+                    targetRot = 0;
+                }
+            }
+            prevCameraRoll = cameraRoll;
+            cameraRoll = targetRot;
+        }
+    }
+
+
+    public static float getSkateboardCameraRot(float partialTicks){
+        return prevCameraRoll + (cameraRoll - prevCameraRoll) * partialTicks;
+    }
+
 }

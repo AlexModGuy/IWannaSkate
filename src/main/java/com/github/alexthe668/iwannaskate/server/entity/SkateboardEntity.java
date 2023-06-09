@@ -331,14 +331,14 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         this.yOld = this.getY();
         this.zOld = this.getZ();
         this.prevOnGroundProgress = this.onGroundProgress;
-        boolean grounded = this.isOnGround() && !this.isGrinding() && this.backHeight >= this.frontHeight;
+        boolean grounded = this.onGround() && !this.isGrinding() && this.backHeight >= this.frontHeight;
         if (grounded && this.onGroundProgress < 5F) {
             this.onGroundProgress += 2.5F;
         }
         if (!grounded && this.onGroundProgress > 0F) {
             this.onGroundProgress -= 2.5F;
         }
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (this.lSteps > 0) {
                 double d5 = this.getX() + (this.lx - this.getX()) / (double) this.lSteps;
                 //dont lerp y, doesnt change much
@@ -361,7 +361,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             prevDelta = this.getDeltaMovement();
             this.checkInsideBlocks();
             if (this.hasEnchant(IWSEnchantmentRegistry.ONBOARDING.get())) {
-                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, 0.5F, 0.2F), EntitySelector.pushableBy(this));
+                List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2F, 0.5F, 0.2F), EntitySelector.pushableBy(this));
                 if (!list.isEmpty()) {
                     for (int j = 0; j < list.size(); ++j) {
                         Entity entity = list.get(j);
@@ -402,14 +402,14 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         this.tickSound();
         if (this.entityData.get(REMOVE_SOON)) {
             if (this.hasEnchant(IWSEnchantmentRegistry.INSTANT_RETURN.get()) && returnToPlayer != null) {
-                if (!level.isClientSide && !returnToPlayer.addItem(this.getItemStack().copy())) {
+                if (!this.level().isClientSide && !returnToPlayer.addItem(this.getItemStack().copy())) {
                     spawnAtLocation(this.getItemStack().copy());
                 }
                 this.discard();
             } else {
                 this.removeIn--;
                 this.setZRot((float) Math.sin(this.removeIn * 0.3F * Math.PI) * 50F);
-                if (this.removeIn <= 0 && !this.level.isClientSide) {
+                if (this.removeIn <= 0 && !this.level().isClientSide) {
                     this.removeIn = 0;
                     spawnAtLocation(this.getItemStack().copy());
                     this.discard();
@@ -443,7 +443,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get()) && this.isInWaterOrBubble() && d < 0.9) {
             d = 0.9D;
         }
-        return this.isInLava() ? 0.1F : this.isInWaterOrBubble() && !this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get()) ? 0.6F : this.isOnGround() ? d : 0.98F;
+        return this.isInLava() ? 0.1F : this.isInWaterOrBubble() && !this.hasEnchant(IWSEnchantmentRegistry.BENTHIC.get()) ? 0.6F : this.onGround() ? d : 0.98F;
     }
 
     private double getBlockSlowdown() {
@@ -454,7 +454,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (sprintDown > 0) {
             sprintDown--;
         }
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             Player player = IWannaSkateMod.PROXY.getClientSidePlayer();
             if (player != null && player.isPassengerOfSameVehicle(this) && IWannaSkateMod.PROXY.isKeyDown(0)) {
                 if (sprintDown < 2) {
@@ -463,7 +463,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                 }
             }
         }
-        if (this.jumpFor == 0 && this.isOnGround() && trickFlag) {
+        if (this.jumpFor == 0 && this.onGround() && trickFlag) {
             this.playSound(IWSSoundRegistry.SKATEBOARD_JUMP_LAND.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
             trickFlag = false;
         }
@@ -489,7 +489,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         }
         this.setWheelRot(wheelRot + wheelSpeed * 100);
         this.prevWheelRot = wheelRot;
-        if (level.isClientSide && this.skateboardData != null) {
+        if (this.level().isClientSide && this.skateboardData != null) {
             ParticleOptions particleType = this.skateboardData.getWheelType().getWheelParticles();
             if (particleType != null && (this.skateboardData.getWheelType().particleSpawnOverride(this) || this.random.nextFloat() < 0.5F)) {
                 Vec3 center = this.position().add(0, 0.15 + getRenderOffGroundAmount(1.0F), 0);
@@ -522,27 +522,27 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     private void addWheelParticle(Vec3 wheelVec, ParticleOptions partice) {
         if (partice == ParticleTypes.PORTAL) {
-            this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D), -this.random.nextDouble(), (this.random.nextDouble() - 0.5D));
+            this.level().addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D), -this.random.nextDouble(), (this.random.nextDouble() - 0.5D));
         } else if (partice == IWSParticleRegistry.HALLOWEEN.get()) {
-            this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.35F, this.random.nextDouble() * 0.2F, (this.random.nextDouble() - 0.5D) * 0.35F);
+            this.level().addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.35F, this.random.nextDouble() * 0.2F, (this.random.nextDouble() - 0.5D) * 0.35F);
         } else if (partice == ParticleTypes.SNOWFLAKE) {
-            this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.15F, this.random.nextDouble() * 0.1F, (this.random.nextDouble() - 0.5D) * 0.15F);
+            this.level().addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, (this.random.nextDouble() - 0.5D) * 0.15F, this.random.nextDouble() * 0.1F, (this.random.nextDouble() - 0.5D) * 0.15F);
         } else if (partice == IWSParticleRegistry.BEE.get()) {
             Vec3 randomOffset = new Vec3((this.random.nextDouble() - 0.5D) * 1, (this.random.nextDouble()) * 0.75F, (this.random.nextDouble() - 0.5D) * 1);
             Vec3 spawning = wheelVec.add(randomOffset);
-            this.level.addParticle(partice, spawning.x, spawning.y, spawning.z, wheelVec.x, wheelVec.y, wheelVec.z);
+            this.level().addParticle(partice, spawning.x, spawning.y, spawning.z, wheelVec.x, wheelVec.y, wheelVec.z);
         } else if (partice == IWSParticleRegistry.HOVER.get()) {
             double speed = this.getDeltaMovement().horizontalDistance();
             double d = wheelVec.y;
             if (speed < 0.04F) {
                 d += 0.1D;
             }
-            this.level.addParticle(partice, wheelVec.x, d, wheelVec.z, this.getYRot(), -0.05F - 0.1F * getRenderOffGroundAmount(1.0F), speed);
+            this.level().addParticle(partice, wheelVec.x, d, wheelVec.z, this.getYRot(), -0.05F - 0.1F * getRenderOffGroundAmount(1.0F), speed);
         } else if (partice == IWSParticleRegistry.SPARKLE.get()) {
-            this.level.addParticle(partice, wheelVec.x + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().x, wheelVec.y + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().y, wheelVec.z + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().z, 0, 0, 0);
+            this.level().addParticle(partice, wheelVec.x + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().x, wheelVec.y + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().y, wheelVec.z + (this.random.nextDouble() - 0.5D) * 0.2F - this.getDeltaMovement().z, 0, 0, 0);
         } else {
             Vec3 delta = this.getDeltaMovement();
-            this.level.addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, delta.x, delta.y, delta.z);
+            this.level().addParticle(partice, wheelVec.x, wheelVec.y, wheelVec.z, delta.x, delta.y, delta.z);
         }
     }
 
@@ -551,7 +551,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (Math.abs(heightDiff) > 0) {
             this.setForwards(Mth.clamp(this.getForwards() - heightDiff * 0.8F, 0, getMaxForwardsTicks()));
         }
-        this.setGrinding(this.isOnGround() && (this.getBlockStateOn().is(IWSTags.GRINDS) || this.getFeetBlockState().is(IWSTags.GRINDS)));
+        this.setGrinding(this.onGround() && (this.getBlockStateOn().is(IWSTags.GRINDS) || this.getFeetBlockState().is(IWSTags.GRINDS)));
         boolean onWater = this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
         if (onWater) {
             this.setOnGround(true);
@@ -640,7 +640,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         frontHeight = this.front.getHeightBelow(sampleFrontHeight, frontHeight);
         backHeight = this.back.getHeightBelow(sampleBackHeight, backHeight);
 
-        if (level.isClientSide) {
+        if (this.level().isClientSide) {
             if (this.getSkateboardData().getWheelType().hasTrail()) {
                 if (this.trailPosPointer < 0) {
                     for (int i = 0; i < this.trailPositions.length; ++i) {
@@ -669,7 +669,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (jiggleXTime > 0) {
             jiggleXTime--;
         }
-        if (this.isOnGround()) {
+        if (this.onGround()) {
             float forwards = 0.25F * Math.abs((float) Math.sin(Math.toRadians(this.getXRot()))) * getOnGroundProgress(1);
             Vec3 frontPos = rotateVec(new Vec3(0, 0, forwards + 0.55F), false, 1.0F).add(0, frontHeight, 0);
             Vec3 backPos = rotateVec(new Vec3(0, 0, forwards - 0.55F), false, 1.0F).add(0, backHeight, 0);
@@ -734,14 +734,14 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         return !this.isRemoveLogic();
     }
 
-    public boolean isOnGround() {
-        return super.isOnGround() || this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
+    public boolean onGround() {
+        return super.onGround() || this.hasEnchant(IWSEnchantmentRegistry.SURFING.get()) && this.isOnWater();
     }
 
     private boolean isOnWater() {
         BlockPos ourPos = BlockPos.containing(this.getX(), this.getY() + 0.4F, this.getZ());
         BlockPos underPos = this.getOnPos();
-        return level.getFluidState(underPos).is(FluidTags.WATER) && !level.getFluidState(ourPos).is(FluidTags.WATER);
+        return this.level().getFluidState(underPos).is(FluidTags.WATER) && !this.level().getFluidState(ourPos).is(FluidTags.WATER);
     }
 
     @Override
@@ -754,7 +754,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
         } else {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
                 return InteractionResult.SUCCESS;
@@ -821,7 +821,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     public void tickPlayerRider(Player passenger) {
         float yawDeviate = Mth.wrapDegrees(passenger.getYRot() - this.getYRot());
         boolean preserveForwards = false;
-        if (!level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (Math.abs(passenger.zza) > 0) {
                 if (passenger.zza < 0) {
                     this.setForwards(Math.min(this.getForwards() - 3, 0));
@@ -843,7 +843,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                         this.setSkaterPose(SkaterPose.GRIND);
                     } else {
                         if (this.getDeltaMovement().length() > 0.02F) {
-                            this.setSkaterPose(this.sprintDown > 0 || !this.isOnGround() ? SkaterPose.CROUCH : SkaterPose.STAND_SIDEWAYS);
+                            this.setSkaterPose(this.sprintDown > 0 || !this.onGround() ? SkaterPose.CROUCH : SkaterPose.STAND_SIDEWAYS);
                         } else {
                             this.setSkaterPose(SkaterPose.NONE);
                         }
@@ -896,7 +896,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
                 }
                 if (!damageBlocked) {
                     IWSAdvancements.trigger(passenger, IWSAdvancements.TAKE_SKATE_DAMAGE);
-                    passenger.hurt(IWSDamageTypes.causeSkateDamage(this.level.registryAccess()), 2 + 2 * f1);
+                    passenger.hurt(IWSDamageTypes.causeSkateDamage(this.level().registryAccess()), 2 + 2 * f1);
                 }
                 passenger.stopRiding();
             }
@@ -915,8 +915,8 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             soundTimer = 15 + random.nextInt(10);
             this.playSound(IWSSoundRegistry.SKATEBOARD_PEDAL.get(), 1, 0.8F + this.random.nextFloat() * 0.4F);
         }
-        if (!this.isSilent() && !this.level.isClientSide) {
-            this.level.broadcastEntityEvent(this, (byte) 67);
+        if (!this.isSilent() && !this.level().isClientSide) {
+            this.level().broadcastEntityEvent(this, (byte) 67);
         }
         if (soundTimer > 0) {
             soundTimer--;
@@ -931,7 +931,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         passenger.yHeadRot = Mth.clamp(passenger.yHeadRot, passenger.yBodyRot - 90, passenger.yBodyRot + 90);
     }
 
-    public void positionRider(Entity passenger) {
+    public void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         prevPedalAmount = this.getPedalAmount();
         if (this.isPassengerOfSameVehicle(passenger) && passenger instanceof LivingEntity living && !this.touchingUnloadedChunk()) {
             if (passenger instanceof Player) {
@@ -946,9 +946,9 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
             if (living.getType().is(IWSTags.OVERRIDES_SKATEBOARD_POSITIONING)) {
                 d0 += living.getMyRidingOffset();
             }
-            living.setPos(this.getX(), d0, this.getZ());
+            moveFunction.accept(passenger, this.getX(), d0, this.getZ());
         } else {
-            super.positionRider(passenger);
+            super.positionRider(passenger, moveFunction);
         }
     }
 
@@ -963,7 +963,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        return super.isInvulnerableTo(damageSource) || this.hasEnchant(IWSEnchantmentRegistry.HARDWOOD.get()) && (!damageSource.is(DamageTypes.OUT_OF_WORLD) && !damageSource.is(DamageTypes.GENERIC) && !(damageSource.getDirectEntity() instanceof Player));
+        return super.isInvulnerableTo(damageSource) || this.hasEnchant(IWSEnchantmentRegistry.HARDWOOD.get()) && (!damageSource.is(DamageTypes.OUTSIDE_BORDER) && !damageSource.is(DamageTypes.GENERIC) && !(damageSource.getDirectEntity() instanceof Player));
     }
 
     @Override
@@ -1018,7 +1018,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
 
     public void checkDespawn() {
         if (this.isMobSpawned() && !this.isVehicle()) {
-            Entity entity = this.level.getNearestPlayer(this, -1.0D);
+            Entity entity = this.level().getNearestPlayer(this, -1.0D);
             if (entity != null) {
                 double d0 = entity.distanceToSqr(this);
                 int i = this.getType().getCategory().getDespawnDistance();
@@ -1131,15 +1131,15 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
     }
 
     private void enterSlowMotion() {
-        if (!level.isClientSide && level instanceof ServerLevel) {
+        if (!this.level().isClientSide && this.level() instanceof ServerLevel) {
             float speed = this.getSlowMotionLevel() + 1;
-            ServerTickRateTracker tracker = ServerTickRateTracker.getForServer(level.getServer());
+            ServerTickRateTracker tracker = ServerTickRateTracker.getForServer(this.level().getServer());
             for (TickRateModifier modifier : tracker.tickRateModifierList) {
                 if (modifier instanceof LocalEntityTickRateModifier entityTick && entityTick.getEntityId() == this.getId()) {
                     return;
                 }
             }
-            tracker.addTickRateModifier(new LocalEntityTickRateModifier(this.getId(), this.getType(), IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get(), this.level.dimension(), 200, speed));
+            tracker.addTickRateModifier(new LocalEntityTickRateModifier(this.getId(), this.getType(), IWannaSkateMod.COMMON_CONFIG.slowMotionDistance.get(), this.level().dimension(), 200, speed));
         }
     }
 
@@ -1163,7 +1163,7 @@ public class SkateboardEntity extends Entity implements PlayerRideableJumping, I
         if (this.isVehicle() && fallDistance > listenDistance && !this.hasEnchant(IWSEnchantmentRegistry.SECURED.get())) {
             for (Entity entity : this.getPassengers()) {
                 IWSAdvancements.trigger(entity, IWSAdvancements.TAKE_SKATE_DAMAGE);
-                entity.causeFallDamage(fallDistance, damageMod, IWSDamageTypes.causeSkateDamage(this.level.registryAccess()));
+                entity.causeFallDamage(fallDistance, damageMod, IWSDamageTypes.causeSkateDamage(this.level().registryAccess()));
             }
             if (fallDistance > listenDistance + 3) {
                 this.ejectPassengers();

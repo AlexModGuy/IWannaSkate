@@ -135,12 +135,12 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     public Entity getSkateboard() {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             UUID id = getSkateboardUUID();
-            return id == null ? null : ((ServerLevel) level).getEntity(id);
+            return id == null ? null : ((ServerLevel) level()).getEntity(id);
         } else {
             int id = this.entityData.get(SKATEBOARD_ID);
-            return id == -1 ? null : level.getEntity(id);
+            return id == -1 ? null : level().getEntity(id);
         }
     }
 
@@ -160,19 +160,19 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     public void tick() {
         super.tick();
         Entity skateboard = getSkateboard();
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (skateboard != null) {
                 this.entityData.set(SKATEBOARD_ID, skateboard.getId());
             } else if ((skateTimer <= -300 || this.getTarget() != null) && this.canPlaceBoard()) {
                 skateTimer = 0;
-                SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level);
+                SkateboardEntity spawnedBoard = IWSEntityRegistry.SKATEBOARD.get().create(level());
                 ItemStack stack = this.getItemBySlot(EquipmentSlot.MAINHAND);
                 spawnedBoard.setItemStack(stack.copy());
                 spawnedBoard.setPos(this.position());
                 spawnedBoard.setYRot(this.getYRot());
                 spawnedBoard.setMobSpawned();
                 spawnedBoard.setXRot(-70);
-                if (level.addFreshEntity(spawnedBoard)) {
+                if (level().addFreshEntity(spawnedBoard)) {
                     this.swing(InteractionHand.MAIN_HAND, true);
                     stack.shrink(1);
                     this.setSkateboardUUID(spawnedBoard.getUUID());
@@ -200,7 +200,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         if (!this.isPassenger() && skateboard != null) {
             if (this.isAlive() && attemptRecoveryTimer < 60) {
                 if (this.distanceToSqr(skateboard) > 1F) {
-                    if (!level.isClientSide) {
+                    if (!level().isClientSide) {
                         this.getNavigation().moveTo(skateboard.getX(), skateboard.getY(0.5F), skateboard.getZ(), 1F);
                     }
                 } else {
@@ -217,7 +217,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
     }
 
     private boolean canPlaceBoard() {
-        return IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsUseSkateboards.get() && this.isAlive() && this.isOnGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level.isUnobstructed(this);
+        return IWannaSkateMod.COMMON_CONFIG.skaterSkeletonsUseSkateboards.get() && this.isAlive() && this.onGround() && this.getItemBySlot(EquipmentSlot.MAINHAND).is(IWSItemRegistry.SKATEBOARD.get()) && SkateQuality.getSkateQuality(this.getBlockStateOn(), SkateQuality.LOW) != SkateQuality.LOW && level().isUnobstructed(this);
     }
 
     private boolean shouldDismountBoard(SkateboardEntity board) {
@@ -268,7 +268,7 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
         this.captureDrops(new java.util.ArrayList<>());
 
         boolean flag = this.lastHurtByPlayerTime > 0;
-        if (this.shouldDropLoot() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (this.shouldDropLoot() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
             this.dropFromLootTable(source, flag);
             this.dropCustomDeathLoot(source, i, flag);
         }
@@ -295,6 +295,6 @@ public class SkaterSkeletonEntity extends AbstractSkeleton {
             }
         }
         if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, processedDrops, i, lastHurtByPlayerTime > 0))
-            processedDrops.forEach(e -> level.addFreshEntity(e));
+            processedDrops.forEach(e -> level().addFreshEntity(e));
     }
 }
